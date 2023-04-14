@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('transactions', function (Blueprint $table) {
+        Schema::create('tujuans', function (Blueprint $table) {
             $table->id();
-            $table->string('code_transaction');
-            $table->foreignId('course_id')->constrained('courses');
-            $table->foreignId('user_id')->constrained('users');
-            $table->enum('status', ['pending', 'success', 'failed']);
+            $table->string('tujuan');
+            $table->string('image_tujuan');
+            $table->string('image_roadmap');
+
         });
     }
 
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('transactions');
+        Schema::dropIfExists('tujuans');
     }
 };
