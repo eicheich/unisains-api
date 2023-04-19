@@ -37,5 +37,6 @@ Route::prefix('v1')->group(function () {
     });
     Route::prefix('admin')->middleware('isAdmin')->group(function () {
         Route::get('dashboard', [DashboardController::class, 'dashboard']);
+        
     });
 });
