@@ -11,4 +11,12 @@ class Course extends Model
 
     // fillabel
     protected $guarded = [];
+
+    // relation
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    
 }

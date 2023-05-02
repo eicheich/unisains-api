@@ -71,4 +71,20 @@ class CourseController extends Controller
         ], 201);
     }
 
+    public function all()
+    {
+        // get all course and check if data exist or not, if data exist return data with pagination 9, if not return message
+        $courses = Course::with('category')->paginate(9);
+        if ($courses->isEmpty()) {
+            return response()->json([
+                'message' => 'Data not found',
+            ], 404);
+        }
+        return response()->json([
+            'message' => 'Get all courses successfully',
+            'courses' => $courses,
+        ], 200);
+
+    }
+
 }

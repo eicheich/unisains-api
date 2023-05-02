@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
     use HasFactory;
+
+    // relasi
+    public function courses()
+    {
+        return $this->hasMany(Course::class);
+    }
 }
