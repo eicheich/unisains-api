@@ -87,4 +87,21 @@ class CourseController extends Controller
 
     }
 
+    public function show($id)
+    {
+        // get course by id and check if data exist or not, if data exist return data, if not return message
+        $course = Course::with('category')->find($id);
+        if (!$course) {
+            return response()->json([
+                'message' => 'Data not found',
+            ], 404);
+        }
+        return response()->json([
+            'message' => 'Get course successfully',
+            'course' => $course,
+        ], 200);
+    
+        # code...
+    }
+
 }
