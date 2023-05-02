@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Admin\CourseController;
 use App\Http\Controllers\Api\V1\Admin\DashboardController;
 use App\Http\Controllers\Api\V1\AuthController;
 use Illuminate\Http\Request;
@@ -37,6 +38,9 @@ Route::prefix('v1')->group(function () {
     });
     Route::prefix('admin')->middleware('isAdmin')->group(function () {
         Route::get('dashboard', [DashboardController::class, 'dashboard']);
-        
+        Route::prefix('course')->group(function () {
+            Route::get('all', [CourseController::class, 'all']);
+            Route::post('store', [CourseController::class, 'store']);
+        });
     });
 });
