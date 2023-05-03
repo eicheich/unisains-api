@@ -42,6 +42,7 @@ Route::prefix('v1')->group(function () {
             Route::get('all', [CourseController::class, 'all']);
             Route::post('store', [CourseController::class, 'store']);
             Route::get('show/{id}', [CourseController::class, 'show']);
+            Route::post('update/{id}', [CourseController::class, 'update']);
         });
     });
 });
