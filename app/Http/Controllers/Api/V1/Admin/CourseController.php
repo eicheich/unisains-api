@@ -171,5 +171,18 @@ class CourseController extends Controller
         }
 
     }
+    public function delete($id)
+    {
+        $course = Course::withTrashed()->find($id);
+        if (!$course) {
+            return response()->json([
+                'message' => 'Data not found',
+            ], 404);
+        }
+        $course->delete();
+        return response()->json([
+            'message' => 'Course deleted successfully',
+        ], 200);
+    }
 
 }

@@ -43,6 +43,7 @@ Route::prefix('v1')->group(function () {
             Route::post('store', [CourseController::class, 'store']);
             Route::get('show/{id}', [CourseController::class, 'show']);
             Route::post('update/{id}', [CourseController::class, 'update']);
+            Route::post('delete/{id}', [CourseController::class, 'delete']);
         });
     });
 });
