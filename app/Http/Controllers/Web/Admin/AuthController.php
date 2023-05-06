@@ -22,4 +22,11 @@ class AuthController extends Controller
             return redirect()->back()->withErrors(['password' => 'Password is incorrect']);
         }
     }
+
+    public function logout(Request $request)
+    {
+        auth()->logout();
+        return redirect()->route('login.page');
+    }
+   
 }

@@ -8,7 +8,17 @@
            aria-label="Search">
        <div class="navbar-nav">
            <div class="nav-item text-nowrap">
-               <a class="nav-link px-3" href="#">Sign out</a>
+              <form action="{{route('logout.post')}}" method="post">
+                @csrf
+                 <button class="nav-link px-3 btn-logout" type="submit">Sign out</button>
+                 <style>
+                    .btn-logout{
+                        background-color: transparent;
+                        border: none;
+                        color: white;
+                    }
+                 </style>
+              </form>
            </div>
        </div>
    </header>
