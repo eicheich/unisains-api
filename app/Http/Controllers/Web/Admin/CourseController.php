@@ -74,15 +74,7 @@ class CourseController extends Controller
     public function all()
     {
         $courses = Course::with('category')->paginate(9);
-        if ($courses->isEmpty()) {
-            return response()->json([
-                'message' => 'Data not found',
-            ], 404);
-        }
-        return response()->json([
-            'message' => 'Get all courses successfully',
-            'courses' => $courses,
-        ], 200);
+        return view('admin.course.course', compact('courses'));
     }
 
     public function show($id)

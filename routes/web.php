@@ -34,7 +34,7 @@ Route::prefix('auth')->group(function () {
 Route::prefix('admin')->middleware('isAdmin')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard.page');
     Route::prefix('course')->group(function () {
-        Route::get('all', [CourseController::class, 'all']);
+        Route::get('/', [CourseController::class, 'all'])->name('course.page');
         Route::post('store', [CourseController::class, 'store']);
         Route::get('show/{id}', [CourseController::class, 'show']);
         Route::post('update/{id}', [CourseController::class, 'update']);
