@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Web\Admin\CourseController;
+use App\Http\Controllers\Web\Admin\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +16,16 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('layouts.main');
+});
+
+Route::prefix('admin')->middleware('isAdmin')->group(function () {
+    Route::get('dashboard', [DashboardController::class, 'dashboard']);
+    Route::prefix('course')->group(function () {
+        Route::get('all', [CourseController::class, 'all']);
+        Route::post('store', [CourseController::class, 'store']);
+        Route::get('show/{id}', [CourseController::class, 'show']);
+        Route::post('update/{id}', [CourseController::class, 'update']);
+        Route::post('delete/{id}', [CourseController::class, 'delete']);
+    });
 });
