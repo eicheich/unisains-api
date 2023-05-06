@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('layouts.main');
+    return redirect()->route('dashboard.page');
 });
 
 Route::prefix('auth')->group(function () {
