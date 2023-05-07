@@ -1,6 +1,6 @@
 @extends('layouts.main')
 @section('content')
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         @if (session('status'))
             <div class="alert alert-success" role="alert">
                 {{ session('status') }}
@@ -10,7 +10,7 @@
         {{-- button add course --}}
         <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group me-2">
-                <a href="#" class="btn btn-sm btn-outline-secondary">Tambah Kursus</a>
+                <a href="{{route('add.course')}}" class="btn btn-sm btn-outline-secondary">Tambah Kursus</a>
             </div>
         </div>
     </div>

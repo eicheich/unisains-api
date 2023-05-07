@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Course;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -11,29 +12,27 @@ use Illuminate\Support\Facades\Validator;
 
 class CourseController extends Controller
 {
-    // store course
+    public function add()
+    {
+        $kategori = Category::all();
+        return view('admin.course.add', compact('kategori'));
+    }
     public function store(Request $request)
     {
-        // Validate data request
         $validator = Validator::make($request->all(), [
             'title_course' => 'required',
-            'description_course' => 'required',
+            'description' => 'required',
             'is_paid' => 'required|boolean',
             'category_id' => 'required|integer',
-            'price' => 'required_if:is_paid,1|numeric|min:0',
-            'discount' => 'required_if:is_paid,1|numeric|min:0|max:100',
             'certificate_course' => 'required|file|mimes:pdf,jpeg,png|max:2048',
             'image_course' => 'required|file|mimes:jpeg,png|max:2048',
         ]);
 
+        // jika validasi gagal maka akan kembali ke halaman sebelumnya danberi session error
         if ($validator->fails()) {
-            return response()->json([
-                'message' => 'Bad Request',
-                'errors' => $validator->errors(),
-            ], 400);
+            return redirect()->back()->with('status', $validator->errors());
         }
 
-        // Process request
         $certificate = $request->file('certificate_course');
         $certificate_name = time() . '.' . $certificate->getClientOriginalExtension();
         $certificate->move(public_path('storage/images/certificate'), $certificate_name);
@@ -44,7 +43,7 @@ class CourseController extends Controller
 
         $course = Course::create([
             'title_course' => $request->title_course,
-            'description' => $request->description_course,
+            'description' => $request->description,
             'is_paid' => $request->is_paid,
             'certificate_course' => $certificate_name,
             'image_course' => $image_name,
@@ -65,10 +64,7 @@ class CourseController extends Controller
             ]);
         }
 
-        return response()->json([
-            'message' => 'Course created successfully',
-            'course' => $course,
-        ], 201);
+        return redirect()->route('course.page')->with('status', 'course telah di tambahkan');
     }
 
     public function all()
@@ -101,8 +97,8 @@ class CourseController extends Controller
             'category_id' => 'required|integer',
             'price' => 'required_if:is_paid,1|numeric|min:0',
             'discount' => 'required_if:is_paid,1|numeric|min:0|max:100',
-            'certificate_course' => 'file|mimes:pdf,jpeg,png|max:2048',
-            'image_course' => 'file|mimes:jpeg,png|max:2048',
+            'certificate_course' => 'file|mimes:pdf,jpeg,png',
+            'image_course' => 'file|mimes:jpeg,png',
         ]);
 
         if ($validator->fails()) {
