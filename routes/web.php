@@ -3,6 +3,7 @@
 use App\Http\Controllers\Web\Admin\AuthController;
 use App\Http\Controllers\Web\Admin\CourseController;
 use App\Http\Controllers\Web\Admin\DashboardController;
+use App\Http\Controllers\Web\Admin\ModuleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -37,8 +38,12 @@ Route::prefix('admin')->middleware('isAdmin')->group(function () {
         Route::get('/', [CourseController::class, 'all'])->name('course.page');
         Route::get('add', [CourseController::class, 'add'])->name('add.course');
         Route::post('store', [CourseController::class, 'store'])->name('store.course');
-        Route::get('show/{id}', [CourseController::class, 'show']);
+        Route::get('show/{id}', [CourseController::class, 'show'])->name('course.show');
         Route::post('update/{id}', [CourseController::class, 'update']);
         Route::post('delete/{id}', [CourseController::class, 'delete']);
+
+        Route::prefix('modules')->group(function () {
+            Route::post('store', [ModuleController::class, 'store'])->name('store.modules');
+        });
     });
 });

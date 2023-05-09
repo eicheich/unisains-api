@@ -76,15 +76,8 @@ class CourseController extends Controller
     public function show($id)
     {
         $course = Course::with('category')->find($id);
-        if (!$course) {
-            return response()->json([
-                'message' => 'Data not found',
-            ], 404);
-        }
-        return response()->json([
-            'message' => 'Get course successfully',
-            'course' => $course,
-        ], 200);
+        $modules = DB::table('modules')->where('course_id', $id)->get();
+        return view('admin.course.show', compact('course', 'modules'));
     }
 
     public function update(Request $request, $id)

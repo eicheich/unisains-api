@@ -23,6 +23,29 @@ class isAdmin
         }
 
         return $next($request);
+        // if (!$request->hasHeader('Authorization')) {
+        //     return response()->json([
+        //         'message' => 'Unauthorized. Token not found.',
+        //     ], 401);
+        // }
+
+        // $token = explode(' ', $request->header('Authorization'))[1];
+
+        // if (!Auth::guard('sanctum')->check()) {
+        //     return response()->json([
+        //         'message' => 'Unauthorized. Invalid token or user is not an admin.',
+        //     ], 401);
+        // }
+
+        // $user = Auth::guard('sanctum')->user();
+        // if (!$user || $user->role != 'admin') {
+        //     return response()->json([
+        //         'message' => 'Unauthorized. Invalid token or user is not an admin.',
+        //     ], 401);
+        // }
+
+        // return $next($request);
+
     }
 
 

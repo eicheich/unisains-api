@@ -123,13 +123,13 @@
                             <h6 class="card-title mb-2">{{ $course->title_course }}</h6>
                             <p class="card-subtitle mb-2">Kategori : {{ $course->category->name_category }}</p>
                             <p class="card-text">{{ Str::limit($course->description, 70) }}</p>
-                            @if ($course->is_paid == 0) 
+                            @if ($course->is_paid == 0)
                                 <p class="card-text price">Gratis</p>
                             @else
                                 <p class="card-text price">Rp. {{ $course->price }}</p>
                             @endif
                             {{-- button lihat selengkapnya --}}
-                            <a class="btn btn-outline-secondary" href="#">Lihat selengkapnya</a>
+                            <a class="btn btn-outline-secondary" href="{{route('course.show', $course->id)}}">Lihat selengkapnya</a>
                         </div>
                     </div>
                 </div>
