@@ -15,11 +15,22 @@
                 <img src="{{ asset('storage/images/thumbnail_course/' . $course->image_course) }}" alt="Course Image"
                     class="img-fluid mb-3" />
                 <h1 class="mb-3">{{ $course->title_course }}</h1>
-                <p class="lead">Deskripsi kursus singkat</p>
+                {{-- check is_paid --}}
+                @if ($course->is_paid == 0)
+                    <p>Gratis</p>
+                @else
+                    <p>Harga : Rp. {{ $course->price }}</p>
+                @endif
+                {{-- check discount --}}
+                @if ($course->discount == 0)
+                    <p>Diskon: Tidak ada</p>
+                @else
+                    <p>Diskon: {{ $course->discount }}%</p >
+                @endif
                 <hr class="my-4" />
                 <h2>Deskripsi Kursus</h2>
                 <p>{{ $course->description }}</p>
-                <h2>Apa yang akan Anda pelajari</h2>
+                <h2>Modul</h2>
                 <ul>
                     @if ($modules->isEmpty())
                         <li>Belum ada modul</li>
@@ -27,19 +38,21 @@
                         @foreach ($modules as $m)
                             <div id="accordion">
                                 <div class="card mt-5">
-                                    <div class="card-header" id="headingOne">
+                                    <div class="card-header" id="heading{{ $m->id }}">
                                         <h5 class="mb-0">
-                                            <button class="btn" data-toggle="collapse" data-target="#collapseOne"
-                                                aria-expanded="true" aria-controls="collapseOne">
+                                            <button class="btn" data-toggle="collapse"
+                                                data-target="#collapse{{ $m->id }}" aria-expanded="true"
+                                                aria-controls="collapse{{ $m->id }}">
                                                 {{ $m->title_module }}
                                             </button>
                                         </h5>
                                     </div>
-                                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
-                                        data-parent="#accordion">
+                                    <div id="collapse{{ $m->id }}" class="collapse show"
+                                        aria-labelledby="heading{{ $m->id }}" data-parent="#accordion">
                                         <div class="card">
-                                            <img src="{{ asset('storage/images/module/' . $m->image_module) }}"
-                                                 alt="...">
+                                            <img class="image_module"
+                                                src="{{ asset('storage/images/module/' . $m->image_module) }}"
+                                                alt="...">
                                         </div>
                                         <div class="card-body">
                                             Deskripsi <br>
@@ -49,10 +62,14 @@
                                             Isi Materi <br>
                                             {{ $m->materi_module }}}
                                         </div>
+                        <a href="#" class="btn btn-sm btn-outline-secondary m-2">Edit kursus</a>
+                        <a href="#" class="btn btn-sm btn-outline-secondary m-2">Edit kursus</a>
+
                                     </div>
                                 </div>
                             </div>
                         @endforeach
+
                         {{-- button tambah moduke --}}
                     @endif
                     <button id="add-module-btn" class="btn btn-sm btn-outline-secondary mt-5" data-toggle="modal"
@@ -115,6 +132,10 @@
                                 display: inline-block;
                                 width: 100%;
                                 margin-bottom: 0;
+                            }
+
+                            .image_module {
+                                width: 10rem;
                             }
 
                             .custom-file-input {
@@ -182,47 +203,26 @@
                         {{-- <li>Topik kedua</li>
                     <li>Topik ketiga</li> --}}
                 </ul>
-                <h2>Persyaratan</h2>
-                <ul>
-                    <li>Persyaratan pertama</li>
-                    <li>Persyaratan kedua</li>
-                    <li>Persyaratan ketiga</li>
-                </ul>
+                <h2>Kategori</h2>
+                <p>{{ $course->category->name_category }}</p>
             </div>
 
             <script>
-                // Mengambil elemen dengan ID accordion
                 const accordion = document.querySelector('#accordion');
+                const collapses = accordion.querySelectorAll('.collapse');
 
-                // Mengambil seluruh elemen card di dalam accordion
-                const cards = accordion.querySelectorAll('.card');
-
-                // Menambahkan event listener untuk setiap card
-                cards.forEach(card => {
-                    card.addEventListener('click', () => {
-                        // Mengambil elemen collapse di dalam card
-                        const collapse = card.querySelector('.collapse');
-
-                        // Memeriksa apakah collapse sedang ditampilkan atau disembunyikan
-                        const isCollapsed = collapse.classList.contains('show');
-
-                        // Mengubah tampilan collapse sesuai dengan kondisi sebelumnya
-                        if (isCollapsed) {
-                            collapse.classList.remove('show');
-                        } else {
-                            collapse.classList.add('show');
-                        }
+                collapses.forEach(collapse => {
+                    collapse.addEventListener('show.bs.collapse', () => {
+                    });
+                    collapse.addEventListener('hide.bs.collapse', () => {
                     });
                 });
             </script>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Harga: $99</h5>
-                        <p class="card-text">
-                            Diskon 20% untuk pendaftar awal.
-                        </p>
-                        <a href="#" class="btn btn-primary btn-lg btn-block">Edit kursus</a>
+                        <a href="#" class="btn btn-sm btn-outline-secondary m-2">Edit kursus</a>
+                        <a href="#" class="btn btn-sm btn-outline-secondary m-2">Edit kursus</a>
                     </div>
                 </div>
             </div>
