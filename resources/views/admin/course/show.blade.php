@@ -23,13 +23,15 @@
                 @endif
                 {{-- check discount --}}
                 @if ($course->discount == 0)
-                    <p>Diskon: Tidak ada</p>
+                <p>Diskon: Tidak ada</p>
                 @else
-                    <p>Diskon: {{ $course->discount }}%</p >
-                @endif
-                <hr class="my-4" />
-                <h2>Deskripsi Kursus</h2>
-                <p>{{ $course->description }}</p>
+                <p>Diskon: {{ $course->discount }}%</p >
+                    @endif
+                    <hr class="my-4" />
+                    <h2>Kategori</h2>
+                    <p>{{ $course->category->name_category }}</p>
+                    <h2>Deskripsi Kursus</h2>
+                    <p>{{ $course->description }}</p>
                 <h2>Modul</h2>
                 <ul>
                     @if ($modules->isEmpty())
@@ -203,8 +205,6 @@
                         {{-- <li>Topik kedua</li>
                     <li>Topik ketiga</li> --}}
                 </ul>
-                <h2>Kategori</h2>
-                <p>{{ $course->category->name_category }}</p>
             </div>
 
             <script>
@@ -221,8 +221,8 @@
             <div class="col-md-3">
                 <div class="card">
                     <div class="card-body">
-                        <a href="#" class="btn btn-sm btn-outline-secondary m-2">Edit kursus</a>
-                        <a href="#" class="btn btn-sm btn-outline-secondary m-2">Edit kursus</a>
+                        <a href="#" class="btn btn-m btn-outline-warning">Edit kursus</a>
+                        <a href="#" class="btn btn-m btn-outline-danger">Hapus kursus</a>
                     </div>
                 </div>
             </div>

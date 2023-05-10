@@ -129,7 +129,9 @@
                                 <p class="card-text price">Rp. {{ $course->price }}</p>
                             @endif
                             {{-- button lihat selengkapnya --}}
-                            <a class="btn btn-outline-secondary" href="{{route('course.show', $course->id)}}">Lihat selengkapnya</a>
+                            <a class="btn btn-outline-warning" href="#">Edit Kursus</a>
+                            <a class="btn btn-outline-primary" href="{{route('course.show', $course->id)}}">Lihat selengkapnya</a>
+                            <a class="btn btn-outline-danger" href="#">Hapus Kursus</a>
                         </div>
                     </div>
                 </div>
