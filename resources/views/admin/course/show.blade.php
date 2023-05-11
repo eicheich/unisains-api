@@ -23,15 +23,15 @@
                 @endif
                 {{-- check discount --}}
                 @if ($course->discount == 0)
-                <p>Diskon: Tidak ada</p>
+                    <p>Diskon: Tidak ada</p>
                 @else
-                <p>Diskon: {{ $course->discount }}%</p >
-                    @endif
-                    <hr class="my-4" />
-                    <h2>Kategori</h2>
-                    <p>{{ $course->category->name_category }}</p>
-                    <h2>Deskripsi Kursus</h2>
-                    <p>{{ $course->description }}</p>
+                    <p>Diskon: {{ $course->discount }}%</p>
+                @endif
+                <hr class="my-4" />
+                <h2>Kategori</h2>
+                <p>{{ $course->category->name_category }}</p>
+                <h2>Deskripsi Kursus</h2>
+                <p>{{ $course->description }}</p>
                 <h2>Modul</h2>
                 <ul>
                     @if ($modules->isEmpty())
@@ -64,19 +64,17 @@
                                             Isi Materi <br>
                                             {{ $m->materi_module }}}
                                         </div>
-                        <a href="#" class="btn btn-sm btn-outline-secondary m-2">Edit kursus</a>
-                        <a href="#" class="btn btn-sm btn-outline-secondary m-2">Edit kursus</a>
-
+                                            <a href="{{route('update.modules.page', $m->id)}}" class="btn btn-sm btn-outline-warning m-2">Edit Modul</a>
+                                            <a href="#" class="btn btn-sm btn-outline-danger m-2">Hapus Modul</a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
                         @endforeach
 
                         {{-- button tambah moduke --}}
                     @endif
                     <button id="add-module-btn" class="btn btn-sm btn-outline-secondary mt-5" data-toggle="modal"
                         data-target="#add-module-modal">Tambah Modul</button>
-
                     <div class="modal fade" id="add-module-modal" tabindex="-1" role="dialog"
                         aria-labelledby="add-module-modal-title" aria-hidden="true">
                         <div class="modal-dialog" role="document">
@@ -93,8 +91,8 @@
                                         @csrf
                                         <div class="form-group">
                                             <label for="module-name">Judul Modul</label>
-                                            <input type="text" class="form-control" id="module-name" name="title_module"
-                                                placeholder="Nama Modul">
+                                            <input type="text" class="form-control" id="module-name"
+                                                name="title_module" placeholder="Nama Modul">
                                         </div>
                                         <div class="form-group">
                                             <label for="module-description">Deskripsi Modul</label>
@@ -127,7 +125,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <style>
                             .custom-file {
                                 position: relative;
@@ -202,8 +199,6 @@
                                 }
                             }
                         </script>
-                        {{-- <li>Topik kedua</li>
-                    <li>Topik ketiga</li> --}}
                 </ul>
             </div>
 
@@ -212,10 +207,8 @@
                 const collapses = accordion.querySelectorAll('.collapse');
 
                 collapses.forEach(collapse => {
-                    collapse.addEventListener('show.bs.collapse', () => {
-                    });
-                    collapse.addEventListener('hide.bs.collapse', () => {
-                    });
+                    collapse.addEventListener('show.bs.collapse', () => {});
+                    collapse.addEventListener('hide.bs.collapse', () => {});
                 });
             </script>
             <div class="col-md-3">

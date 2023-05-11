@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Module;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class ModuleController extends Controller
@@ -34,4 +35,68 @@ class ModuleController extends Controller
             'course_id' => $request->course_id,
         ]);
     }
+
+    public function update(Request $request, $id)
+    {
+
+        $module = Module::findorfail($id);
+
+        $validator = Validator::make($request->all(), [
+            'title_module' => 'required|string|max:255',
+            'materi_module' => 'required|string',
+            'description' => 'required|string',
+            'image_module' => 'nullable|file|mimes:jpeg,png|max:2048',
+        ]);
+        // dd($validator);
+
+        $image = $request->file('image_module');
+        if ($image){
+            $image_name = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('storage/images/module'), $image_name);
+        } else {
+            $image_name = $module->image_module;
+        }
+
+        // update data
+        $module->update([
+            'title_module' => $request->title_module,
+            'materi_module' => $request->materi_module,
+            'description' => $request->description,
+            'image_module' => $image_name,
+        ]);
+
+        // $validator = Validator::make($request->all(), [
+        //     'title_module' => 'required|string|max:255',
+        //     'materi_module' => 'required|string',
+        //     'description' => 'required|string',
+        //     'image_module' => 'required|file|mimes:jpeg,png|max:2048',
+        // ]);
+
+
+        // // $old_image = $request->old_image;
+
+        // $image = $request->file('image_module');
+
+
+
+        // $module = Module::where('id', $id)->update([
+        //     'title_module' => $request->title_module,
+        //     'materi_module' => $request->materi_module,
+        //     'description' => $request->description,
+        //     'image_module' => $image,
+        // ]);
+
+        return redirect()->route('course.page');
+
+    }
+
+    public function updatePage($id)
+    {
+        $module = Module::where('id', $id)->first();
+        return view('admin.course.module.update', compact('module'));
+    }
+
+        # code...
+
+
 }

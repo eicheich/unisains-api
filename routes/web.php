@@ -44,6 +44,8 @@ Route::prefix('admin')->middleware('isAdmin')->group(function () {
 
         Route::prefix('modules')->group(function () {
             Route::post('store', [ModuleController::class, 'store'])->name('store.modules');
+            Route::get('update-page/{id}', [ModuleController::class, 'updatePage'])->name('update.modules.page');
+            Route::post('update/{id}', [ModuleController::class, 'update'])->name('update.modules');
         });
     });
 });

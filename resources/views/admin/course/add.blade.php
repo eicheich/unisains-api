@@ -10,7 +10,6 @@
         <div class="btn-toolbar mb-2 mb-md-0">
         </div>
     </div>
-
     {{-- form add course --}}
     <form action="{{ route('store.course') }}" method="post" enctype="multipart/form-data">
         @csrf
@@ -96,98 +95,99 @@
         <div class="card mt-5">
             <button type="submit" class="btn btn-primary">Submit</button>
         </div>
-        <style>
-            .card {
-                width: 100%;
-                max-width: 500px;
-                margin: 0 auto;
+    </form>
+    <style>
+        .card {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .custom-file {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            margin-bottom: 0;
+        }
+
+        .custom-file-input {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            height: calc(2.25rem + 2px);
+            margin: 0;
+            opacity: 0;
+        }
+
+        .custom-file-label {
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            z-index: 1;
+            height: calc(2.25rem + 2px);
+            padding: 0.375rem 0.75rem;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+            font-weight: 400;
+            cursor: pointer;
+        }
+
+        .preview {
+            text-align: center;
+        }
+
+        .preview img {
+            max-width: 100%;
+            height: auto;
+            margin: 0 auto;
+        }
+    </style>
+
+    <script>
+        function previewImage(inputId) {
+            var preview = document.querySelector('#' + inputId + '_preview');
+            var file = document.querySelector('#' + inputId).files[0];
+            var reader = new FileReader();
+
+            reader.onloadend = function() {
+                preview.src = reader.result;
             }
 
-            .custom-file {
-                position: relative;
-                display: inline-block;
-                width: 100%;
-                margin-bottom: 0;
+            if (file) {
+                reader.readAsDataURL(file);
+            } else {
+                preview.src = "";
+            }
+        }
+
+
+        function togglePrice() {
+            var free_checkbox = document.querySelector('#free_course');
+            var paid_checkbox = document.querySelector('#paid_course');
+            var price_container = document.querySelector('#price_container');
+
+            if (paid_checkbox.checked) {
+                price_container.style.display = 'block';
+            } else {
+                price_container.style.display = 'none';
             }
 
-            .custom-file-input {
-                position: relative;
-                z-index: 2;
-                width: 100%;
-                height: calc(2.25rem + 2px);
-                margin: 0;
-                opacity: 0;
+            free_checkbox.checked = !paid_checkbox.checked;
+        }
+
+        function toggleDiscount() {
+            var discount_checkbox = document.querySelector('#discount');
+            var discount_container = document.querySelector('#discount_container');
+
+            if (discount_checkbox.checked) {
+                discount_container.style.display = 'block';
+            } else {
+                discount_container.style.display = 'none';
             }
-
-            .custom-file-label {
-                position: absolute;
-                top: 0;
-                right: 0;
-                left: 0;
-                z-index: 1;
-                height: calc(2.25rem + 2px);
-                padding: 0.375rem 0.75rem;
-                line-height: 1.5;
-                color: #495057;
-                background-color: #fff;
-                border: 1px solid #ced4da;
-                border-radius: 0.25rem;
-                font-weight: 400;
-                cursor: pointer;
-            }
-
-            .preview {
-                text-align: center;
-            }
-
-            .preview img {
-                max-width: 100%;
-                height: auto;
-                margin: 0 auto;
-            }
-        </style>
-
-        <script>
-            function previewImage(inputId) {
-                var preview = document.querySelector('#' + inputId + '_preview');
-                var file = document.querySelector('#' + inputId).files[0];
-                var reader = new FileReader();
-
-                reader.onloadend = function() {
-                    preview.src = reader.result;
-                }
-
-                if (file) {
-                    reader.readAsDataURL(file);
-                } else {
-                    preview.src = "";
-                }
-            }
-
-
-            function togglePrice() {
-                var free_checkbox = document.querySelector('#free_course');
-                var paid_checkbox = document.querySelector('#paid_course');
-                var price_container = document.querySelector('#price_container');
-
-                if (paid_checkbox.checked) {
-                    price_container.style.display = 'block';
-                } else {
-                    price_container.style.display = 'none';
-                }
-
-                free_checkbox.checked = !paid_checkbox.checked;
-            }
-
-            function toggleDiscount() {
-                var discount_checkbox = document.querySelector('#discount');
-                var discount_container = document.querySelector('#discount_container');
-
-                if (discount_checkbox.checked) {
-                    discount_container.style.display = 'block';
-                } else {
-                    discount_container.style.display = 'none';
-                }
-            }
-        </script>
-    @endsection
+        }
+    </script>
+@endsection

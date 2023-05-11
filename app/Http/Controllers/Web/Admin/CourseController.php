@@ -27,8 +27,6 @@ class CourseController extends Controller
             'certificate_course' => 'required|file|mimes:pdf,jpeg,png|max:2048',
             'image_course' => 'required|file|mimes:jpeg,png|max:2048',
         ]);
-
-        // jika validasi gagal maka akan kembali ke halaman sebelumnya danberi session error
         if ($validator->fails()) {
             return redirect()->back()->with('status', $validator->errors());
         }
@@ -40,7 +38,6 @@ class CourseController extends Controller
         $image = $request->file('image_course');
         $image_name = time() . '.' . $image->getClientOriginalExtension();
         $image->move(public_path('storage/images/thumbnail_course'), $image_name);
-
         $course = Course::create([
             'title_course' => $request->title_course,
             'description' => $request->description,
@@ -66,20 +63,17 @@ class CourseController extends Controller
 
         return redirect()->route('course.page')->with('status', 'course telah di tambahkan');
     }
-
     public function all()
     {
         $courses = Course::with('category')->paginate(9);
         return view('admin.course.course', compact('courses'));
     }
-
     public function show($id)
     {
         $course = Course::with('category')->find($id);
         $modules = DB::table('modules')->where('course_id', $id)->get();
         return view('admin.course.show', compact('course', 'modules'));
     }
-
     public function update(Request $request, $id)
     {
         // Validate data request
@@ -100,15 +94,12 @@ class CourseController extends Controller
                 'errors' => $validator->errors(),
             ], 400);
         }
-
-        // Process request
         $course = Course::find($id);
         if (!$course) {
             return response()->json([
                 'message' => 'Data not found',
             ], 404);
         }
-
         if ($request->hasFile('certificate_course')) {
             $certificate = $request->file('certificate_course');
             $certificate_name = time() . '.' . $certificate->getClientOriginalExtension();
