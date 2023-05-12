@@ -151,15 +151,17 @@ class CourseController extends Controller
     }
     public function delete($id)
     {
-        $course = Course::withTrashed()->find($id);
-        if (!$course) {
-            return response()->json([
-                'message' => 'Data not found',
-            ], 404);
+        $course = Course::findorfail($id);
+        $old_certificate = public_path('storage/images/certificate/') . $course->certificate_course;
+        unlink($old_certificate);
+        if ($course) {
+            $old_image = public_path('storage/images/thumbnail_course/') . $course->image_course;
+            if (file_exists($old_image && $old_certificate)) {
+                unlink($old_image);
+
+            }
+            $course->delete();
         }
-        $course->delete();
-        return response()->json([
-            'message' => 'Course deleted successfully',
-        ], 200);
+        return redirect()->route('course.page')->with('status', 'course telah di hapus');
     }
 }

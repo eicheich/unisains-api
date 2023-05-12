@@ -41,7 +41,7 @@ Route::prefix('admin')->middleware('isAdmin')->group(function () {
         Route::get('show/{id}', [CourseController::class, 'show'])->name('course.show');
         Route::get('update-page/{id}', [CourseController::class, 'updatePage'])->name('update.course.page');
         Route::post('update/{id}', [CourseController::class, 'update'])->name('update.course');
-        Route::post('delete/{id}', [CourseController::class, 'delete']);
+        Route::post('delete/{id}', [CourseController::class, 'delete'])->name('delete.course');
 
         Route::prefix('modules')->group(function () {
             Route::post('store', [ModuleController::class, 'store'])->name('store.modules');

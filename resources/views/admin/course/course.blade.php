@@ -128,10 +128,28 @@
                             @else
                                 <p class="card-text price">Rp. {{ $course->price }}</p>
                             @endif
-                            {{-- button lihat selengkapnya --}}
-                            <a class="btn btn-outline-warning" href="{{route('update.course.page', $course->id)}}">Edit Kursus</a>
-                            <a class="btn btn-outline-primary" href="{{route('course.show', $course->id)}}">Lihat selengkapnya</a>
-                            <a class="btn btn-outline-danger" href="#">Hapus Kursus</a>
+                            <a class="btn btn-outline-warning" href="{{ route('update.course.page', $course->id) }}">Edit
+                                Kursus</a>
+                            <a class="btn btn-outline-primary" href="{{ route('course.show', $course->id) }}">Lihat
+                                selengkapnya</a>
+                            <form action="{{ route('delete.course', $course->id) }}" method="post">
+                                @csrf
+                                <button class="btn btn-outline-danger" id="submit-delete" type="submit">Hapus
+                                    Kursus</button>
+                            </form>
+
+                            <script>
+                                const deleteButton = document.getElementById("submit-delete");
+                                deleteButton.addEventListener("click", function(event) {
+                                    event.preventDefault();
+                                    const confirmation = confirm("Apakah Anda yakin ingin menghapus kursus ini?");
+                                    if (confirmation) {
+                                        // lanjutkan dengan submit form
+                                        this.form.submit();
+                                    }
+                                });
+                            </script>
+
                         </div>
                     </div>
                 </div>
