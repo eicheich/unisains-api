@@ -75,59 +75,64 @@ class CourseController extends Controller
         $module_rangkuman = DB::table('module_rangkuman')->where('course_id', $id)->get();
         return view('admin.course.show', compact('course', 'modules', 'module_rangkuman'));
     }
+    public function updatePage($id)
+    {
+        $course = Course::all()->find($id);
+        $category = Category::all();
+        return view('admin.course.edit', compact('course', 'category'));
+    }
     public function update(Request $request, $id)
     {
         // Validate data request
         $validator = Validator::make($request->all(), [
             'title_course' => 'required',
-            'description_course' => 'required',
+            'description' => 'required',
             'is_paid' => 'required|boolean',
             'category_id' => 'required|integer',
-            'price' => 'required_if:is_paid,1|numeric|min:0',
-            'discount' => 'required_if:is_paid,1|numeric|min:0|max:100',
-            'certificate_course' => 'file|mimes:pdf,jpeg,png',
-            'image_course' => 'file|mimes:jpeg,png',
+            'certificate_course' => 'nullable|file|mimes:pdf,jpeg,png   ',
+            'image_course' => 'nullable|file|mimes:jpeg,png',
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                'message' => 'Bad Request',
-                'errors' => $validator->errors(),
-            ], 400);
+            return redirect()->back()->with('status', $validator->errors());
         }
         $course = Course::find($id);
-        if (!$course) {
-            return response()->json([
-                'message' => 'Data not found',
-            ], 404);
-        }
-        if ($request->hasFile('certificate_course')) {
-            $certificate = $request->file('certificate_course');
-            $certificate_name = time() . '.' . $certificate->getClientOriginalExtension();
-            $certificate->move(public_path('storage/images/certificate'), $certificate_name);
-            Storage::delete('public/images/certificate/' . $course->certificate_course);
-        } else {
-            $certificate_name = $course->certificate_course;
-        }
-
+        $image = $request->file('image_course');
         if ($request->hasFile('image_course')) {
+            $old_image = public_path('storage/images/thumbnail_course/') . $course->image_course;
+            if (file_exists($old_image)) {
+                unlink($old_image);
+            }
             $image = $request->file('image_course');
             $image_name = time() . '.' . $image->getClientOriginalExtension();
             $image->move(public_path('storage/images/thumbnail_course'), $image_name);
-            Storage::delete('public/images/thumbnail_course/' . $course->image_course);
         } else {
             $image_name = $course->image_course;
         }
 
+
+        $certificate = $request->file('certificate_course');
+        if ($request->hasFile('certificate_course')) {
+            $old_image = public_path('storage/images/certificate/') . $course->certificate_course;
+            if (file_exists($old_image)) {
+                unlink($old_image);
+            }
+            $certificate = $request->file('certificate_course');
+            $certificate_name = time() . '.' . $certificate->getClientOriginalExtension();
+            $certificate->move(public_path('storage/images/certificate'), $certificate_name);
+
+        } else {
+            $certificate_name = $course->certificate_course;
+        }
+
         $course->update([
             'title_course' => $request->title_course,
-            'description' => $request->description_course,
+            'description' => $request->description,
             'is_paid' => $request->is_paid,
             'certificate_course' => $certificate_name,
             'image_course' => $image_name,
             'category_id' => $request->category_id,
         ]);
-
         if ($request->is_paid == 1 && $request->discount !== null) {
             $price = $request->price;
             $discount = $request->discount;
@@ -141,6 +146,8 @@ class CourseController extends Controller
                 'price' => $price,
             ]);
         }
+        return redirect()->route('course.page')->with('status', 'course telah di update');
+
     }
     public function delete($id)
     {

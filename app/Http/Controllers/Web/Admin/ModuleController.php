@@ -47,6 +47,9 @@ class ModuleController extends Controller
             'description' => 'required|string',
             'image_module' => 'nullable|file|mimes:jpeg,png|max:2048',
         ]);
+        if ($validator->fails()) {
+            return redirect()->back()->with('status', $validator->errors());
+        }
         $module = Module::findorfail($id);
         $image = $request->file('image_module');
         if ($request->hasFile('image_module')) {

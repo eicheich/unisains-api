@@ -39,7 +39,8 @@ Route::prefix('admin')->middleware('isAdmin')->group(function () {
         Route::get('add', [CourseController::class, 'add'])->name('add.course');
         Route::post('store', [CourseController::class, 'store'])->name('store.course');
         Route::get('show/{id}', [CourseController::class, 'show'])->name('course.show');
-        Route::post('update/{id}', [CourseController::class, 'update']);
+        Route::get('update-page/{id}', [CourseController::class, 'updatePage'])->name('update.course.page');
+        Route::post('update/{id}', [CourseController::class, 'update'])->name('update.course');
         Route::post('delete/{id}', [CourseController::class, 'delete']);
 
         Route::prefix('modules')->group(function () {
