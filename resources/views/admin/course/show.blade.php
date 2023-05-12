@@ -35,7 +35,7 @@
                 <h2>Modul</h2>
                 <ul>
                     @if ($modules->isEmpty())
-                        <li>Belum ada modul</li>
+                       <h5>Belum ada modul rangkuman</h5>
                     @else
                         @foreach ($modules as $m)
                             <div id="accordion">
@@ -64,16 +64,18 @@
                                             Isi Materi <br>
                                             {{ $m->materi_module }}}
                                         </div>
-                                            <a href="{{route('update.modules.page', $m->id)}}" class="btn btn-sm btn-outline-warning m-2">Edit Modul</a>
-                                            {{-- <a href="#" class="btn btn-sm btn-outline-danger m-2">Hapus Modul</a> --}}
-                                            <form action="{{route('delete.modules',$m->id)}}" method="post">
-                                                @csrf
-                                                <button type="submit" class="btn btn-sm btn-outline-danger m-2">Hapus Modul</button>
+                                        <a href="{{ route('update.modules.page', $m->id) }}"
+                                            class="btn btn-sm btn-outline-warning m-2">Edit Modul</a>
+                                        {{-- <a href="#" class="btn btn-sm btn-outline-danger m-2">Hapus Modul</a> --}}
+                                        <form action="{{ route('delete.modules', $m->id) }}" method="post">
+                                            @csrf
+                                            <button type="submit" class="btn btn-sm btn-outline-danger m-2">Hapus
+                                                Modul</button>
 
-                                            </form>
-                                        </div>
+                                        </form>
                                     </div>
                                 </div>
+                            </div>
                         @endforeach
 
                         {{-- button tambah moduke --}}
@@ -96,8 +98,8 @@
                                         @csrf
                                         <div class="form-group">
                                             <label for="module-name">Judul Modul</label>
-                                            <input type="text" class="form-control" id="module-name"
-                                                name="title_module" placeholder="Nama Modul">
+                                            <input type="text" class="form-control" id="module-name" name="title_module"
+                                                placeholder="Nama Modul">
                                         </div>
                                         <div class="form-group">
                                             <label for="module-description">Deskripsi Modul</label>
@@ -130,99 +132,100 @@
                                 </div>
                             </div>
                         </div>
-                        <style>
-                            .custom-file {
-                                position: relative;
-                                display: inline-block;
-                                width: 100%;
-                                margin-bottom: 0;
-                            }
 
-                            .image_module {
-                                width: 10rem;
-                            }
 
-                            .custom-file-input {
-                                position: relative;
-                                z-index: 2;
-                                width: 100%;
-                                height: calc(2.25rem + 2px);
-                                margin: 0;
-                                opacity: 0;
-                            }
-
-                            .custom-file-label {
-                                position: absolute;
-                                top: 0;
-                                right: 0;
-                                left: 0;
-                                z-index: 1;
-                                height: calc(2.25rem + 2px);
-                                padding: 0.375rem 0.75rem;
-                                line-height: 1.5;
-                                color: #495057;
-                                background-color: #fff;
-                                border: 1px solid #ced4da;
-                                border-radius: 0.25rem;
-                                font-weight: 400;
-                                cursor: pointer;
-                            }
-
-                            .preview {
-                                text-align: center;
-                            }
-
-                            .preview img {
-                                max-width: 100%;
-                                height: auto;
-                                margin: 0 auto;
-                            }
-                        </style>
-                        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-                        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-                        <script>
-                            $(document).ready(function() {
-                                $('#add-module-btn').click(function() {
-                                    // tampilkan modal
-                                    $('#add-module-modal').modal('show');
-                                });
-                            });
-
-                            function previewImage(inputId) {
-                                var preview = document.querySelector('#' + inputId + '_preview');
-                                var file = document.querySelector('#' + inputId).files[0];
-                                var reader = new FileReader();
-
-                                reader.onloadend = function() {
-                                    preview.src = reader.result;
-                                }
-
-                                if (file) {
-                                    reader.readAsDataURL(file);
-                                } else {
-                                    preview.src = "";
-                                }
-                            }
-                        </script>
-                </ul>
-            </div>
-
-            <script>
-                const accordion = document.querySelector('#accordion');
-                const collapses = accordion.querySelectorAll('.collapse');
-
-                collapses.forEach(collapse => {
-                    collapse.addEventListener('show.bs.collapse', () => {});
-                    collapse.addEventListener('hide.bs.collapse', () => {});
-                });
-            </script>
-            <div class="col-md-3">
-                <div class="card">
-                    <div class="card-body">
-                        <a href="#" class="btn btn-m btn-outline-warning">Edit kursus</a>
-                        <a href="#" class="btn btn-m btn-outline-danger">Hapus kursus</a>
-                    </div>
-                </div>
+                    </ul>
+                    <h2>Modul Rangkuman</h2>
+                    @if ($module_rangkuman->isEmpty())
+                        <h5>Belum ada modul rangkuman</h5>
+                        {{-- @else --}}
+                    @endif
             </div>
         </div>
-    @endsection
+    </div>
+
+
+
+    </div>
+    <style>
+        .custom-file {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            margin-bottom: 0;
+        }
+
+        .image_module {
+            width: 10rem;
+        }
+
+        .custom-file-input {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            height: calc(2.25rem + 2px);
+            margin: 0;
+            opacity: 0;
+        }
+
+        .custom-file-label {
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            z-index: 1;
+            height: calc(2.25rem + 2px);
+            padding: 0.375rem 0.75rem;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+            font-weight: 400;
+            cursor: pointer;
+        }
+
+        .preview {
+            text-align: center;
+        }
+
+        .preview img {
+            max-width: 100%;
+            height: auto;
+            margin: 0 auto;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script>
+        const accordion = document.querySelector('#accordion');
+        const collapses = accordion.querySelectorAll('.collapse');
+
+        collapses.forEach(collapse => {
+            collapse.addEventListener('show.bs.collapse', () => {});
+            collapse.addEventListener('hide.bs.collapse', () => {});
+        });
+        $(document).ready(function() {
+            $('#add-module-btn').click(function() {
+                // tampilkan modal
+                $('#add-module-modal').modal('show');
+            });
+        });
+
+        function previewImage(inputId) {
+            var preview = document.querySelector('#' + inputId + '_preview');
+            var file = document.querySelector('#' + inputId).files[0];
+            var reader = new FileReader();
+
+            reader.onloadend = function() {
+                preview.src = reader.result;
+            }
+
+            if (file) {
+                reader.readAsDataURL(file);
+            } else {
+                preview.src = "";
+            }
+        }
+    </script>
+@endsection

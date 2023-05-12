@@ -60,9 +60,6 @@ class ModuleController extends Controller
         } else {
             $image_name = $module->image_module;
         }
-
-
-        // update data
         $module->update([
             'title_module' => $request->title_module,
             'materi_module' => $request->materi_module,
@@ -71,13 +68,11 @@ class ModuleController extends Controller
         ]);
         return redirect()->route('course.page');
     }
-
     public function updatePage($id)
     {
         $module = Module::where('id', $id)->first();
         return view('admin.course.module.update', compact('module'));
     }
-
     public function delete($id)
     {
         $module = Module::findorfail($id);
