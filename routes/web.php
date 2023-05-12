@@ -32,7 +32,7 @@ Route::prefix('auth')->group(function () {
     });
 });
 
-Route::prefix('admin')->middleware('isAdmin')->group(function () {
+Route::prefix('admin')->middleware('isAdminWeb')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard.page');
     Route::prefix('course')->group(function () {
         Route::get('/', [CourseController::class, 'all'])->name('course.page');
