@@ -65,7 +65,12 @@
                                             {{ $m->materi_module }}}
                                         </div>
                                             <a href="{{route('update.modules.page', $m->id)}}" class="btn btn-sm btn-outline-warning m-2">Edit Modul</a>
-                                            <a href="#" class="btn btn-sm btn-outline-danger m-2">Hapus Modul</a>
+                                            {{-- <a href="#" class="btn btn-sm btn-outline-danger m-2">Hapus Modul</a> --}}
+                                            <form action="{{route('delete.modules',$m->id)}}" method="post">
+                                                @csrf
+                                                <button type="submit" class="btn btn-sm btn-outline-danger m-2">Hapus Modul</button>
+
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
