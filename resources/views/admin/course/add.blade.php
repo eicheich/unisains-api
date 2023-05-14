@@ -92,9 +92,19 @@
             </div>
         </div>
         {{-- button submit --}}
-        <div class="card mt-5">
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </div>
+        <button type="submit" class="btn btn-primary w-5 m-5">Submit</button>
+        <style>
+            .btn-add {
+                margin-top: 5rem;
+                padding: 10px 10rem 10px 10rem;
+                border-radius: 10px;
+                background-color: orange;
+                /* remove outline */
+                outline: none;
+                color: white;
+                /* center */
+            }
+        </style>
     </form>
     <style>
         .card {
