@@ -80,12 +80,12 @@
                                 <div class="card-body">
                                     <form role="form" class="text-start">
                                         <div class="input-group input-group-outline my-3">
-                                            {{-- <label class="form-label">Email</label> --}}
-                                            <input type="email" name="email" class="form-control" placeholder="email">
+                                            <input type="email" name="email" class="form-control"
+                                                placeholder="email">
                                         </div>
                                         <div class="input-group input-group-outline mb-3">
-                                            {{-- <label class="form-label">Password</label> --}}
-                                            <input type="password" name="password" class="form-control" placeholder="password">
+                                            <input type="password" name="password" class="form-control"
+                                                placeholder="password">
                                         </div>
                                         <div class="text-center">
                                             <button type="submit"

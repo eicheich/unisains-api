@@ -99,16 +99,24 @@
         <div class="search-filter">
             <div class="col">
                 <form action="#" method="GET">
-                    <div class="input-group mb-3">
+                    <div class="input-group input-group-outline mb-3">
                         <input type="text" class="form-control" placeholder="Search by course name"
                             aria-label="Recipient's username" aria-describedby="button-addon2" name="search">
                         <select class="" name="category">
-                            <option value="">All categories</option>
+                            <option value="select">All categories</option>
                             <option value="math">Math</option>
                             <option value="science">Science</option>
                             <option value="history">History</option>
                         </select>
-                        <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
+                        <button class="btn-search" type="submit" id="button-addon2">Search</button>
+                        <style>
+                            .btn-search{
+                                border: none;
+                                background-color: #F08A5D;
+                                color: #fff;
+                                width: 5rem;
+                            }
+                        </style>
                     </div>
                 </form>
             </div>
