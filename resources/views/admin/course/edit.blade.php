@@ -1,7 +1,7 @@
 @extends('layouts.main')
 @section('content')
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Tambah Kursus</h1>
+        <h1 class="h2">Edit Kursus</h1>
         @if (session('status'))
             <div class="alert alert-success" role="alert">
                 {{ session('status') }}
@@ -120,6 +120,22 @@
             margin: 0;
             opacity: 0;
         }
+        .btn-add {
+                margin-top: 5rem;
+                padding: 10px 10rem 10px 10rem;
+                border-radius: 10px;
+                background-color: orange;
+                /* remove outline */
+                outline: none;
+                color: white;
+                /* center */
+            }
+            .form-control{
+                width: 100%;
+                padding: 1rem;
+                height: 3rem;
+                border: 1px solid #ced4da;
+            }
 
         .custom-file-label {
             position: absolute;

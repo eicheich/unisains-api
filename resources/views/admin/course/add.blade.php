@@ -39,7 +39,7 @@
 
         <div class="mb-3 px-5">
             <label for="course_category" class="form-label">Kategori Kursus</label>
-            <select class="form-select" aria-label="Default select example" id="course_category" name="category_id">
+            <select class="form-select p-2" aria-label="Default select example" id="course_category" name="category_id">
                 <option selected>Pilih Kategori</option>
                 @foreach ($kategori as $k)
                     <option value="{{ $k->id }}">{{ $k->name_category }}</option>
@@ -103,6 +103,12 @@
                 outline: none;
                 color: white;
                 /* center */
+            }
+            .form-control{
+                width: 100%;
+                padding: 1rem;
+                height: 3rem;
+                border: 1px solid #ced4da;
             }
         </style>
     </form>

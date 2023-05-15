@@ -17,6 +17,7 @@
     {{-- <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
     <link rel="stylesheet" href="{{ asset('css/dashboard.rtl.css') }}"> --}}
     <link rel="stylesheet" href="{{ asset('css/nucleo-icons.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('css/nucleo-svg.css') }}">
     <link rel="stylesheet" href="{{ asset('css/material-dashboard.css') }}">
     <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
