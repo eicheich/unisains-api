@@ -15,13 +15,11 @@
                 <img src="{{ asset('storage/images/thumbnail_course/' . $course->image_course) }}" alt="Course Image"
                     class="img-fluid mb-3" />
                 <h1 class="mb-3">{{ $course->title_course }}</h1>
-                {{-- check is_paid --}}
                 @if ($course->is_paid == 0)
                     <p>Gratis</p>
                 @else
                     <p>Harga : Rp. {{ $course->price }}</p>
                 @endif
-                {{-- check discount --}}
                 @if ($course->discount == 0)
                     <p>Diskon: Tidak ada</p>
                 @else
@@ -73,24 +71,23 @@
                                             <img class="image_module"
                                                 src="{{ asset('storage/images/module/' . $m->image_module) }}"
                                                 alt="...">
+                                            <div class="card-body">
+                                                Deskripsi <br>
+                                                {{ $m->description }}}
+                                            </div>
+                                            <div class="card-body">
+                                                Isi Materi <br>
+                                                {{ $m->materi_module }}}
+                                            </div>
+                                            <form action="{{ route('delete.modules', $m->id) }}" method="post">
+                                                @csrf
+                                                <button type="submit" class="btn btn-sm btn-outline-danger m-2">Hapus
+                                                    Modul</button>
+                                            </form>
+                                            <a href="{{ route('update.modules.page', $m->id) }}"
+                                                class="btn btn-sm btn-outline-warning m-2">Edit Modul</a>
+                                            {{-- <a href="#" class="btn btn-sm btn-outline-danger m-2">Hapus Modul</a> --}}
                                         </div>
-                                        <div class="card-body">
-                                            Deskripsi <br>
-                                            {{ $m->description }}}
-                                        </div>
-                                        <div class="card-body">
-                                            Isi Materi <br>
-                                            {{ $m->materi_module }}}
-                                        </div>
-                                        <a href="{{ route('update.modules.page', $m->id) }}"
-                                            class="btn btn-sm btn-outline-warning m-2">Edit Modul</a>
-                                        {{-- <a href="#" class="btn btn-sm btn-outline-danger m-2">Hapus Modul</a> --}}
-                                        <form action="{{ route('delete.modules', $m->id) }}" method="post">
-                                            @csrf
-                                            <button type="submit" class="btn btn-sm btn-outline-danger m-2">Hapus
-                                                Modul</button>
-
-                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -174,7 +171,8 @@
                                 instead.
                             </video>
                         </div>
-                        <a href="#" class="btn btn-sm btn-outline-warning m-2">Edit Rangkuman</a>
+                        <a href="{{ route('update.rangkuman.page', $mr->id) }}"
+                            class="btn btn-sm btn-outline-warning m-2">Edit Rangkuman</a>
                         <a href="#" class="btn btn-sm btn-outline-danger m-2">Hapus Rangkuman</a>
                     @endforeach
                 @endif

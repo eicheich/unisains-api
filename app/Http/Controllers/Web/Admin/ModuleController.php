@@ -119,7 +119,43 @@ class ModuleController extends Controller
     public function createRangkuman($course_id)
     {
         $course = Course::findorfail($course_id);
-
         return view('admin.course.module.rangkuman.create', compact('course'));
+    }
+
+    public function editRangkuman($id)
+    {
+        $rangkuman = DB::table('module_rangkuman')->where('id', $id)->first();
+        return view('admin.course.module.rangkuman.edit', compact('rangkuman'));
+    }
+
+    public function updateRangkuman(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'isi_rangkuman' => 'required|string',
+            'video_rangkuman' => 'nullable|file|mimes:mp4',
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()->with('status', $validator->errors());
+        }
+
+        $rangkuman = DB::table('module_rangkuman')->where('id', $id)->first();
+        if ($request->hasFile('video_rangkuman')) {
+            $old_video = public_path('storage/video/rangkuman/') . $rangkuman->video_rangkuman;
+            if (file_exists($old_video)) {
+                unlink($old_video);
+            }
+            $video = $request->file('video_rangkuman');
+            $video_name = time() . '.' . $video->getClientOriginalExtension();
+            $video->move(public_path('storage/video/rangkuman'), $video_name);
+        } else {
+            $video_name = $rangkuman->video_rangkuman;
+        }
+        // db update
+        $rangkuman = DB::table('module_rangkuman')->where('id', $id)->update([
+            'isi_rangkuman' => $request->isi_rangkuman,
+            'video_rangkuman' => $video_name,
+        ]);
+
+        return redirect()->route('course.page')->with('status', 'Rangkuman updated successfully');
     }
 }
