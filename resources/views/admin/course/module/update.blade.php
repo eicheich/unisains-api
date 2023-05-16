@@ -23,7 +23,8 @@
                 <img src="{{ asset('storage/images/module/' . $module->image_module) }}" alt="" width="100px">
                 <div class="form-group">
                     <label class="text-dom-a5" for="image">Image</label>
-                    <input id="image" type="file" class="form-control" name="image_module" value="{{ $module->image_module }}">
+                    <input id="image" type="file" class="form-control" name="image_module"
+                        value="{{ $module->image_module }}">
                 </div>
                 <div class="preview mt-3">
                     <img id="image_module_preview" class="img-fluid" alt="Preview Image">
@@ -43,6 +44,24 @@
         </div>
     </form>
     <style>
+        .btn-add {
+            margin-top: 5rem;
+            padding: 10px 10rem 10px 10rem;
+            border-radius: 10px;
+            background-color: orange;
+            /* remove outline */
+            outline: none;
+            color: white;
+            /* center */
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 1rem;
+            height: 3rem;
+            border: 1px solid #ced4da;
+        }
+
         .card {
             width: 100%;
             max-width: 500px;

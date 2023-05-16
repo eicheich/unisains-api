@@ -35,17 +35,35 @@
                 <h2>Modul</h2>
                 <ul>
                     @if ($modules->isEmpty())
-                       <h5>Belum ada modul rangkuman</h5>
+                        <h5>Belum ada modul rangkuman</h5>
                     @else
                         @foreach ($modules as $m)
                             <div id="accordion">
                                 <div class="card mt-5">
-                                    <div class="card-header" id="heading{{ $m->id }}">
+                                    <div class="coll-show" id="heading{{ $m->id }}">
                                         <h5 class="mb-0">
-                                            <button class="btn" data-toggle="collapse"
+                                            <button class="btn-coll" data-toggle="collapse"
                                                 data-target="#collapse{{ $m->id }}" aria-expanded="true"
                                                 aria-controls="collapse{{ $m->id }}">
                                                 {{ $m->title_module }}
+                                                <style>
+                                                    .coll-show {
+                                                        background-color: #ffffff;
+                                                        justify-content: center;
+                                                        border: none;
+                                                        border-radius: 4;
+                                                        box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.2);
+                                                    }
+
+                                                    .btn-coll {
+                                                        padding: 1rem;
+                                                        background-color: #ffffff;
+                                                        justify-content: center;
+                                                        border: none;
+                                                        border-radius: 40%;
+                                                        box-shadow: none;
+                                                    }
+                                                </style>
                                             </button>
                                         </h5>
                                     </div>
@@ -134,12 +152,12 @@
                         </div>
 
 
-                    </ul>
-                    <h2>Modul Rangkuman</h2>
-                    @if ($module_rangkuman->isEmpty())
-                        <h5>Belum ada modul rangkuman</h5>
-                        {{-- @else --}}
-                    @endif
+                </ul>
+                <h2>Modul Rangkuman</h2>
+                @if ($module_rangkuman->isEmpty())
+                    <h5>Belum ada modul rangkuman</h5>
+                    {{-- @else --}}
+                @endif
             </div>
         </div>
     </div>
@@ -153,6 +171,24 @@
             display: inline-block;
             width: 100%;
             margin-bottom: 0;
+        }
+
+        .btn-add {
+            margin-top: 5rem;
+            padding: 10px 10rem 10px 10rem;
+            border-radius: 10px;
+            background-color: orange;
+            /* remove outline */
+            outline: none;
+            color: white;
+            /* center */
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 1rem;
+            height: 3rem;
+            border: 1px solid #ced4da;
         }
 
         .image_module {
