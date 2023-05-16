@@ -113,7 +113,7 @@ class ModuleController extends Controller
             'course_id' => $request->course_id,
         ]);
 
-        return redirect()->back()->with('status', 'Rangkuman created successfully');
+        return redirect()->route('course.page')->with('status', 'Rangkuman created successfully');
     }
 
     public function createRangkuman($course_id)
