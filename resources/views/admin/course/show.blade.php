@@ -150,13 +150,13 @@
                                 </div>
                             </div>
                         </div>
-
-
+                    </div>
                 </ul>
                 <h2>Modul Rangkuman</h2>
                 @if ($module_rangkuman->isEmpty())
                     <h5>Belum ada modul rangkuman</h5>
-                    {{-- @else --}}
+                    <a href="{{route('create.rangkuman', $course->id)}}" class="btn btn-sm btn-outline-secondary mt-5">Tambah rangkuman</a>
+                @else
                 @endif
             </div>
         </div>

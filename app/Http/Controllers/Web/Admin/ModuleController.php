@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Web\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Course;
 use App\Models\Module;
 use Faker\Core\File;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -87,5 +89,37 @@ class ModuleController extends Controller
             $module->delete();
         }
         return redirect()->back()->with('status', 'Module deleted successfully');
+    }
+
+    public function storeRangkuman(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'isi_rangkuman' => 'required|string',
+            'video_rangkuman' => 'required|file|mimes:mp4',
+            'course_id' => 'required|integer',
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()->with('status', $validator->errors());
+        }
+
+        $video = $request->file('video_rangkuman');
+        $video_name = time() . '.' . $video->getClientOriginalExtension();
+        $video->move(public_path('storage/video/rangkuman'), $video_name);
+
+        // db insert into
+        $rangkuman = DB::table('module_rangkuman')->insert([
+            'isi_rangkuman' => $request->isi_rangkuman,
+            'video_rangkuman' => $video_name,
+            'course_id' => $request->course_id,
+        ]);
+
+        return redirect()->back()->with('status', 'Rangkuman created successfully');
+    }
+
+    public function createRangkuman($course_id)
+    {
+        $course = Course::findorfail($course_id);
+
+        return view('admin.course.module.rangkuman.create', compact('course'));
     }
 }

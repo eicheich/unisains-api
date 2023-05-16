@@ -49,5 +49,10 @@ Route::prefix('admin')->middleware('isAdmin')->group(function () {
             Route::post('update/{id}', [ModuleController::class, 'update'])->name('update.modules');
             Route::post('delete/{id}', [ModuleController::class, 'delete'])->name('delete.modules');
         });
+        Route::prefix('rangkuman')->group(function(){
+            Route::get('create/{course_id}', [ModuleController::class, 'createRangkuman'])->name('create.rangkuman');
+            Route::post('store', [ModuleController::class, 'storeRangkuman'])->name('store.rangkuman');
+
+        });
     });
 });
