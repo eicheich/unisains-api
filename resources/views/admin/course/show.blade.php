@@ -155,8 +155,28 @@
                 <h2>Modul Rangkuman</h2>
                 @if ($module_rangkuman->isEmpty())
                     <h5>Belum ada modul rangkuman</h5>
-                    <a href="{{route('create.rangkuman', $course->id)}}" class="btn btn-sm btn-outline-secondary mt-5">Tambah rangkuman</a>
+                    <a href="{{ route('create.rangkuman', $course->id) }}"
+                        class="btn btn-sm btn-outline-secondary mt-5">Tambah rangkuman</a>
                 @else
+                    @foreach ($module_rangkuman as $mr)
+                        <div class="card">
+                            <p>{{ $mr->isi_rangkuman }}</p>
+                            <video controls>
+                                <source src="{{ asset('storage/video/rangkuman/' . $mr->video_rangkuman) }}"
+                                    type="video/mp4">
+                                <source src="{{ asset('storage/video/rangkuman/' . $mr->video_rangkuman) }}"
+                                    type="video/webm">
+                                <source src="{{ asset('storage/video/rangkuman/' . $mr->video_rangkuman) }}"
+                                    type="video/ogg">
+                                Your browser does not support the video tag. You can <a
+                                    href="{{ asset('storage/video/rangkuman/' . $mr->video_rangkuman) }}">download the
+                                    video</a>
+                                instead.
+                            </video>
+                        </div>
+                        <a href="#" class="btn btn-sm btn-outline-warning m-2">Edit Rangkuman</a>
+                        <a href="#" class="btn btn-sm btn-outline-danger m-2">Hapus Rangkuman</a>
+                    @endforeach
                 @endif
             </div>
         </div>
