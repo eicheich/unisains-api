@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Admin\CourseController;
 use App\Http\Controllers\Api\V1\Admin\DashboardController;
 use App\Http\Controllers\Api\V1\AuthController;
 use Illuminate\Http\Request;
@@ -27,7 +28,7 @@ Route::get('/acces-denied', function () {
 
 Route::prefix('v1')->group(function () {
     Route::prefix('auth')->group(function () {
-        Route::get('login', [AuthController::class, 'login'])->name('login.get');
+        Route::get('login', [AuthController::class, 'login']);
         Route::post('register', [AuthController::class, 'register']);
         Route::middleware('auth:sanctum')->group(function () {
             Route::post('logout', [AuthController::class, 'logout']);
@@ -37,6 +38,12 @@ Route::prefix('v1')->group(function () {
     });
     Route::prefix('admin')->middleware('isAdmin')->group(function () {
         Route::get('dashboard', [DashboardController::class, 'dashboard']);
-        
+        Route::prefix('course')->group(function () {
+            Route::get('all', [CourseController::class, 'all']);
+            Route::post('store', [CourseController::class, 'store']);
+            Route::get('show/{id}', [CourseController::class, 'show']);
+            Route::post('update/{id}', [CourseController::class, 'update']);
+            Route::post('delete/{id}', [CourseController::class, 'delete']);
+        });
     });
 });
