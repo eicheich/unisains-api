@@ -12,10 +12,6 @@
     </div>
     <form action="{{ route('store.rangkuman') }}" method="post" enctype="multipart/form-data">
         @csrf
-        <div class="mb-3 px-5">
-            <label for="course_name" class="form-label">Judul Modul</label>
-            <input type="text" class="form-control" id="course_name" name="title_module" placeholder="">
-        </div>
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Video Rangkuman</h5>
@@ -48,27 +44,23 @@
             color: white;
             /* center */
         }
-
         .form-control {
             width: 100%;
             padding: 1rem;
             height: 3rem;
             border: 1px solid #ced4da;
         }
-
         .card {
             width: 100%;
             max-width: 500px;
             margin: 0 auto;
         }
-
         .custom-file {
             position: relative;
             display: inline-block;
             width: 100%;
             margin-bottom: 0;
         }
-
         .custom-file-input {
             position: relative;
             z-index: 2;
@@ -77,7 +69,6 @@
             margin: 0;
             opacity: 0;
         }
-
         .custom-file-label {
             position: absolute;
             top: 0;
@@ -94,11 +85,9 @@
             font-weight: 400;
             cursor: pointer;
         }
-
         .preview {
             text-align: center;
         }
-
         .preview img {
             max-width: 100%;
             height: auto;

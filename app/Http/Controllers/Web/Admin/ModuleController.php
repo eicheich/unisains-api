@@ -17,8 +17,8 @@ class ModuleController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'title_module' => 'required|string|max:255',
-            'materi_module' => 'required|string',
-            'description' => 'required|string',
+            'materi_module' => 'required',
+            'description' => 'required|max:255',
             'image_module' => 'required|file|mimes:jpeg,png',
         ]);
 
@@ -157,5 +157,18 @@ class ModuleController extends Controller
         ]);
 
         return redirect()->route('course.page')->with('status', 'Rangkuman updated successfully');
+    }
+
+    public function deleteRangkuman(Request $request, $id)
+    {
+        $rangkuman = DB::table('module_rangkuman')->where('id', $id)->first();
+
+        // delete video
+        $old_video = public_path('storage/video/rangkuman/') . $rangkuman->video_rangkuman;
+        if (file_exists($old_video)) {
+            unlink($old_video);
+        }
+        $rangkuman = DB::table('module_rangkuman')->where('id', $id)->delete();
+        return redirect()->back()->with('status', 'Rangkuman deleted successfully');
     }
 }

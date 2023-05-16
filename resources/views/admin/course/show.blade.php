@@ -81,7 +81,8 @@
                                             </div>
                                             <form action="{{ route('delete.modules', $m->id) }}" method="post">
                                                 @csrf
-                                                <button type="submit" class="btn btn-sm btn-outline-danger m-2">Hapus
+                                                <button type="submit" id="hapus-modul"
+                                                    class="btn btn-sm btn-outline-danger m-2">Hapus
                                                     Modul</button>
                                             </form>
                                             <a href="{{ route('update.modules.page', $m->id) }}"
@@ -173,16 +174,37 @@
                         </div>
                         <a href="{{ route('update.rangkuman.page', $mr->id) }}"
                             class="btn btn-sm btn-outline-warning m-2">Edit Rangkuman</a>
-                        <a href="#" class="btn btn-sm btn-outline-danger m-2">Hapus Rangkuman</a>
+                        <form action="{{ route('delete.rangkuman', $mr->id) }}" method="post">
+                            @csrf
+                            <button class="btn btn-sm btn-outline-danger m-2" id="submit-delete" type="submit">Hapus
+                                Rangkuman</button>
+                        </form>
                     @endforeach
                 @endif
             </div>
         </div>
     </div>
-
-
-
     </div>
+    <script>
+        const deleteButton = document.getElementById("submit-delete");
+        const deleteModule = document.getElementById("hapus-modul");
+        deleteModule.addEventListener("click", function(event) {
+            event.preventDefault();
+            const confirmation = confirm("Apakah Anda yakin ingin menghapus modul ini?");
+            if (confirmation) {
+                // lanjutkan dengan submit form
+                this.form.submit();
+            }
+        });
+        deleteButton.addEventListener("click", function(event) {
+            event.preventDefault();
+            const confirmation = confirm("Apakah Anda yakin ingin menghapus kursus ini?");
+            if (confirmation) {
+                // lanjutkan dengan submit form
+                this.form.submit();
+            }
+        });
+    </script>
     <style>
         .custom-file {
             position: relative;

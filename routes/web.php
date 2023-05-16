@@ -53,7 +53,8 @@ Route::prefix('admin')->middleware('isAdmin')->group(function () {
             Route::get('create/{course_id}', [ModuleController::class, 'createRangkuman'])->name('create.rangkuman');
             Route::post('store', [ModuleController::class, 'storeRangkuman'])->name('store.rangkuman');
             Route::get('edit/{id}', [ModuleController::class, 'editRangkuman'])->name('update.rangkuman.page');
-            Route::post('update/{id}', [ModuleController::class, 'updateRangkuman'])->name('update.rangkuman');      
+            Route::post('update/{id}', [ModuleController::class, 'updateRangkuman'])->name('update.rangkuman');
+            Route::post('delete/{id}', [ModuleController::class, 'deleteRangkuman'])->name('delete.rangkuman');
 
         });
     });
