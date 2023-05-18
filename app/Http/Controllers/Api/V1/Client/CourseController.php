@@ -13,11 +13,11 @@ class CourseController extends Controller
         $courses = DB::table('courses')->get();
         if ($courses) {
             return response()->json([
-                'data' => $courses
+                'course' => $courses
             ], 200);
         }
         return response()->json([
-            'message' => 'data not found'
+            'message' => 'course not found'
         ], 404);
     }
 
@@ -28,13 +28,25 @@ class CourseController extends Controller
 
         if ($anatomi->isEmpty() && $astronomi->isEmpty()) {
             return response()->json([
-                'message' => 'data not found',
+                'message' => 'course not found',
             ], 404);
         } else
             return response()->json([
                 'anatomi' => $anatomi,
                 'astronomi' => $astronomi,
             ],200);
+    }
 
+    public function show($id)
+    {
+        $course = DB::table('courses')->where('id', $id)->first();
+        if ($course) {
+            return response()->json([
+                'course' => $course
+            ],200);
+        } else
+        return response()->json([
+            'message' => 'course not found'
+        ]);
     }
 }
