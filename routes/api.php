@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Api\V1\Admin\CourseController;
+use App\Http\Controllers\Api\V1\Client\CourseController;
 use App\Http\Controllers\Api\V1\Admin\DashboardController;
 use App\Http\Controllers\Api\V1\AuthController;
 use Illuminate\Http\Request;
@@ -36,14 +36,17 @@ Route::prefix('v1')->group(function () {
             Route::post('update-profile', [AuthController::class, 'updateProfile']);
         });
     });
-    Route::prefix('admin')->middleware('isAdmin')->group(function () {
-        Route::get('dashboard', [DashboardController::class, 'dashboard']);
-        Route::prefix('course')->group(function () {
-            Route::get('all', [CourseController::class, 'all']);
-            Route::post('store', [CourseController::class, 'store']);
-            Route::get('show/{id}', [CourseController::class, 'show']);
-            Route::post('update/{id}', [CourseController::class, 'update']);
-            Route::post('delete/{id}', [CourseController::class, 'delete']);
-        });
+    // Route::prefix('admin')->middleware('isAdmin')->group(function () {
+    //     Route::get('dashboard', [DashboardController::class, 'dashboard']);
+    //     Route::prefix('course')->group(function () {
+    //         Route::get('all', [CourseController::class, 'all']);
+    //         Route::post('store', [CourseController::class, 'store']);
+    //         Route::get('show/{id}', [CourseController::class, 'show']);
+    //         Route::post('update/{id}', [CourseController::class, 'update']);
+    //         Route::post('delete/{id}', [CourseController::class, 'delete']);
+    //     });
+    // });
+    Route::prefix('course')->group(function () {
+        Route::get('all', [CourseController::class, 'all']);
     });
 });
