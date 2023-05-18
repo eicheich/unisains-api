@@ -11,8 +11,30 @@ class CourseController extends Controller
     public function all()
     {
         $courses = DB::table('courses')->get();
+        if ($courses) {
+            return response()->json([
+                'data' => $courses
+            ], 200);
+        }
         return response()->json([
-            'data' => $courses
-        ]);
+            'message' => 'data not found'
+        ], 404);
+    }
+
+    public function category()
+    {
+        $anatomi = DB::table('courses')->where('category_id', 1)->get();
+        $astronomi = DB::table('courses')->where('category_id', 2)->get();
+
+        if ($anatomi->isEmpty() && $astronomi->isEmpty()) {
+            return response()->json([
+                'message' => 'data not found',
+            ], 404);
+        } else
+            return response()->json([
+                'anatomi' => $anatomi,
+                'astronomi' => $astronomi,
+            ],200);
+
     }
 }

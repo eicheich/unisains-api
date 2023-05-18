@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Api\V1\Client\CourseController;
-use App\Http\Controllers\Api\V1\Admin\DashboardController;
 use App\Http\Controllers\Api\V1\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -48,5 +47,6 @@ Route::prefix('v1')->group(function () {
     // });
     Route::prefix('course')->group(function () {
         Route::get('all', [CourseController::class, 'all']);
+        Route::get('category', [CourseController::class, 'category']);
     });
 });
