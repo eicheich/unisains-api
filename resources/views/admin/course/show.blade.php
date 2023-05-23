@@ -73,11 +73,11 @@
                                                 alt="...">
                                             <div class="card-body">
                                                 Deskripsi <br>
-                                                {{ $m->description }}}
+                                                {{ $m->description }}
                                             </div>
                                             <div class="card-body">
                                                 Isi Materi <br>
-                                                {{ $m->materi_module }}}
+                                                {{ $m->materi_module }}
                                             </div>
                                             <form action="{{ route('delete.modules', $m->id) }}" method="post">
                                                 @csrf
