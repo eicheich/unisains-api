@@ -181,7 +181,17 @@
                         </form>
                     @endforeach
                 @endif
+                <h2 class="mt-5">Kartu AR</h2>
+                @if ($ar->isEmpty())
+                    <h5>Belum ada Kartu AR</h5>
+                    <a href="{{ route('create.rangkuman', $course->id) }}"
+                        class="btn btn-sm btn-outline-secondary mt-5">Tambah rangkuman</a>
+                @else
+                @endif
             </div>
+
+
+
         </div>
     </div>
     </div>

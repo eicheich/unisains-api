@@ -73,7 +73,9 @@ class CourseController extends Controller
         $course = Course::with('category')->find($id);
         $modules = DB::table('modules')->where('course_id', $id)->get();
         $module_rangkuman = DB::table('module_rangkuman')->where('course_id', $id)->get();
-        return view('admin.course.show', compact('course', 'modules', 'module_rangkuman'));
+        $ar = DB::table('augmented_realities')->where('course_id', $id)->get();
+        return view('admin.course.show', compact('course', 'modules', 'module_rangkuman','ar'));
+
     }
     public function updatePage($id)
     {
