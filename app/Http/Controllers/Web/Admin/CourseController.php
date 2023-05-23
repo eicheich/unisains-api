@@ -24,8 +24,8 @@ class CourseController extends Controller
             'description' => 'required',
             'is_paid' => 'required|boolean',
             'category_id' => 'required|integer',
-            'certificate_course' => 'required|file|mimes:pdf,jpeg,png|max:2048',
-            'image_course' => 'required|file|mimes:jpeg,png|max:2048',
+            'certificate_course' => 'required|file|mimes:pdf,jpeg,png',
+            'image_course' => 'required|file|mimes:jpeg,png',
         ]);
         if ($validator->fails()) {
             return redirect()->back()->with('status', $validator->errors());
