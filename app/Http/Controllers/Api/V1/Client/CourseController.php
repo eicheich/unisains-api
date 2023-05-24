@@ -49,4 +49,21 @@ class CourseController extends Controller
                 'message' => 'course not found'
             ], 404);
     }
+
+    public function preview($id)
+    {
+        $course = DB::table('courses')->where('id', $id)
+            ->select('courses.id', 'courses.title_course', 'courses.description', 'courses.price', 'courses.image_course')
+            // ->join('categories', 'courses.category_id', '=', 'categories.id')
+            ->get();
+
+        if ($course->isEmpty()) {
+            return response()->json([
+                'message' => 'course not found',
+            ], 404);
+        } else
+            return response()->json([
+                'course' => $course,
+            ], 200);
+    }
 }
