@@ -61,6 +61,7 @@ Route::prefix('admin')->middleware('isAdminWeb')->group(function () {
             Route::post('store', [ARController::class, 'store'])->name('store.ar');
             Route::get('edit/{id}',[ARController::class, 'edit'])->name('edit.ar.page'); 
             Route::post('update/{id}',[ARController::class, 'update'])->name('update.ar');
+            Route::post('delete/{id}',[ARController::class, 'delete'])->name('delete.ar');
 
         });
     });

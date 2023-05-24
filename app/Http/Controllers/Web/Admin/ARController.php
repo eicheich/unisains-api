@@ -62,4 +62,15 @@ class ARController extends Controller
         }
         return redirect()->route('course.show', $ar->course_id)->with('status', 'AR updated successfully');
     }
+
+    public function delete($id)
+    {
+        $ar = DB::table('augmented_realities')->where('id', $id)->first();
+        $old_image = public_path('storage/images/ar/') . $ar->image_ar;
+        if (file_exists($old_image)) {
+            unlink($old_image);
+        }
+        DB::table('augmented_realities')->where('id', $id)->delete();
+        return redirect()->back()->with('status', 'AR deleted successfully');
+    }
 }

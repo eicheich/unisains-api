@@ -194,12 +194,23 @@
                                     <div class="card">
                                         <img class="card-img" src="{{ asset('storage/images/ar/' . $ar->image_ar) }}"
                                             alt="Card Image">
-                                        <div class="card-actions">
-                                            <a href="{{ route('edit.ar.page', $ar->id) }}"
-                                                class="btn btn-primary">Edit</a>
-                                            <button class="btn btn-danger">Hapus</button>
+                                        <div class="card-actions d-flex justify-content-center mt-3">
+                                            <div>
+                                                <a href="{{ route('edit.ar.page', $ar->id) }}"
+                                                    class="btn btn-primary">Edit</a>
+                                            </div>
+                                            <div>
+                                                <form action="{{ route('delete.ar', $ar->id) }}" method="post">
+                                                    @csrf
+                                                    <button type="submit" id="hapus-ar"
+                                                        class="btn btn-danger mx-2">Hapus
+                                                        AR</button>
+                                                </form>
+                                            </div>
                                         </div>
                                     </div>
+
+
                                 </div>
                             @endforeach
                         </div>
@@ -277,23 +288,27 @@
     </div>
     </div>
     <script>
+        function handleDelete(event, confirmationMessage) {
+            event.preventDefault();
+            const confirmation = confirm(confirmationMessage);
+            if (confirmation) {
+                this.form.submit();
+            }
+        }
+
         const deleteButton = document.getElementById("submit-delete");
         const deleteModule = document.getElementById("hapus-modul");
+        const deleteAr = document.getElementById("hapus-ar");
+
         deleteModule.addEventListener("click", function(event) {
-            event.preventDefault();
-            const confirmation = confirm("Apakah Anda yakin ingin menghapus modul ini?");
-            if (confirmation) {
-                // lanjutkan dengan submit form
-                this.form.submit();
-            }
+            handleDelete.call(this, event, "Apakah Anda yakin ingin menghapus modul ini?");
         });
+
         deleteButton.addEventListener("click", function(event) {
-            event.preventDefault();
-            const confirmation = confirm("Apakah Anda yakin ingin menghapus kursus ini?");
-            if (confirmation) {
-                // lanjutkan dengan submit form
-                this.form.submit();
-            }
+            handleDelete.call(this, event, "Apakah Anda yakin ingin menghapus kursus ini?");
+        });
+        deleteAr.addEventListener("click", function(event) {
+            handleDelete.call(this, event, "Apakah Anda yakin ingin menghapus kursus ini?");
         });
     </script>
     <style>
