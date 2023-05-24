@@ -21,7 +21,7 @@ class UserFactory extends Factory
             'first_name' => 'admin',
             'last_name' => 'unisains',
             'username' => 'adm_unisains',
-            'email' => 'universteam2023@gmail.com',
+            'email' => 'universeteam2023@gmail.com',
             'role' => 'admin',
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
         ];
