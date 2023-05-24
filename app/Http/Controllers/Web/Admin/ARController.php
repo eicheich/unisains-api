@@ -27,6 +27,39 @@ class ARController extends Controller
         ]);
 
         return redirect()->back()->with('status', 'AR created successfully');
-        
+    }
+
+    public function edit($id)
+    {
+        $ar = DB::table('augmented_realities')->where('id', $id)->first();
+        return view('admin.course.ar.edit', compact('ar'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'image_ar' => 'nullable|mimes:jpeg,png',
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()->with('status', $validator->errors());
+        }
+        $ar = DB::table('augmented_realities')->where('id', $id)->first();
+        if ($request->hasFile('image_ar')) {
+            $old_image = public_path('storage/images/ar/') . $ar->image_ar;
+            if (file_exists($old_image)) {
+                unlink($old_image);
+            }
+            $image = $request->file('image_ar');
+            $image_name = time() . '.' . $image->extension();
+            $image->move(public_path('storage/images/ar'), $image_name);
+            DB::table('augmented_realities')->where('id', $id)->update([
+                'image_ar' => $image_name,
+            ]);
+        } else {
+            DB::table('augmented_realities')->where('id', $id)->update([
+                'image_ar' => $ar->image_ar,
+            ]);
+        }
+        return redirect()->route('course.show', $ar->course_id)->with('status', 'AR updated successfully');
     }
 }

@@ -194,19 +194,40 @@
                                     <div class="card">
                                         <img class="card-img" src="{{ asset('storage/images/ar/' . $ar->image_ar) }}"
                                             alt="Card Image">
+                                        <div class="card-actions">
+                                            <a href="{{ route('edit.ar.page', $ar->id) }}"
+                                                class="btn btn-primary">Edit</a>
+                                            <button class="btn btn-danger">Hapus</button>
+                                        </div>
                                     </div>
                                 </div>
                             @endforeach
                         </div>
                     </div>
                     <style>
+                        .card {
+                            position: relative;
+                            overflow: hidden;
+                        }
+
                         .card-img {
                             padding: 1rem;
                             height: 100%;
                             width: 16rem;
                             object-fit: cover;
-                            box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.2);
                             border-radius: 10px;
+                        }
+
+                        .card-actions {
+                            bottom: 0;
+                            left: 0;
+                            width: 100%;
+                            padding: 10px;
+                            text-align: center;
+                        }
+
+                        .card-actions button {
+                            margin-right: 5px;
                         }
                     </style>
                     <button id="add-ar-btn" class="btn btn-sm btn-outline-secondary mt-5" data-toggle="modal"
