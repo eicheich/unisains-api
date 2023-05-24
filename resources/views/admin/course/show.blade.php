@@ -194,19 +194,51 @@
                                     <div class="card">
                                         <img class="card-img" src="{{ asset('storage/images/ar/' . $ar->image_ar) }}"
                                             alt="Card Image">
+                                        <div class="card-actions d-flex justify-content-center mt-3">
+                                            <div>
+                                                <a href="{{ route('edit.ar.page', $ar->id) }}"
+                                                    class="btn btn-primary">Edit</a>
+                                            </div>
+                                            <div>
+                                                <form action="{{ route('delete.ar', $ar->id) }}" method="post">
+                                                    @csrf
+                                                    <button type="submit" id="hapus-ar"
+                                                        class="btn btn-danger mx-2">Hapus
+                                                        AR</button>
+                                                </form>
+                                            </div>
+                                        </div>
                                     </div>
+
+
                                 </div>
                             @endforeach
                         </div>
                     </div>
                     <style>
+                        .card {
+                            position: relative;
+                            overflow: hidden;
+                        }
+
                         .card-img {
                             padding: 1rem;
                             height: 100%;
                             width: 16rem;
                             object-fit: cover;
-                            box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.2);
                             border-radius: 10px;
+                        }
+
+                        .card-actions {
+                            bottom: 0;
+                            left: 0;
+                            width: 100%;
+                            padding: 10px;
+                            text-align: center;
+                        }
+
+                        .card-actions button {
+                            margin-right: 5px;
                         }
                     </style>
                     <button id="add-ar-btn" class="btn btn-sm btn-outline-secondary mt-5" data-toggle="modal"
@@ -256,23 +288,27 @@
     </div>
     </div>
     <script>
+        function handleDelete(event, confirmationMessage) {
+            event.preventDefault();
+            const confirmation = confirm(confirmationMessage);
+            if (confirmation) {
+                this.form.submit();
+            }
+        }
+
         const deleteButton = document.getElementById("submit-delete");
         const deleteModule = document.getElementById("hapus-modul");
+        const deleteAr = document.getElementById("hapus-ar");
+
         deleteModule.addEventListener("click", function(event) {
-            event.preventDefault();
-            const confirmation = confirm("Apakah Anda yakin ingin menghapus modul ini?");
-            if (confirmation) {
-                // lanjutkan dengan submit form
-                this.form.submit();
-            }
+            handleDelete.call(this, event, "Apakah Anda yakin ingin menghapus modul ini?");
         });
+
         deleteButton.addEventListener("click", function(event) {
-            event.preventDefault();
-            const confirmation = confirm("Apakah Anda yakin ingin menghapus kursus ini?");
-            if (confirmation) {
-                // lanjutkan dengan submit form
-                this.form.submit();
-            }
+            handleDelete.call(this, event, "Apakah Anda yakin ingin menghapus kursus ini?");
+        });
+        deleteAr.addEventListener("click", function(event) {
+            handleDelete.call(this, event, "Apakah Anda yakin ingin menghapus kursus ini?");
         });
     </script>
     <style>
