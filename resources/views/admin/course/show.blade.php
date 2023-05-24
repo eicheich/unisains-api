@@ -184,10 +184,70 @@
                 <h2 class="mt-5">Kartu AR</h2>
                 @if ($ar->isEmpty())
                     <h5>Belum ada Kartu AR</h5>
-                    <a href="{{ route('create.rangkuman', $course->id) }}"
-                        class="btn btn-sm btn-outline-secondary mt-5">Tambah rangkuman</a>
+                    <button id="add-module-btn" class="btn btn-sm btn-outline-secondary mt-5" data-toggle="modal"
+                        data-target="#add-ar-modal">Tambah AR</button>
                 @else
+                    <div class="container">
+                        <div class="row">
+                            @foreach ($ar as $ar)
+                                <div class="col-md-4">
+                                    <div class="card">
+                                        <img class="card-img" src="{{ asset('storage/images/ar/' . $ar->image_ar) }}"
+                                            alt="Card Image">
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    <style>
+                        .card-img {
+                            padding: 1rem;
+                            height: 100%;
+                            width: 16rem;
+                            object-fit: cover;
+                            box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.2);
+                            border-radius: 10px;
+                        }
+                    </style>
+                    <button id="add-ar-btn" class="btn btn-sm btn-outline-secondary mt-5" data-toggle="modal"
+                        data-target="#add-ar-modal">Tambah AR</button>
                 @endif
+                <div class="modal fade" id="add-ar-modal" tabindex="-1" role="dialog"
+                    aria-labelledby="add-module-modal-title" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="add-module-modal-title">Tambah AR</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{{ route('store.ar') }}" method="post" enctype="multipart/form-data">
+                                    @csrf
+
+                                    <div class="form-group mt-2">
+                                        <p>Gambar AR</p>
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" id="ar"
+                                                name="image_ar" onchange="previewImage('ar')">
+                                            <label class="custom-file-label" for="ar">Pilih file</label>
+                                        </div>
+                                    </div>
+                                    <div class="preview mt-3">
+                                        <img id="ar_preview" class="img-fluid" alt="Preview Image">
+                                    </div>
+                                    <input type="hidden" name="course_id" value="{{ $course->id }}">
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Batal</button>
+                                        <button type="submit" class="btn btn-primary">Tambah</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
 
