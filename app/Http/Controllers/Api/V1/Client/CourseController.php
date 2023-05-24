@@ -11,14 +11,14 @@ class CourseController extends Controller
     public function all()
     {
         $courses = DB::table('courses')->get();
-        if ($courses) {
+        if ($courses->isEmpty()) {
             return response()->json([
-                'course' => $courses
+                'message' => 'course not found',
+            ], 404);
+        } else
+            return response()->json([
+                'courses' => $courses,
             ], 200);
-        }
-        return response()->json([
-            'message' => 'course not found'
-        ], 404);
     }
 
     public function category()
@@ -34,7 +34,7 @@ class CourseController extends Controller
             return response()->json([
                 'anatomi' => $anatomi,
                 'astronomi' => $astronomi,
-            ],200);
+            ], 200);
     }
 
     public function show($id)
@@ -43,10 +43,10 @@ class CourseController extends Controller
         if ($course) {
             return response()->json([
                 'course' => $course
-            ],200);
+            ], 200);
         } else
-        return response()->json([
-            'message' => 'course not found'
-        ]);
+            return response()->json([
+                'message' => 'course not found'
+            ]);
     }
 }
