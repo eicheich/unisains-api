@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Web\Admin\ARController;
 use App\Http\Controllers\Web\Admin\AuthController;
 use App\Http\Controllers\Web\Admin\CourseController;
 use App\Http\Controllers\Web\Admin\DashboardController;
@@ -55,6 +56,9 @@ Route::prefix('admin')->middleware('isAdminWeb')->group(function () {
             Route::get('edit/{id}', [ModuleController::class, 'editRangkuman'])->name('update.rangkuman.page');
             Route::post('update/{id}', [ModuleController::class, 'updateRangkuman'])->name('update.rangkuman');
             Route::post('delete/{id}', [ModuleController::class, 'deleteRangkuman'])->name('delete.rangkuman');
+        });
+        Route::prefix('ar')->group( function(){
+            Route::post('store', [ARController::class, 'store'])->name('store.ar');
 
         });
     });

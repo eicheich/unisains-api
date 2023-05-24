@@ -24,8 +24,8 @@ class CourseController extends Controller
             'description' => 'required',
             'is_paid' => 'required|boolean',
             'category_id' => 'required|integer',
-            'certificate_course' => 'required|file|mimes:pdf,jpeg,png|max:2048',
-            'image_course' => 'required|file|mimes:jpeg,png|max:2048',
+            'certificate_course' => 'required|file|mimes:pdf,jpeg,png',
+            'image_course' => 'required|file|mimes:jpeg,png',
         ]);
         if ($validator->fails()) {
             return redirect()->back()->with('status', $validator->errors());
@@ -73,7 +73,9 @@ class CourseController extends Controller
         $course = Course::with('category')->find($id);
         $modules = DB::table('modules')->where('course_id', $id)->get();
         $module_rangkuman = DB::table('module_rangkuman')->where('course_id', $id)->get();
-        return view('admin.course.show', compact('course', 'modules', 'module_rangkuman'));
+        $ar = DB::table('augmented_realities')->where('course_id', $id)->get();
+        return view('admin.course.show', compact('course', 'modules', 'module_rangkuman','ar'));
+
     }
     public function updatePage($id)
     {
