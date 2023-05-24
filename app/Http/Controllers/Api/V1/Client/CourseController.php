@@ -47,6 +47,6 @@ class CourseController extends Controller
         } else
             return response()->json([
                 'message' => 'course not found'
-            ]);
+            ], 404);
     }
 }
