@@ -95,7 +95,7 @@ class ModuleController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'isi_rangkuman' => 'required|string',
-            'video_rangkuman' => 'required|file|mimes:mp4',
+            'video_rangkuman' => 'required|file|mimes:mp4,webm',
             'course_id' => 'required|integer',
         ]);
         if ($validator->fails()) {

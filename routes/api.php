@@ -48,6 +48,10 @@ Route::prefix('v1')->group(function () {
     Route::prefix('course')->group(function () {
         Route::get('all', [CourseController::class, 'all']);
         Route::get('category', [CourseController::class, 'category']);
-        Route::get('show/{id}', [CourseController::class, 'show']);
+        Route::get('preview/{id}', [CourseController::class, 'preview']);
+        Route::get('search', [CourseController::class, 'search']);
+        Route::middleware('auth:sanctum')->group(function () {
+            Route::get('show/{id}', [CourseController::class, 'show']);
+        });
     });
 });

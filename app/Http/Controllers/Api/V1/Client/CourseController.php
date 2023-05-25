@@ -11,14 +11,14 @@ class CourseController extends Controller
     public function all()
     {
         $courses = DB::table('courses')->get();
-        if ($courses) {
+        if ($courses->isEmpty()) {
             return response()->json([
-                'course' => $courses
+                'message' => 'course not found',
+            ], 404);
+        } else
+            return response()->json([
+                'courses' => $courses,
             ], 200);
-        }
-        return response()->json([
-            'message' => 'course not found'
-        ], 404);
     }
 
     public function category()
@@ -34,19 +34,62 @@ class CourseController extends Controller
             return response()->json([
                 'anatomi' => $anatomi,
                 'astronomi' => $astronomi,
-            ],200);
+            ], 200);
     }
 
     public function show($id)
     {
-        $course = DB::table('courses')->where('id', $id)->first();
+        // $course = DB::table('courses')->where('id', $id)->first();
+        $course = DB::table('courses')
+            ->where('courses.id', $id)
+            ->join('categories', 'courses.category_id', '=', 'categories.id')
+            ->select('courses.*', 'categories.name_category')
+            ->first();
+
         if ($course) {
             return response()->json([
                 'course' => $course
-            ],200);
+            ], 200);
         } else
-        return response()->json([
-            'message' => 'course not found'
-        ]);
+            return response()->json([
+                'message' => 'course not found'
+            ], 404);
+    }
+
+    public function preview($id)
+    {
+        $course = DB::table('courses')
+            ->where('courses.id', $id)
+            ->join('categories', 'courses.category_id', '=', 'categories.id')
+            ->select('courses.id', 'courses.title_course', 'courses.description', 'courses.price', 'courses.image_course', 'categories.name_category')
+            ->get();
+
+        if ($course->isEmpty()) {
+            return response()->json([
+                'message' => 'course not found',
+            ], 404);
+        } else
+            return response()->json([
+                'course' => $course,
+            ], 200);
+    }
+
+    public function search(Request $request)
+    {
+        $search = $request->search;
+        $course = DB::table('courses')
+            ->where('courses.title_course', 'like', '%' . $search . '%')
+            ->join('categories', 'courses.category_id', '=', 'categories.id')
+            ->select('courses.id', 'courses.title_course', 'courses.description', 'courses.price', 'courses.image_course', 'categories.name_category')
+            ->get();
+
+        if ($course->isEmpty()) {
+            return response()->json([
+                'message' => 'course not found',
+            ], 404);
+        } else
+            return response()->json([
+                'course' => $course,
+            ], 200);
     }
 }
