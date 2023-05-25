@@ -49,6 +49,8 @@ Route::prefix('v1')->group(function () {
         Route::get('all', [CourseController::class, 'all']);
         Route::get('category', [CourseController::class, 'category']);
         Route::get('preview/{id}', [CourseController::class, 'preview']);
-        Route::get('show/{id}', [CourseController::class, 'show']);
+        Route::middleware('auth:sanctum')->group(function () {
+            Route::get('show/{id}', [CourseController::class, 'show']);
+        });
     });
 });
