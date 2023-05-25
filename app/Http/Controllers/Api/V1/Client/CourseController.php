@@ -73,4 +73,23 @@ class CourseController extends Controller
                 'course' => $course,
             ], 200);
     }
+
+    public function search(Request $request)
+    {
+        $search = $request->search;
+        $course = DB::table('courses')
+            ->where('courses.title_course', 'like', '%' . $search . '%')
+            ->join('categories', 'courses.category_id', '=', 'categories.id')
+            ->select('courses.id', 'courses.title_course', 'courses.description', 'courses.price', 'courses.image_course', 'categories.name_category')
+            ->get();
+
+        if ($course->isEmpty()) {
+            return response()->json([
+                'message' => 'course not found',
+            ], 404);
+        } else
+            return response()->json([
+                'course' => $course,
+            ], 200);
+    }
 }
