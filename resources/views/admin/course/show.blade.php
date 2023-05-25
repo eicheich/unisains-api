@@ -2,7 +2,6 @@
 @section('content')
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Detail Kursus</h1>
-        {{-- button add course --}}
         @if (session('status'))
             <div class="alert alert-success" role="alert">
                 {{ session('status') }}
@@ -79,15 +78,6 @@
                                                 Isi Materi <br>
                                                 {{ $m->materi_module }}
                                             </div>
-                                            {{-- <form action="{{ route('delete.modules', $m->id) }}" method="post">
-                                                @csrf
-                                                <button type="submit" id="hapus-modul"
-                                                    class="btn btn-sm btn-outline-danger m-2">Hapus
-                                                    Modul</button>
-                                            </form>
-                                            <a href="{{ route('update.modules.page', $m->id) }}"
-                                                class="btn btn-sm btn-outline-warning m-2">Edit Modul</a> --}}
-                                            {{-- <a href="#" class="btn btn-sm btn-outline-danger m-2">Hapus Modul</a> --}}
                                             <div class="card-actions d-flex justify-content-center mt-3">
                                                 <div>
                                                     <a href="{{ route('update.modules.page', $m->id) }}"
@@ -107,8 +97,6 @@
                                 </div>
                             </div>
                         @endforeach
-
-                        {{-- button tambah moduke --}}
                     @endif
                     <button id="add-module-btn" class="btn btn-sm btn-outline-secondary mt-5" data-toggle="modal"
                         data-target="#add-module-modal">Tambah Modul</button>
@@ -186,13 +174,6 @@
                                 instead.
                             </video>
                         </div>
-                        {{-- <a href="{{ route('update.rangkuman.page', $mr->id) }}"
-                            class="btn btn-sm btn-outline-warning m-2">Edit Rangkuman</a>
-                        <form action="{{ route('delete.rangkuman', $mr->id) }}" method="post">
-                            @csrf
-                            <button class="btn btn-sm btn-outline-danger m-2" id="submit-delete" type="submit">Hapus
-                                Rangkuman</button>
-                        </form> --}}
                         <div class="card-actions d-flex justify-content-center mt-3">
                             <div>
                                 <a href="{{ route('update.rangkuman.page', $mr->id) }}" class="btn btn-primary">Edit</a>
@@ -350,10 +331,8 @@
             padding: 10px 10rem 10px 10rem;
             border-radius: 10px;
             background-color: orange;
-            /* remove outline */
             outline: none;
             color: white;
-            /* center */
         }
 
         .form-control {
@@ -415,7 +394,6 @@
         });
         $(document).ready(function() {
             $('#add-module-btn').click(function() {
-                // tampilkan modal
                 $('#add-module-modal').modal('show');
             });
         });
@@ -424,11 +402,9 @@
             var preview = document.querySelector('#' + inputId + '_preview');
             var file = document.querySelector('#' + inputId).files[0];
             var reader = new FileReader();
-
             reader.onloadend = function() {
                 preview.src = reader.result;
             }
-
             if (file) {
                 reader.readAsDataURL(file);
             } else {
