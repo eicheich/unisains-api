@@ -79,15 +79,29 @@
                                                 Isi Materi <br>
                                                 {{ $m->materi_module }}
                                             </div>
-                                            <form action="{{ route('delete.modules', $m->id) }}" method="post">
+                                            {{-- <form action="{{ route('delete.modules', $m->id) }}" method="post">
                                                 @csrf
                                                 <button type="submit" id="hapus-modul"
                                                     class="btn btn-sm btn-outline-danger m-2">Hapus
                                                     Modul</button>
                                             </form>
                                             <a href="{{ route('update.modules.page', $m->id) }}"
-                                                class="btn btn-sm btn-outline-warning m-2">Edit Modul</a>
+                                                class="btn btn-sm btn-outline-warning m-2">Edit Modul</a> --}}
                                             {{-- <a href="#" class="btn btn-sm btn-outline-danger m-2">Hapus Modul</a> --}}
+                                            <div class="card-actions d-flex justify-content-center mt-3">
+                                                <div>
+                                                    <a href="{{ route('update.modules.page', $m->id) }}"
+                                                        class="btn btn-primary">Edit</a>
+                                                </div>
+                                                <div>
+                                                    <form action="{{ route('delete.modules', $m->id) }}" method="post">
+                                                        @csrf
+                                                        <button type="submit" id="hapus-ar"
+                                                            class="btn btn-danger mx-2">Hapus
+                                                            Module</button>
+                                                    </form>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -172,13 +186,25 @@
                                 instead.
                             </video>
                         </div>
-                        <a href="{{ route('update.rangkuman.page', $mr->id) }}"
+                        {{-- <a href="{{ route('update.rangkuman.page', $mr->id) }}"
                             class="btn btn-sm btn-outline-warning m-2">Edit Rangkuman</a>
                         <form action="{{ route('delete.rangkuman', $mr->id) }}" method="post">
                             @csrf
                             <button class="btn btn-sm btn-outline-danger m-2" id="submit-delete" type="submit">Hapus
                                 Rangkuman</button>
-                        </form>
+                        </form> --}}
+                        <div class="card-actions d-flex justify-content-center mt-3">
+                            <div>
+                                <a href="{{ route('update.rangkuman.page', $mr->id) }}" class="btn btn-primary">Edit</a>
+                            </div>
+                            <div>
+                                <form action="{{ route('delete.rangkuman', $mr->id) }}" method="post">
+                                    @csrf
+                                    <button type="submit" id="hapus-ar" class="btn btn-danger mx-2">Hapus
+                                        Module</button>
+                                </form>
+                            </div>
+                        </div>
                     @endforeach
                 @endif
                 <h2 class="mt-5">Kartu AR</h2>
