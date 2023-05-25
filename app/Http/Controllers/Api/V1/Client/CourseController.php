@@ -39,7 +39,13 @@ class CourseController extends Controller
 
     public function show($id)
     {
-        $course = DB::table('courses')->where('id', $id)->first();
+        // $course = DB::table('courses')->where('id', $id)->first();
+        $course = DB::table('courses')
+            ->where('courses.id', $id)
+            ->join('categories', 'courses.category_id', '=', 'categories.id')
+            ->select('courses.*', 'categories.name_category')
+            ->first();
+
         if ($course) {
             return response()->json([
                 'course' => $course
@@ -52,9 +58,10 @@ class CourseController extends Controller
 
     public function preview($id)
     {
-        $course = DB::table('courses')->where('id', $id)
-            ->select('courses.id', 'courses.title_course', 'courses.description', 'courses.price', 'courses.image_course')
-            // ->join('categories', 'courses.category_id', '=', 'categories.id')
+        $course = DB::table('courses')
+            ->where('courses.id', $id)
+            ->join('categories', 'courses.category_id', '=', 'categories.id')
+            ->select('courses.id', 'courses.title_course', 'courses.description', 'courses.price', 'courses.image_course', 'categories.name_category')
             ->get();
 
         if ($course->isEmpty()) {
