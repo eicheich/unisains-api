@@ -43,23 +43,55 @@ class CartController extends Controller
     public function all()
     {
         $user = Auth::user();
+        $cart = DB::table('carts')
+            ->join('courses', 'courses.id', '=', 'carts.course_id')
+            ->where('carts.user_id', $user->id)
+            ->first();
+        if ($cart->isEmpty()) {
+            return response()->json([
+                'message' => 'Cart is empty',
+            ], 200);
+        } else {
+            try {
+                DB::beginTransaction();
+                $cart = DB::table('carts')
+                    ->join('courses', 'courses.id', '=', 'carts.course_id')
+                    ->where('carts.user_id', $user->id)
+                    ->get();
+                DB::commit();
+                return response()->json([
+                    'message' => 'Cart is empty',
+                    'data' => $cart,
+                ], 200);
+            } catch (\Throwable $th) {
+                DB::rollback();
+                return response()->json([
+                    'message' => 'Something went wrong',
+                ], 500);
+            }
+        }
+    }
+
+    public function delete($id)
+    {
+        $user = Auth::user();
         try {
+            DB::beginTransaction();
             $cart = DB::table('carts')
-                ->join('courses', 'courses.id', '=', 'carts.course_id')
-                ->where('carts.user_id', $user->id)
-                ->select('courses.*')
-                ->get();
+                ->where('user_id', $user->id)
+                ->where('course_id', $id)->first();
             if ($cart->isEmpty()) {
                 return response()->json([
                     'message' => 'Cart is empty',
                 ], 200);
-            } else {
-                return response()->json([
-                    'message' => 'Cart',
-                    'data' => $cart,
-                ], 200);
             }
+
+            DB::commit();
+            return response()->json([
+                'message' => 'Course deleted from cart',
+            ], 200);
         } catch (\Throwable $th) {
+            DB::rollback();
             return response()->json([
                 'message' => 'Something went wrong',
             ], 500);
