@@ -2,7 +2,6 @@
 @section('content')
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Detail Kursus</h1>
-        {{-- button add course --}}
         @if (session('status'))
             <div class="alert alert-success" role="alert">
                 {{ session('status') }}
@@ -44,24 +43,6 @@
                                                 data-target="#collapse{{ $m->id }}" aria-expanded="true"
                                                 aria-controls="collapse{{ $m->id }}">
                                                 {{ $m->title_module }}
-                                                <style>
-                                                    .coll-show {
-                                                        background-color: #ffffff;
-                                                        justify-content: center;
-                                                        border: none;
-                                                        border-radius: 4;
-                                                        box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.2);
-                                                    }
-
-                                                    .btn-coll {
-                                                        padding: 1rem;
-                                                        background-color: #ffffff;
-                                                        justify-content: center;
-                                                        border: none;
-                                                        border-radius: 40%;
-                                                        box-shadow: none;
-                                                    }
-                                                </style>
                                             </button>
                                         </h5>
                                     </div>
@@ -79,22 +60,25 @@
                                                 Isi Materi <br>
                                                 {{ $m->materi_module }}
                                             </div>
-                                            <form action="{{ route('delete.modules', $m->id) }}" method="post">
-                                                @csrf
-                                                <button type="submit" id="hapus-modul"
-                                                    class="btn btn-sm btn-outline-danger m-2">Hapus
-                                                    Modul</button>
-                                            </form>
-                                            <a href="{{ route('update.modules.page', $m->id) }}"
-                                                class="btn btn-sm btn-outline-warning m-2">Edit Modul</a>
-                                            {{-- <a href="#" class="btn btn-sm btn-outline-danger m-2">Hapus Modul</a> --}}
+                                            <div class="card-actions d-flex justify-content-center mt-3">
+                                                <div>
+                                                    <a href="{{ route('update.modules.page', $m->id) }}"
+                                                        class="btn btn-primary">Edit</a>
+                                                </div>
+                                                <div>
+                                                    <form action="{{ route('delete.modules', $m->id) }}" method="post">
+                                                        @csrf
+                                                        <button type="submit" id="hapus-ar"
+                                                            class="btn btn-danger mx-2">Hapus
+                                                            Module</button>
+                                                    </form>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         @endforeach
-
-                        {{-- button tambah moduke --}}
                     @endif
                     <button id="add-module-btn" class="btn btn-sm btn-outline-secondary mt-5" data-toggle="modal"
                         data-target="#add-module-modal">Tambah Modul</button>
@@ -172,13 +156,18 @@
                                 instead.
                             </video>
                         </div>
-                        <a href="{{ route('update.rangkuman.page', $mr->id) }}"
-                            class="btn btn-sm btn-outline-warning m-2">Edit Rangkuman</a>
-                        <form action="{{ route('delete.rangkuman', $mr->id) }}" method="post">
-                            @csrf
-                            <button class="btn btn-sm btn-outline-danger m-2" id="submit-delete" type="submit">Hapus
-                                Rangkuman</button>
-                        </form>
+                        <div class="card-actions d-flex justify-content-center mt-3">
+                            <div>
+                                <a href="{{ route('update.rangkuman.page', $mr->id) }}" class="btn btn-primary">Edit</a>
+                            </div>
+                            <div>
+                                <form action="{{ route('delete.rangkuman', $mr->id) }}" method="post">
+                                    @csrf
+                                    <button type="submit" id="hapus-ar" class="btn btn-danger mx-2">Hapus
+                                        Module</button>
+                                </form>
+                            </div>
+                        </div>
                     @endforeach
                 @endif
                 <h2 class="mt-5">Kartu AR</h2>
@@ -209,38 +198,10 @@
                                             </div>
                                         </div>
                                     </div>
-
-
                                 </div>
                             @endforeach
                         </div>
                     </div>
-                    <style>
-                        .card {
-                            position: relative;
-                            overflow: hidden;
-                        }
-
-                        .card-img {
-                            padding: 1rem;
-                            height: 100%;
-                            width: 16rem;
-                            object-fit: cover;
-                            border-radius: 10px;
-                        }
-
-                        .card-actions {
-                            bottom: 0;
-                            left: 0;
-                            width: 100%;
-                            padding: 10px;
-                            text-align: center;
-                        }
-
-                        .card-actions button {
-                            margin-right: 5px;
-                        }
-                    </style>
                     <button id="add-ar-btn" class="btn btn-sm btn-outline-secondary mt-5" data-toggle="modal"
                         data-target="#add-ar-modal">Tambah AR</button>
                 @endif
@@ -257,7 +218,6 @@
                             <div class="modal-body">
                                 <form action="{{ route('store.ar') }}" method="post" enctype="multipart/form-data">
                                     @csrf
-
                                     <div class="form-group mt-2">
                                         <p>Gambar AR</p>
                                         <div class="custom-file">
@@ -281,37 +241,35 @@
                     </div>
                 </div>
             </div>
-
-
-
         </div>
     </div>
     </div>
-    <script>
-        function handleDelete(event, confirmationMessage) {
-            event.preventDefault();
-            const confirmation = confirm(confirmationMessage);
-            if (confirmation) {
-                this.form.submit();
-            }
+    <style>
+        .card {
+            position: relative;
+            overflow: hidden;
         }
 
-        const deleteButton = document.getElementById("submit-delete");
-        const deleteModule = document.getElementById("hapus-modul");
-        const deleteAr = document.getElementById("hapus-ar");
+        .card-img {
+            padding: 1rem;
+            height: 100%;
+            width: 16rem;
+            object-fit: cover;
+            border-radius: 10px;
+        }
 
-        deleteModule.addEventListener("click", function(event) {
-            handleDelete.call(this, event, "Apakah Anda yakin ingin menghapus modul ini?");
-        });
+        .card-actions {
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 10px;
+            text-align: center;
+        }
 
-        deleteButton.addEventListener("click", function(event) {
-            handleDelete.call(this, event, "Apakah Anda yakin ingin menghapus kursus ini?");
-        });
-        deleteAr.addEventListener("click", function(event) {
-            handleDelete.call(this, event, "Apakah Anda yakin ingin menghapus kursus ini?");
-        });
-    </script>
-    <style>
+        .card-actions button {
+            margin-right: 5px;
+        }
+
         .custom-file {
             position: relative;
             display: inline-block;
@@ -324,10 +282,8 @@
             padding: 10px 10rem 10px 10rem;
             border-radius: 10px;
             background-color: orange;
-            /* remove outline */
             outline: none;
             color: white;
-            /* center */
         }
 
         .form-control {
@@ -348,6 +304,40 @@
             height: calc(2.25rem + 2px);
             margin: 0;
             opacity: 0;
+        }
+
+        .coll-show {
+            background-color: #ffffff;
+            justify-content: center;
+            border: none;
+            border-radius: 4;
+            box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .coll-show {
+            background-color: #ffffff;
+            justify-content: center;
+            border: none;
+            border-radius: 4;
+            box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-coll {
+            padding: 1rem;
+            background-color: #ffffff;
+            justify-content: center;
+            border: none;
+            border-radius: 40%;
+            box-shadow: none;
+        }
+
+        .btn-coll {
+            padding: 1rem;
+            background-color: #ffffff;
+            justify-content: center;
+            border: none;
+            border-radius: 40%;
+            box-shadow: none;
         }
 
         .custom-file-label {
@@ -380,6 +370,31 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script>
+        
+
+        const deleteButton = document.getElementById("submit-delete");
+        const deleteModule = document.getElementById("hapus-modul");
+        const deleteAr = document.getElementById("hapus-ar");
+
+        deleteModule.addEventListener("click", function(event) {
+            handleDelete.call(this, event, "Apakah Anda yakin ingin menghapus modul ini?");
+        });
+
+        deleteButton.addEventListener("click", function(event) {
+            handleDelete.call(this, event, "Apakah Anda yakin ingin menghapus kursus ini?");
+        });
+        deleteAr.addEventListener("click", function(event) {
+            handleDelete.call(this, event, "Apakah Anda yakin ingin menghapus kursus ini?");
+        });
+
+        function handleDelete(event, confirmationMessage) {
+            event.preventDefault();
+            const confirmation = confirm(confirmationMessage);
+            if (confirmation) {
+                this.form.submit();
+            }
+        }
+        
         const accordion = document.querySelector('#accordion');
         const collapses = accordion.querySelectorAll('.collapse');
 
@@ -389,7 +404,6 @@
         });
         $(document).ready(function() {
             $('#add-module-btn').click(function() {
-                // tampilkan modal
                 $('#add-module-modal').modal('show');
             });
         });
@@ -398,11 +412,9 @@
             var preview = document.querySelector('#' + inputId + '_preview');
             var file = document.querySelector('#' + inputId).files[0];
             var reader = new FileReader();
-
             reader.onloadend = function() {
                 preview.src = reader.result;
             }
-
             if (file) {
                 reader.readAsDataURL(file);
             } else {

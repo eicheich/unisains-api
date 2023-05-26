@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\Client\CourseController;
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\Client\CartController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -52,6 +53,11 @@ Route::prefix('v1')->group(function () {
         Route::get('search', [CourseController::class, 'search']);
         Route::middleware('auth:sanctum')->group(function () {
             Route::get('show/{id}', [CourseController::class, 'show']);
+            Route::prefix('cart')->group(function(){
+                Route::post('store',[CartController::class, 'store']);
+                Route::get('all',[CartController::class, 'all']);
+                Route::post('delete/{id}',[CartController::class, 'delete']);
+            });
         });
     });
 });
