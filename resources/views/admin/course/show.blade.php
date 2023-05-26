@@ -43,24 +43,6 @@
                                                 data-target="#collapse{{ $m->id }}" aria-expanded="true"
                                                 aria-controls="collapse{{ $m->id }}">
                                                 {{ $m->title_module }}
-                                                <style>
-                                                    .coll-show {
-                                                        background-color: #ffffff;
-                                                        justify-content: center;
-                                                        border: none;
-                                                        border-radius: 4;
-                                                        box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.2);
-                                                    }
-
-                                                    .btn-coll {
-                                                        padding: 1rem;
-                                                        background-color: #ffffff;
-                                                        justify-content: center;
-                                                        border: none;
-                                                        border-radius: 40%;
-                                                        box-shadow: none;
-                                                    }
-                                                </style>
                                             </button>
                                         </h5>
                                     </div>
@@ -216,38 +198,10 @@
                                             </div>
                                         </div>
                                     </div>
-
-
                                 </div>
                             @endforeach
                         </div>
                     </div>
-                    <style>
-                        .card {
-                            position: relative;
-                            overflow: hidden;
-                        }
-
-                        .card-img {
-                            padding: 1rem;
-                            height: 100%;
-                            width: 16rem;
-                            object-fit: cover;
-                            border-radius: 10px;
-                        }
-
-                        .card-actions {
-                            bottom: 0;
-                            left: 0;
-                            width: 100%;
-                            padding: 10px;
-                            text-align: center;
-                        }
-
-                        .card-actions button {
-                            margin-right: 5px;
-                        }
-                    </style>
                     <button id="add-ar-btn" class="btn btn-sm btn-outline-secondary mt-5" data-toggle="modal"
                         data-target="#add-ar-modal">Tambah AR</button>
                 @endif
@@ -264,7 +218,6 @@
                             <div class="modal-body">
                                 <form action="{{ route('store.ar') }}" method="post" enctype="multipart/form-data">
                                     @csrf
-
                                     <div class="form-group mt-2">
                                         <p>Gambar AR</p>
                                         <div class="custom-file">
@@ -288,37 +241,35 @@
                     </div>
                 </div>
             </div>
-
-
-
         </div>
     </div>
     </div>
-    <script>
-        function handleDelete(event, confirmationMessage) {
-            event.preventDefault();
-            const confirmation = confirm(confirmationMessage);
-            if (confirmation) {
-                this.form.submit();
-            }
+    <style>
+        .card {
+            position: relative;
+            overflow: hidden;
         }
 
-        const deleteButton = document.getElementById("submit-delete");
-        const deleteModule = document.getElementById("hapus-modul");
-        const deleteAr = document.getElementById("hapus-ar");
+        .card-img {
+            padding: 1rem;
+            height: 100%;
+            width: 16rem;
+            object-fit: cover;
+            border-radius: 10px;
+        }
 
-        deleteModule.addEventListener("click", function(event) {
-            handleDelete.call(this, event, "Apakah Anda yakin ingin menghapus modul ini?");
-        });
+        .card-actions {
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 10px;
+            text-align: center;
+        }
 
-        deleteButton.addEventListener("click", function(event) {
-            handleDelete.call(this, event, "Apakah Anda yakin ingin menghapus kursus ini?");
-        });
-        deleteAr.addEventListener("click", function(event) {
-            handleDelete.call(this, event, "Apakah Anda yakin ingin menghapus kursus ini?");
-        });
-    </script>
-    <style>
+        .card-actions button {
+            margin-right: 5px;
+        }
+
         .custom-file {
             position: relative;
             display: inline-block;
@@ -355,6 +306,40 @@
             opacity: 0;
         }
 
+        .coll-show {
+            background-color: #ffffff;
+            justify-content: center;
+            border: none;
+            border-radius: 4;
+            box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .coll-show {
+            background-color: #ffffff;
+            justify-content: center;
+            border: none;
+            border-radius: 4;
+            box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-coll {
+            padding: 1rem;
+            background-color: #ffffff;
+            justify-content: center;
+            border: none;
+            border-radius: 40%;
+            box-shadow: none;
+        }
+
+        .btn-coll {
+            padding: 1rem;
+            background-color: #ffffff;
+            justify-content: center;
+            border: none;
+            border-radius: 40%;
+            box-shadow: none;
+        }
+
         .custom-file-label {
             position: absolute;
             top: 0;
@@ -385,6 +370,31 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script>
+        
+
+        const deleteButton = document.getElementById("submit-delete");
+        const deleteModule = document.getElementById("hapus-modul");
+        const deleteAr = document.getElementById("hapus-ar");
+
+        deleteModule.addEventListener("click", function(event) {
+            handleDelete.call(this, event, "Apakah Anda yakin ingin menghapus modul ini?");
+        });
+
+        deleteButton.addEventListener("click", function(event) {
+            handleDelete.call(this, event, "Apakah Anda yakin ingin menghapus kursus ini?");
+        });
+        deleteAr.addEventListener("click", function(event) {
+            handleDelete.call(this, event, "Apakah Anda yakin ingin menghapus kursus ini?");
+        });
+
+        function handleDelete(event, confirmationMessage) {
+            event.preventDefault();
+            const confirmation = confirm(confirmationMessage);
+            if (confirmation) {
+                this.form.submit();
+            }
+        }
+        
         const accordion = document.querySelector('#accordion');
         const collapses = accordion.querySelectorAll('.collapse');
 
