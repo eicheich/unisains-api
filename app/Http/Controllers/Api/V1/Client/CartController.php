@@ -21,38 +21,19 @@ class CartController extends Controller
                 'message' => 'Validation error',
                 'errors' => $validator->errors(),
             ], 422);
-        }
-        // $cart = DB::table('cartssad')->insert([
-        //     'user_id' => $user->id,
-        //     'course_id' => $request->course_id,
-        // ]);
-        // if ($cart) {
-        //     return response()->json([
-        //         'message' => 'Course added to cart',
-        //     ], 200);
-        // } else {
-        //     return response()->json([
-        //         'message' => 'Something went wrong',
-        //     ], 500);
-        // }
-        if ($validator) {
-            try {
-                DB::beginTransaction();
-                $cart = DB::table('carts')->insert([
-                    'user_id' => $user->id,
-                    'course_id' => $request->course_id,
-                ]);
-                DB::commit();
-                return response()->json([
-                    'message' => 'Course added to cart',
-                ], 200);
-            } catch (\Throwable $th) {
-                DB::rollback();
-                return response()->json([
-                    'message' => 'Something went wrong',
-                ], 500);
-            }
-        } else {
+        } else
+        try {
+            DB::beginTransaction();
+            $cart = DB::table('carts')->insert([
+                'user_id' => $user->id,
+                'course_id' => $request->course_id,
+            ]);
+            DB::commit();
+            return response()->json([
+                'message' => 'Course added to cart',
+            ], 200);
+        } catch (\Throwable $th) {
+            DB::rollback();
             return response()->json([
                 'message' => 'Something went wrong',
             ], 500);
