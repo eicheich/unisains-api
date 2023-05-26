@@ -22,18 +22,44 @@ class CartController extends Controller
                 'errors' => $validator->errors(),
             ], 422);
         } else
+            try {
+                DB::beginTransaction();
+                $cart = DB::table('carts')->insert([
+                    'user_id' => $user->id,
+                    'course_id' => $request->course_id,
+                ]);
+                DB::commit();
+                return response()->json([
+                    'message' => 'Course added to cart',
+                ], 200);
+            } catch (\Throwable $th) {
+                DB::rollback();
+                return response()->json([
+                    'message' => 'Something went wrong',
+                ], 500);
+            }
+    }
+
+    public function all()
+    {
+        $user = Auth::user();
         try {
-            DB::beginTransaction();
-            $cart = DB::table('carts')->insert([
-                'user_id' => $user->id,
-                'course_id' => $request->course_id,
-            ]);
-            DB::commit();
-            return response()->json([
-                'message' => 'Course added to cart',
-            ], 200);
+            $cart = DB::table('carts')
+                ->join('courses', 'courses.id', '=', 'carts.course_id')
+                ->where('carts.user_id', $user->id)
+                ->select('courses.*')
+                ->get();
+            if ($cart->isEmpty()) {
+                return response()->json([
+                    'message' => 'Cart is empty',
+                ], 200);
+            } else {
+                return response()->json([
+                    'message' => 'Cart',
+                    'data' => $cart,
+                ], 200);
+            }
         } catch (\Throwable $th) {
-            DB::rollback();
             return response()->json([
                 'message' => 'Something went wrong',
             ], 500);
