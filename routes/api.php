@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\Client\CourseController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\Client\CartController;
+use App\Http\Controllers\Api\V1\Client\ProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -32,8 +33,6 @@ Route::prefix('v1')->group(function () {
         Route::post('register', [AuthController::class, 'register']);
         Route::middleware('auth:sanctum')->group(function () {
             Route::post('logout', [AuthController::class, 'logout']);
-            Route::get('me', [AuthController::class, 'me']);
-            Route::post('update-profile', [AuthController::class, 'updateProfile']);
         });
     });
     // Route::prefix('admin')->middleware('isAdmin')->group(function () {
@@ -53,11 +52,15 @@ Route::prefix('v1')->group(function () {
         Route::get('search', [CourseController::class, 'search']);
         Route::middleware('auth:sanctum')->group(function () {
             Route::get('show/{id}', [CourseController::class, 'show']);
-            Route::prefix('cart')->group(function(){
-                Route::post('store',[CartController::class, 'store']);
-                Route::get('all',[CartController::class, 'all']);
-                Route::post('delete/{id}',[CartController::class, 'delete']);
+            Route::prefix('cart')->group(function () {
+                Route::post('store', [CartController::class, 'store']);
+                Route::get('all', [CartController::class, 'all']);
+                Route::post('delete/{id}', [CartController::class, 'delete']);
             });
         });
+    });
+    Route::prefix('profile')->middleware('auth:sanctum')->group(function () {
+        Route::get('show', [ProfileController::class, 'show']);
+        Route::post('update', [ProfileController::class, 'update']);
     });
 });
