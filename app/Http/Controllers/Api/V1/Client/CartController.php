@@ -47,21 +47,14 @@ class CartController extends Controller
             ->join('courses', 'courses.id', '=', 'carts.course_id')
             ->where('carts.user_id', $user->id)
             ->first();
-        if ($cart->isEmpty()) {
+        if ($cart == null) {
             return response()->json([
                 'message' => 'Cart is empty',
             ], 200);
         } else {
             try {
-                DB::beginTransaction();
-                $cart = DB::table('carts')
-                    ->join('courses', 'courses.id', '=', 'carts.course_id')
-                    ->where('carts.user_id', $user->id)
-                    ->get();
-                DB::commit();
                 return response()->json([
-                    'message' => 'Cart is empty',
-                    'data' => $cart,
+                    'cart' => $cart,
                 ], 200);
             } catch (\Throwable $th) {
                 DB::rollback();
@@ -75,17 +68,19 @@ class CartController extends Controller
     public function delete($id)
     {
         $user = Auth::user();
+        $cart = DB::table('carts')
+            ->where('user_id', $user->id)
+            ->where('course_id', $id)->first();
+        if ($cart == null) {
+            return response()->json([
+                'message' => 'Course not found in cart',
+            ], 200);
+        }
         try {
             DB::beginTransaction();
             $cart = DB::table('carts')
                 ->where('user_id', $user->id)
-                ->where('course_id', $id)->first();
-            if ($cart->isEmpty()) {
-                return response()->json([
-                    'message' => 'Cart is empty',
-                ], 200);
-            }
-
+                ->where('course_id', $id)->delete();
             DB::commit();
             return response()->json([
                 'message' => 'Course deleted from cart',
