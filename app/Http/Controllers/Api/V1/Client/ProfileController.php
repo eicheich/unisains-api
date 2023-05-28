@@ -35,9 +35,8 @@ class ProfileController extends Controller
         $validator = Validator::make($request->all(), [
             'first_name' => 'required|string',
             'last_name' => 'required|string',
-            'email' => 'required|email|unique:users',
-            'username' => 'required|unique:users',
-            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'username' => 'required',
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -45,12 +44,28 @@ class ProfileController extends Controller
                 'errors' => $validator->errors(),
             ], 422);
         }
+        if ($request->hasFile('avatar')) {
+            if ($user->avatar != null) {
+                $old_avatar = public_path('storage/images/avatar') . '/' . $user->avatar;
+                if (file_exists($old_avatar)) {
+                    unlink($old_avatar);
+                }
+            }
+            $avatar = $request->file('avatar');
+            $avatar_name = time() . '.' . $avatar->getClientOriginalExtension();
+            $avatar->move(public_path('storage/images/avatar'), $avatar_name);
+            // unlink if ld image exist
+
+        } else {
+            $avatar_name = $user->avatar;
+        }
         try {
             DB::beginTransaction();
             $user = DB::table('users')->where('id', $user->id)->update([
                 'first_name' => $request->first_name,
                 'last_name' => $request->last_name,
                 'username' => $request->username,
+                'avatar' => $avatar_name,
             ]);
             DB::commit();
             return response()->json([
@@ -62,5 +77,6 @@ class ProfileController extends Controller
                 'message' => 'Something went wrong',
             ], 500);
         }
+
     }
 }
