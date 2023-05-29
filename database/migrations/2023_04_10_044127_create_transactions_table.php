@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->string('code_transaction');
+            $table->string('code_transaction')->unique();
             $table->foreignId('course_id')->constrained('courses');
             $table->foreignId('user_id')->constrained('users');
+            $table->integer('total_price');
             $table->enum('status', ['pending', 'success', 'failed']);
         });
     }
