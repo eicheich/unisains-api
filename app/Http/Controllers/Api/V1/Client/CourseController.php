@@ -39,7 +39,6 @@ class CourseController extends Controller
 
     public function show($id)
     {
-        // $course = DB::table('courses')->where('id', $id)->first();
         $course = DB::table('courses')
             ->where('courses.id', $id)
             ->join('categories', 'courses.category_id', '=', 'categories.id')
