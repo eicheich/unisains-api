@@ -71,10 +71,11 @@ class CourseController extends Controller
     public function show($id)
     {
         $course = Course::with('category')->find($id);
+        $quiz = DB::table('quizzes')->where('course_id', $id)->get();
         $modules = DB::table('modules')->where('course_id', $id)->get();
         $module_rangkuman = DB::table('module_rangkuman')->where('course_id', $id)->get();
         $ar = DB::table('augmented_realities')->where('course_id', $id)->get();
-        return view('admin.course.show', compact('course', 'modules', 'module_rangkuman','ar'));
+        return view('admin.course.show', compact('course', 'modules', 'module_rangkuman','ar','quiz'));
 
     }
     public function updatePage($id)
