@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\V1\Client\CourseController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\Client\CartController;
 use App\Http\Controllers\Api\V1\Client\ProfileController;
+use App\Http\Controllers\Api\V1\Client\TransactionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -62,5 +63,12 @@ Route::prefix('v1')->group(function () {
     Route::prefix('profile')->middleware('auth:sanctum')->group(function () {
         Route::get('show', [ProfileController::class, 'show']);
         Route::post('update', [ProfileController::class, 'update']);
+    });
+    Route::prefix('transaction')->middleware('auth:sanctum')->group(function () {
+        Route::get('all', [TransactionController::class, 'all']);
+        Route::post('store', [TransactionController::class, 'store']);
+        Route::get('show/{id}', [TransactionController::class, 'show']);
+        Route::post('update/{id}', [TransactionController::class, 'update']);
+        Route::post('delete/{id}', [TransactionController::class, 'delete']);
     });
 });
