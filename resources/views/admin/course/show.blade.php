@@ -240,6 +240,48 @@
                         </div>
                     </div>
                 </div>
+                <h2 class="mt-5">Soal Kursus</h2>
+                @if ($quiz->isEmpty())
+                    <h5>Belum ada soal kursus</h5>
+                    <button id="add-ar-btn" class="btn btn-sm btn-outline-secondary mt-5" data-toggle="modal"
+                        data-target="#add-quiz-modal">Tambah Soal</button>
+                @else
+                @endif
+                <div class="modal fade" id="add-quiz-modal" tabindex="-1" role="dialog"
+                    aria-labelledby="add-module-modal-title" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="add-module-modal-title">Tambah Soal</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{{ route('store.quiz') }}" method="post" enctype="multipart/form-data">
+                                    @csrf
+                                    <div class="form-group">
+                                        <label for="module-name">Soal</label>
+                                        <input type="text" class="form-control" id="module-name" name="title_module"
+                                            placeholder="Soal">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="module-name">Jawaban</label>
+                                        <input type="text" class="form-control" id="module-name" name="title_module"
+                                            placeholder="Jawaban dari Soal">
+                                    </div>
+                                    <input type="hidden" name="course_id" value="{{ $course->id }}">
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Batal</button>
+                                        <button type="submit" class="btn btn-primary">Tambah</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -370,8 +412,6 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script>
-        
-
         const deleteButton = document.getElementById("submit-delete");
         const deleteModule = document.getElementById("hapus-modul");
         const deleteAr = document.getElementById("hapus-ar");
@@ -394,7 +434,7 @@
                 this.form.submit();
             }
         }
-        
+
         const accordion = document.querySelector('#accordion');
         const collapses = accordion.querySelectorAll('.collapse');
 
