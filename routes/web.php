@@ -66,7 +66,6 @@ Route::prefix('admin')->middleware('isAdminWeb')->group(function () {
 
         });
         Route::prefix('quiz')->group(function(){
-            Route::get('create/{course_id}', [QuizController::class, 'create'])->name('create.quiz');
             Route::post('store', [QuizController::class, 'store'])->name('store.quiz');
             Route::get('edit/{id}', [QuizController::class, 'edit'])->name('update.quiz.page');
             Route::post('update/{id}', [QuizController::class, 'update'])->name('update.quiz');

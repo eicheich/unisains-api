@@ -258,16 +258,16 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form action="{{ route('store.quiz') }}" method="post" enctype="multipart/form-data">
+                                <form action="{{ route('store.quiz') }}" method="post" >
                                     @csrf
                                     <div class="form-group">
                                         <label for="module-name">Soal</label>
-                                        <input type="text" class="form-control" id="module-name" name="title_module"
+                                        <input type="text" class="form-control" id="module-name" name="soal"
                                             placeholder="Soal">
                                     </div>
                                     <div class="form-group">
                                         <label for="module-name">Jawaban</label>
-                                        <input type="text" class="form-control" id="module-name" name="title_module"
+                                        <input type="text" class="form-control" id="module-name" name="jawaban"
                                             placeholder="Jawaban dari Soal">
                                     </div>
                                     <input type="hidden" name="course_id" value="{{ $course->id }}">

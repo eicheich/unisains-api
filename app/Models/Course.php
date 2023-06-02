@@ -30,5 +30,11 @@ class Course extends Model
         return $this->belongsToMany(User::class, 'user_courses');
     }
 
+    // relation
+    public function quizzes()
+    {
+        return $this->hasMany(Quiz::class);
+    }
+
 
 }
