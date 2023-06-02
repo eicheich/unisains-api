@@ -246,6 +246,33 @@
                     <button id="add-ar-btn" class="btn btn-sm btn-outline-secondary mt-5" data-toggle="modal"
                         data-target="#add-quiz-modal">Tambah Soal</button>
                 @else
+                <div class="container">
+                    <div class="row">
+                        @foreach ($quiz as $quiz)
+                        <div class="col-md-4">
+                            <div class="question">
+                                <p>Soal: {{ $quiz->soal }}</p>
+                                <p>Jawaban: {{ $quiz->jawaban }}</p>
+                            </div>
+                            <div class="actions d-flex justify-content-center mt-3">
+                                <div>
+                                    <a href="#" class="btn btn-primary">Edit</a>
+                                </div>
+                                <div>
+                                    <form action="{{ route('delete.quiz', $quiz->id) }}" method="post">
+                                        @csrf
+                                        <button type="submit" id="hapus-ar" class="btn btn-danger mx-2">Hapus Soal</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+                
+                
+                    <button id="add-ar-btn" class="btn btn-sm btn-outline-secondary mt-5" data-toggle="modal"
+                        data-target="#add-quiz-modal">Tambah Soal</button>
                 @endif
                 <div class="modal fade" id="add-quiz-modal" tabindex="-1" role="dialog"
                     aria-labelledby="add-module-modal-title" aria-hidden="true">
