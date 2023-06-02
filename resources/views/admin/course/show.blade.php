@@ -256,7 +256,7 @@
                             </div>
                             <div class="actions d-flex justify-content-center mt-3">
                                 <div>
-                                    <a href="#" class="btn btn-primary">Edit</a>
+                                    <a href="{{route('update.quiz.page', $quiz->id)}}" class="btn btn-primary">Edit</a>
                                 </div>
                                 <div>
                                     <form action="{{ route('delete.quiz', $quiz->id) }}" method="post">

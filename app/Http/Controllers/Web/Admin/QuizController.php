@@ -31,4 +31,11 @@ class QuizController extends Controller
             return redirect()->back()->with('status', $th->getMessage());
         }
     }
+
+    public function edit($id)
+    {
+        $quiz = Quiz::find($id);
+        return view('admin.course.quiz.edit', compact('quiz'));
+    }
+    
 }
