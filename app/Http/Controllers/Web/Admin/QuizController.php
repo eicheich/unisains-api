@@ -37,5 +37,27 @@ class QuizController extends Controller
         $quiz = Quiz::find($id);
         return view('admin.course.quiz.edit', compact('quiz'));
     }
+
+    public function update(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'soal' => 'required',
+            'jawaban' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()->with('status', $validator->errors());
+        }
+        try {
+            $quiz = Quiz::find($id);
+            $quiz->update([
+                'soal' => $request->soal,
+                'jawaban' => $request->jawaban,
+            ]);
+            return redirect()->route('course.show', $quiz->course_id)->with('status', 'Berhasil mengubah quiz');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('status', $th->getMessage());
+        }
+        # code...
+    }
     
 }
