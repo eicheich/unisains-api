@@ -35,9 +35,13 @@ class TransactionController extends Controller
                     'user_id' => $user->id,
                     'course_id' => $request->course_id,
                     'status' => 'pending',
-                    'total' => null
+                    'code_transaction' => 'TRU' . time(),
+                    'total_price' => null
                 ]);
                 DB::commit();
+                return response()->json([
+                    'message' => 'Transaction added',
+                ], 201);
             } catch (\Throwable $th) {
                 DB::rollBack();
                 return response()->json([
