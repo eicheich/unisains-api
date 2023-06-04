@@ -159,7 +159,7 @@ class CourseController extends Controller
         unlink($old_certificate);
         if ($course) {
             $old_image = public_path('storage/images/thumbnail_course/') . $course->image_course;
-            if (file_exists($old_image && $old_certificate)) {
+            if (file_exists($old_image)) {
                 unlink($old_image);
 
             }
