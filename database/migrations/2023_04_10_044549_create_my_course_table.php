@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('course_id')->constrained('courses');
             $table->foreignId('user_id')->constrained('users');
             $table->enum('progress', ['pending', 'done']);
+            $table->timestamps();
         });
     }
 
