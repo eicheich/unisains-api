@@ -242,31 +242,33 @@
                     <button id="add-ar-btn" class="btn btn-sm btn-outline-secondary mt-5" data-toggle="modal"
                         data-target="#add-quiz-modal">Tambah Soal</button>
                 @else
-                <div class="container">
-                    <div class="row">
-                        @foreach ($quiz as $quiz)
-                        <div class="col-md-4">
-                            <div class="question">
-                                <p>Soal: {{ $quiz->soal }}</p>
-                                <p>Jawaban: {{ $quiz->jawaban }}</p>
-                            </div>
-                            <div class="actions d-flex justify-content-center mt-3">
-                                <div>
-                                    <a href="{{route('update.quiz.page', $quiz->id)}}" class="btn btn-primary">Edit</a>
+                    <div class="container">
+                        <div class="row">
+                            @foreach ($quiz as $quiz)
+                                <div class="col-md-4">
+                                    <div class="question">
+                                        <p>Soal: {{ $quiz->soal }}</p>
+                                        <p>Jawaban: {{ $quiz->jawaban }}</p>
+                                    </div>
+                                    <div class="actions d-flex justify-content-center mt-3">
+                                        <div>
+                                            <a href="{{ route('update.quiz.page', $quiz->id) }}"
+                                                class="btn btn-primary">Edit</a>
+                                        </div>
+                                        <div>
+                                            <form action="{{ route('delete.quiz', $quiz->id) }}" method="post">
+                                                @csrf
+                                                <button type="submit" id="hapus-ar" class="btn btn-danger mx-2">Hapus
+                                                    Soal</button>
+                                            </form>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div>
-                                    <form action="{{ route('delete.quiz', $quiz->id) }}" method="post">
-                                        @csrf
-                                        <button type="submit" id="hapus-ar" class="btn btn-danger mx-2">Hapus Soal</button>
-                                    </form>
-                                </div>
-                            </div>
+                            @endforeach
                         </div>
-                        @endforeach
                     </div>
-                </div>
-                
-                
+
+
                     <button id="add-ar-btn" class="btn btn-sm btn-outline-secondary mt-5" data-toggle="modal"
                         data-target="#add-quiz-modal">Tambah Soal</button>
                 @endif
@@ -281,7 +283,7 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form action="{{ route('store.quiz') }}" method="post" >
+                                <form action="{{ route('store.quiz') }}" method="post">
                                     @csrf
                                     <div class="form-group">
                                         <label for="module-name">Soal</label>
@@ -304,6 +306,10 @@
                         </div>
                     </div>
                 </div>
+                <h2 class="mt-5">Sertifikat</h2>
+                <img src="{{ asset('storage/images/certificate/' . $course->certificate_course) }}" alt="Course Image"
+                    class="img-fluid mb-3" />
+
 
             </div>
         </div>

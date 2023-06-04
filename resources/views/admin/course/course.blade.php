@@ -146,7 +146,7 @@
                                 const deleteButton = document.getElementById("submit-delete");
                                 deleteButton.addEventListener("click", function(event) {
                                     event.preventDefault();
-                                    const confirmation = confirm("Apakah Anda yakin ingin menghapus kursus ini?");
+                                    const confirmation = confirm("Apakah Anda yakin ingin menghapus kursus ini beserta isi di dalamnya?");
                                     if (confirmation) {
                                         // lanjutkan dengan submit form
                                         this.form.submit();
