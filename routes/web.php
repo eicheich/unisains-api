@@ -5,6 +5,7 @@ use App\Http\Controllers\Web\Admin\AuthController;
 use App\Http\Controllers\Web\Admin\CourseController;
 use App\Http\Controllers\Web\Admin\DashboardController;
 use App\Http\Controllers\Web\Admin\ModuleController;
+use App\Http\Controllers\Web\Admin\QuizController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -63,6 +64,12 @@ Route::prefix('admin')->middleware('isAdminWeb')->group(function () {
             Route::post('update/{id}',[ARController::class, 'update'])->name('update.ar');
             Route::post('delete/{id}',[ARController::class, 'delete'])->name('delete.ar');
 
+        });
+        Route::prefix('quiz')->group(function(){
+            Route::post('store', [QuizController::class, 'store'])->name('store.quiz');
+            Route::get('edit/{id}', [QuizController::class, 'edit'])->name('update.quiz.page');
+            Route::post('update/{id}', [QuizController::class, 'update'])->name('update.quiz');
+            Route::post('delete/{id}', [QuizController::class, 'delete'])->name('delete.quiz');
         });
     });
 });
