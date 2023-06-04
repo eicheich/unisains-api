@@ -107,18 +107,6 @@
                                                     Kursus</button>
                                             </form>
 
-                                            <script>
-                                                const deleteButton = document.getElementById("submit-delete");
-                                                deleteButton.addEventListener("click", function(event) {
-                                                    event.preventDefault();
-                                                    const confirmation = confirm("Apakah Anda yakin ingin menghapus kursus ini beserta isi di dalamnya?");
-                                                    if (confirmation) {
-                                                        // lanjutkan dengan submit form
-                                                        this.form.submit();
-                                                    }
-                                                });
-                                            </script>
-
                                         </div>
                                     </div>
                                 </div>
@@ -128,78 +116,79 @@
                 </div>
             </div>
             <div class="tab-pane fade" id="list-view">
-               <div class="container">
-                <div class="table-responsive text-center">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Title</th>
-                                <th>Category</th>
-                                <th>Description</th>
-                                <th>Price</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($courses as $index => $course)
+                <div class="container">
+                    <div class="table-responsive text-center">
+                        <table class="table table-striped">
+                            <thead>
                                 <tr>
-                                    <td>{{ $index + 1 }}</td>
-                                    <td>{{ $course->title_course }}</td>
-                                    <td>{{ $course->category->name_category }}</td>
-                                    <td>{{ Str::limit($course->description, 70) }}</td>
-                                    <td>
-                                        @if ($course->is_paid == 0)
-                                            Gratis
-                                        @else
-                                            Rp. {{ $course->price }}
-                                        @endif
-                                    </td>
-                                    <td style="vertical-align: middle; text-align: center;">
-                                        <div class="d-flex justify-content-center">
-                                            <div class="btn-group" role="group">
-                                                <form action="{{ route('update.course.page', $course->id) }}"
-                                                    method="GET">
-                                                    @csrf
-                                                    <button class="btn btn-sm btn-warning mx-1" type="submit">
-                                                        <i class="fas fa-edit"></i>
-                                                    </button>
-                                                </form>
-                                                <form action="{{ route('course.show', $course->id) }}" method="GET">
-                                                    @csrf
-                                                    <button class="btn btn-sm btn-primary mx-1" type="submit">
-                                                        <i class="fas fa-eye"></i>
-                                                    </button>
-                                                </form>
-                                                <form action="{{ route('delete.course', $course->id) }}" method="post">
-                                                    @csrf
-                                                    <button class="btn btn-sm btn-danger mx-1" onclick=""
-                                                        type="submit">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </td>
-
-
-
-
+                                    <th>No</th>
+                                    <th>Title</th>
+                                    <th>Category</th>
+                                    <th>Description</th>
+                                    <th>Price</th>
+                                    <th>Actions</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach ($courses as $index => $course)
+                                    <tr>
+                                        <td>{{ $index + 1 }}</td>
+                                        <td>{{ $course->title_course }}</td>
+                                        <td>{{ $course->category->name_category }}</td>
+                                        <td>{{ Str::limit($course->description, 70) }}</td>
+                                        <td>
+                                            @if ($course->is_paid == 0)
+                                                Gratis
+                                            @else
+                                                Rp. {{ $course->price }}
+                                            @endif
+                                        </td>
+                                        <td style="vertical-align: middle; text-align: center;">
+                                            <div class="d-flex justify-content-center">
+                                                <div class="btn-group" role="group">
+                                                    <form action="{{ route('update.course.page', $course->id) }}"
+                                                        method="GET">
+                                                        @csrf
+                                                        <button class="btn btn-sm btn-warning mx-1" type="submit">
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>
+                                                    </form>
+                                                    <form action="{{ route('course.show', $course->id) }}" method="GET">
+                                                        @csrf
+                                                        <button class="btn btn-sm btn-primary mx-1" type="submit">
+                                                            <i class="fas fa-eye"></i>
+                                                        </button>
+                                                    </form>
+                                                    <form action="{{ route('delete.course', $course->id) }}" method="post"
+                                                        id="deleteForm">
+                                                        @csrf
+                                                        <button class="btn btn-sm btn-danger mx-1" onclick=""
+                                                        id="submit-delete" type="button">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </td>
+
+
+
+
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-               </div>
             </div>
         </div>
         </div>
     @endif
     <style>
         /* .nav-tabs .nav-link.active {
-                            background-color: #F08A5D !important;
-                            color: #fff;
-                        } */
+                                    background-color: #F08A5D !important;
+                                    color: #fff;
+                                } */
 
 
         .search-filter {
@@ -278,16 +267,17 @@
         }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    {{-- <script>
-        const tabLinks = document.querySelectorAll('.nav-link');
-        tabLinks.forEach(function(tab) {
-            tab.addEventListener('click', function(event) {
-                event.preventDefault();
-                tabLinks.forEach(function(link) {
-                    link.classList.remove('active');
-                });
-                tab.classList.add('active');
-            });
+    <script>
+        const deleteButton = document.getElementById("submit-delete");
+        deleteButton.addEventListener("click", function(event) {
+            event.preventDefault();
+            const confirmation = confirm("Apakah Anda yakin ingin menghapus kursus ini beserta isi di dalamnya?");
+            if (confirmation) {
+                // lanjutkan dengan submit form
+                this.form.submit();
+            }
         });
-    </script> --}}
+
+       
+    </script>
 @endsection
