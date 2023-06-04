@@ -2,11 +2,7 @@
 @section('content')
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Detail Kursus</h1>
-        @if (session('status'))
-            <div class="alert alert-success" role="alert">
-                {{ session('status') }}
-            </div>
-        @endif
+        @include('layouts.session')
     </div>
     <div class="container mt-5">
         <div class="row">
@@ -240,6 +236,81 @@
                         </div>
                     </div>
                 </div>
+                <h2 class="mt-5">Soal Kursus</h2>
+                @if ($quiz->isEmpty())
+                    <h5>Belum ada soal kursus</h5>
+                    <button id="add-ar-btn" class="btn btn-sm btn-outline-secondary mt-5" data-toggle="modal"
+                        data-target="#add-quiz-modal">Tambah Soal</button>
+                @else
+                    <div class="container">
+                        <div class="row">
+                            @foreach ($quiz as $quiz)
+                                <div class="col-md-4">
+                                    <div class="question">
+                                        <p>Soal: {{ $quiz->soal }}</p>
+                                        <p>Jawaban: {{ $quiz->jawaban }}</p>
+                                    </div>
+                                    <div class="actions d-flex justify-content-center mt-3">
+                                        <div>
+                                            <a href="{{ route('update.quiz.page', $quiz->id) }}"
+                                                class="btn btn-primary">Edit</a>
+                                        </div>
+                                        <div>
+                                            <form action="{{ route('delete.quiz', $quiz->id) }}" method="post">
+                                                @csrf
+                                                <button type="submit" id="hapus-ar" class="btn btn-danger mx-2">Hapus
+                                                    Soal</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+
+
+                    <button id="add-ar-btn" class="btn btn-sm btn-outline-secondary mt-5" data-toggle="modal"
+                        data-target="#add-quiz-modal">Tambah Soal</button>
+                @endif
+                <div class="modal fade" id="add-quiz-modal" tabindex="-1" role="dialog"
+                    aria-labelledby="add-module-modal-title" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="add-module-modal-title">Tambah Soal</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{{ route('store.quiz') }}" method="post">
+                                    @csrf
+                                    <div class="form-group">
+                                        <label for="module-name">Soal</label>
+                                        <input type="text" class="form-control" id="module-name" name="soal"
+                                            placeholder="Soal">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="module-name">Jawaban</label>
+                                        <input type="text" class="form-control" id="module-name" name="jawaban"
+                                            placeholder="Jawaban dari Soal">
+                                    </div>
+                                    <input type="hidden" name="course_id" value="{{ $course->id }}">
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Batal</button>
+                                        <button type="submit" class="btn btn-primary">Tambah</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h2 class="mt-5">Sertifikat</h2>
+                <img src="{{ asset('storage/images/certificate/' . $course->certificate_course) }}" alt="Course Image"
+                    class="img-fluid mb-3" />
+
+
             </div>
         </div>
     </div>
@@ -370,8 +441,6 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script>
-        
-
         const deleteButton = document.getElementById("submit-delete");
         const deleteModule = document.getElementById("hapus-modul");
         const deleteAr = document.getElementById("hapus-ar");
@@ -394,7 +463,7 @@
                 this.form.submit();
             }
         }
-        
+
         const accordion = document.querySelector('#accordion');
         const collapses = accordion.querySelectorAll('.collapse');
 

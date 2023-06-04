@@ -39,16 +39,21 @@ class CourseController extends Controller
 
     public function show($id)
     {
-        // $course = DB::table('courses')->where('id', $id)->first();
         $course = DB::table('courses')
             ->where('courses.id', $id)
             ->join('categories', 'courses.category_id', '=', 'categories.id')
             ->select('courses.*', 'categories.name_category')
             ->first();
+        $module = DB::table('modules')->where('course_id', $id)->get();
+        $module_rangkuman = DB::table('module_rangkuman')->where('course_id', $id)->get();
+        $ar = DB::table('augmented_realities')->where('course_id', $id)->first();
 
         if ($course) {
             return response()->json([
-                'course' => $course
+                'course' => $course,
+                'module' => $module,
+                'module_rangkuman' => $module_rangkuman,
+                'ar' => $ar,
             ], 200);
         } else
             return response()->json([

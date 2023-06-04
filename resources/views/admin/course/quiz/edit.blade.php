@@ -1,53 +1,39 @@
 @extends('layouts.main')
 @section('content')
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Edit Modul Rangkuman</h1>
+        <h1 class="h2">Edit Soal</h1>
         @include('layouts.session')
         <div class="btn-toolbar mb-2 mb-md-0">
         </div>
     </div>
-    <form action="{{ route('update.rangkuman', $rangkuman->id) }}" method="post" enctype="multipart/form-data">
+    <form action="{{ route('update.quiz', $quiz->id) }}" method="post" enctype="multipart/form-data">
         @csrf
-        <div class="mb-3 px-5">
-            <label for="isi" class="form-label">Isi Rangkuman</label>
-            <textarea class="form-control" id="isi" name="isi_rangkuman" ></textarea>
-        </div>
         <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Video Rangkuman</h5>
-                <video class="video-control" controls>
-                    <source src="{{ asset('storage/video/rangkuman/' . $rangkuman->video_rangkuman) }}" type="video/mp4">
-                    <source src="{{ asset('storage/video/rangkuman/' . $rangkuman->video_rangkuman) }}" type="video/webm">
-                    <source src="{{ asset('storage/video/rangkuman/' . $rangkuman->video_rangkuman) }}" type="video/ogg">
-                    Your browser does not support the video tag. You can <a
-                        href="{{ asset('storage/video/rangkuman/' . $rangkuman->video_rangkuman) }}">download the
-                        video</a>
-                    instead.
-                </video>
-                <div class="form-group">
-                    <label class="text-dom-a5" for="image">Video</label>
-                    <input id="image" type="file" class="form-control" name="video_rangkuman">
-                </div>
-                <div class="preview mt-3">
-                    <img id="image_module_preview" class="img-fluid" alt="Preview Image">
-                </div>
+            <div class="form-group">
+                <label for="module-name">Soal</label>
+                <input type="text" class="form-control" id="module-name" name="soal" value="{{ $quiz->soal }}"
+                    placeholder="Soal">
             </div>
+            <div class="form-group">
+                <label for="module-name">Jawaban</label>
+                <input type="text" class="form-control" id="module-name" name="jawaban" value="{{ $quiz->jawaban }}"
+                    placeholder="Jawaban dari Soal">
+            </div>
+
         </div>
         <div class="card mt-5">
             <button type="submit" class="btn btn-primary">Submit</button>
         </div>
+
     </form>
     <style>
-        .video-control {
-            width: 100%;
-            height: auto;
-        }
-
         .btn-add {
             margin-top: 5rem;
             padding: 10px 10rem 10px 10rem;
             border-radius: 10px;
             background-color: orange;
+            /* remove outline */
+            outline: none;
             color: white;
             /* center */
         }
@@ -109,7 +95,20 @@
         }
     </style>
     <script>
-        document.getElementById('isi').value = "{{ $rangkuman->isi_rangkuman }}";
+        function previewImage(inputId) {
+            var preview = document.querySelector('#' + inputId + '_preview');
+            var file = document.querySelector('#' + inputId).files[0];
+            var reader = new FileReader();
 
+            reader.onloadend = function() {
+                preview.src = reader.result;
+            }
+
+            if (file) {
+                reader.readAsDataURL(file);
+            } else {
+                preview.src = "";
+            }
+        }
     </script>
 @endsection
