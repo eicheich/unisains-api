@@ -242,33 +242,37 @@
                     <button id="add-ar-btn" class="btn btn-sm btn-outline-secondary mt-5" data-toggle="modal"
                         data-target="#add-quiz-modal">Tambah Soal</button>
                 @else
-                <div class="container">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Soal</th>
-                                <th>Jawaban</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($quiz as $quiz)
+                    <div class="container">
+                        <table id="quizTable" class="table table-striped text-center">
+                            <thead>
                                 <tr>
-                                    <td>{{ $quiz->soal }}</td>
-                                    <td>{{ $quiz->jawaban }}</td>
-                                    <td>
-                                        <a href="{{ route('update.quiz.page', $quiz->id) }}" class="btn btn-primary">Edit</a>
-                                        <form action="{{ route('delete.quiz', $quiz->id) }}" method="post" style="display: inline;">
-                                            @csrf
-                                            <button type="submit" class="btn btn-danger">Hapus Soal</button>
-                                        </form>
-                                    </td>
+                                    <th>No</th>
+                                    <th>Soal</th>
+                                    <th>Jawaban</th>
+                                    <th>Actions</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-                
+                            </thead>
+                            <tbody>
+                                @foreach ($quiz as $index => $quiz)
+                                    <tr>
+                                        <td>{{ $index + 1 }}</td>
+                                        <td>{{ $quiz->soal }}</td>
+                                        <td>{{ $quiz->jawaban }}</td>
+                                        <td>
+                                            <a href="{{ route('update.quiz.page', $quiz->id) }}"
+                                                class="btn btn-primary">Edit</a>
+                                            <form action="{{ route('delete.quiz', $quiz->id) }}" method="post"
+                                                style="display: inline;">
+                                                @csrf
+                                                <button type="submit" class="btn btn-danger">Hapus Soal</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+
                     <button id="add-ar-btn" class="btn btn-sm btn-outline-secondary mt-5" data-toggle="modal"
                         data-target="#add-quiz-modal">Tambah Soal</button>
                 @endif
@@ -407,6 +411,9 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script>
+        $(document).ready(function() {
+            $('#quizTable').DataTable();
+        });
         const deleteButton = document.getElementById("submit-delete");
         const deleteModule = document.getElementById("hapus-modul");
         const deleteAr = document.getElementById("hapus-ar");
