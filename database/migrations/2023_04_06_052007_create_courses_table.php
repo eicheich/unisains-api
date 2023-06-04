@@ -21,6 +21,7 @@ return new class extends Migration
             $table->enum('is_paid', [0, 1])->nullable();
             $table->integer('price')->nullable();
             $table->integer('discount')->nullable();
+            $table->softDeletes();
             $table->timestamps();
             
         });
