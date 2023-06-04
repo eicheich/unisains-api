@@ -133,8 +133,8 @@
                 <h2>Modul Rangkuman</h2>
                 @if ($module_rangkuman->isEmpty())
                     <h5>Belum ada modul rangkuman</h5>
-                    <a href="{{ route('create.rangkuman', $course->id) }}"
-                        class="btn btn-sm btn-outline-secondary mt-5">Tambah rangkuman</a>
+                    <button id="add-module-btn" class="btn btn-sm btn-outline-secondary mt-5" data-toggle="modal"
+                        data-target="#add-rangkuman-modal">Tambah Rangkuman</button>
                 @else
                     @foreach ($module_rangkuman as $mr)
                         <div class="card">
@@ -315,6 +315,7 @@
         </div>
     </div>
     </div>
+    @include('admin.course.partials.modalVideo')
     <style>
         .card {
             position: relative;
@@ -490,5 +491,28 @@
                 preview.src = "";
             }
         }
+
+        function previewVideo(inputId) {
+        var preview = document.querySelector('#video_preview');
+        var source = document.querySelector('#video_source');
+        var file = document.querySelector('#' + inputId).files[0];
+        var reader = new FileReader();
+        
+        reader.onloadend = function() {
+            source.src = reader.result;
+            preview.load();
+        }
+
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            source.src = "";
+        }
+    }
+
+        // Panggil fungsi previewVideo saat ada perubahan pada input file
+        document.querySelector('#video').addEventListener('change', function() {
+            previewVideo('video');
+        });
     </script>
 @endsection
