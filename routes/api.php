@@ -1,8 +1,10 @@
 <?php
 
-use App\Http\Controllers\Api\V1\Admin\CourseController;
-use App\Http\Controllers\Api\V1\Admin\DashboardController;
+use App\Http\Controllers\Api\V1\Client\CourseController;
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\Client\CartController;
+use App\Http\Controllers\Api\V1\Client\ProfileController;
+use App\Http\Controllers\Api\V1\Client\TransactionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -28,22 +30,45 @@ Route::get('/acces-denied', function () {
 
 Route::prefix('v1')->group(function () {
     Route::prefix('auth')->group(function () {
-        Route::get('login', [AuthController::class, 'login']);
+        Route::post('login', [AuthController::class, 'login']);
         Route::post('register', [AuthController::class, 'register']);
         Route::middleware('auth:sanctum')->group(function () {
             Route::post('logout', [AuthController::class, 'logout']);
-            Route::get('me', [AuthController::class, 'me']);
-            Route::post('update-profile', [AuthController::class, 'updateProfile']);
         });
     });
-    Route::prefix('admin')->middleware('isAdmin')->group(function () {
-        Route::get('dashboard', [DashboardController::class, 'dashboard']);
-        Route::prefix('course')->group(function () {
-            Route::get('all', [CourseController::class, 'all']);
-            Route::post('store', [CourseController::class, 'store']);
+    // Route::prefix('admin')->middleware('isAdmin')->group(function () {
+    //     Route::get('dashboard', [DashboardController::class, 'dashboard']);
+    //     Route::prefix('course')->group(function () {
+    //         Route::get('all', [CourseController::class, 'all']);
+    //         Route::post('store', [CourseController::class, 'store']);
+    //         Route::get('show/{id}', [CourseController::class, 'show']);
+    //         Route::post('update/{id}', [CourseController::class, 'update']);
+    //         Route::post('delete/{id}', [CourseController::class, 'delete']);
+    //     });
+    // });
+    Route::prefix('course')->group(function () {
+        Route::get('all', [CourseController::class, 'all']);
+        Route::get('category', [CourseController::class, 'category']);
+        Route::get('preview/{id}', [CourseController::class, 'preview']);
+        Route::get('search', [CourseController::class, 'search']);
+        Route::middleware('auth:sanctum')->group(function () {
             Route::get('show/{id}', [CourseController::class, 'show']);
-            Route::post('update/{id}', [CourseController::class, 'update']);
-            Route::post('delete/{id}', [CourseController::class, 'delete']);
+            Route::prefix('cart')->group(function () {
+                Route::post('store', [CartController::class, 'store']);
+                Route::get('all', [CartController::class, 'all']);
+                Route::post('delete/{id}', [CartController::class, 'delete']);
+            });
         });
+    });
+    Route::prefix('profile')->middleware('auth:sanctum')->group(function () {
+        Route::get('show', [ProfileController::class, 'show']);
+        Route::post('update', [ProfileController::class, 'update']);
+    });
+    Route::prefix('transaction')->middleware('auth:sanctum')->group(function () {
+        Route::get('all', [TransactionController::class, 'all']);
+        Route::post('store', [TransactionController::class, 'store']);
+        Route::get('show/{id}', [TransactionController::class, 'show']);
+        Route::post('update/{id}', [TransactionController::class, 'update']);
+        Route::post('delete/{id}', [TransactionController::class, 'delete']);
     });
 });

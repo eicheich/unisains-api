@@ -24,8 +24,8 @@ class CourseController extends Controller
             'description' => 'required',
             'is_paid' => 'required|boolean',
             'category_id' => 'required|integer',
-            'certificate_course' => 'required|file|mimes:pdf,jpeg,png|max:2048',
-            'image_course' => 'required|file|mimes:jpeg,png|max:2048',
+            'certificate_course' => 'required|file|mimes:pdf,jpeg,png',
+            'image_course' => 'required|file|mimes:jpeg,png',
         ]);
         if ($validator->fails()) {
             return redirect()->back()->with('status', $validator->errors());
@@ -61,7 +61,7 @@ class CourseController extends Controller
             ]);
         }
 
-        return redirect()->route('course.page')->with('status', 'course telah di tambahkan');
+        return redirect()->route('course.page')->with('success', 'course telah di tambahkan');
     }
     public function all()
     {
@@ -71,9 +71,12 @@ class CourseController extends Controller
     public function show($id)
     {
         $course = Course::with('category')->find($id);
+        $quiz = DB::table('quizzes')->where('course_id', $id)->get();
         $modules = DB::table('modules')->where('course_id', $id)->get();
         $module_rangkuman = DB::table('module_rangkuman')->where('course_id', $id)->get();
-        return view('admin.course.show', compact('course', 'modules', 'module_rangkuman'));
+        $ar = DB::table('augmented_realities')->where('course_id', $id)->get();
+        return view('admin.course.show', compact('course', 'modules', 'module_rangkuman','ar','quiz'));
+
     }
     public function updatePage($id)
     {
@@ -146,7 +149,7 @@ class CourseController extends Controller
                 'price' => $price,
             ]);
         }
-        return redirect()->route('course.page')->with('status', 'course telah di update');
+        return redirect()->route('course.page')->with('success', 'course telah di update');
 
     }
     public function delete($id)
@@ -162,6 +165,6 @@ class CourseController extends Controller
             }
             $course->delete();
         }
-        return redirect()->route('course.page')->with('status', 'course telah di hapus');
+        return redirect()->route('course.page')->with('error', 'course telah di hapus');
     }
 }

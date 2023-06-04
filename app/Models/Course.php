@@ -24,5 +24,17 @@ class Course extends Model
         return $this->hasMany(Module::class);
     }
 
+    // relation
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'user_courses');
+    }
+
+    // relation
+    public function quizzes()
+    {
+        return $this->hasMany(Quiz::class);
+    }
+
 
 }

@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\Web\Admin\ARController;
 use App\Http\Controllers\Web\Admin\AuthController;
 use App\Http\Controllers\Web\Admin\CourseController;
 use App\Http\Controllers\Web\Admin\DashboardController;
 use App\Http\Controllers\Web\Admin\ModuleController;
+use App\Http\Controllers\Web\Admin\QuizController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -48,6 +50,26 @@ Route::prefix('admin')->middleware('isAdminWeb')->group(function () {
             Route::get('update-page/{id}', [ModuleController::class, 'updatePage'])->name('update.modules.page');
             Route::post('update/{id}', [ModuleController::class, 'update'])->name('update.modules');
             Route::post('delete/{id}', [ModuleController::class, 'delete'])->name('delete.modules');
+        });
+        Route::prefix('rangkuman')->group(function(){
+            Route::get('create/{course_id}', [ModuleController::class, 'createRangkuman'])->name('create.rangkuman');
+            Route::post('store', [ModuleController::class, 'storeRangkuman'])->name('store.rangkuman');
+            Route::get('edit/{id}', [ModuleController::class, 'editRangkuman'])->name('update.rangkuman.page');
+            Route::post('update/{id}', [ModuleController::class, 'updateRangkuman'])->name('update.rangkuman');
+            Route::post('delete/{id}', [ModuleController::class, 'deleteRangkuman'])->name('delete.rangkuman');
+        });
+        Route::prefix('ar')->group( function(){
+            Route::post('store', [ARController::class, 'store'])->name('store.ar');
+            Route::get('edit/{id}',[ARController::class, 'edit'])->name('edit.ar.page'); 
+            Route::post('update/{id}',[ARController::class, 'update'])->name('update.ar');
+            Route::post('delete/{id}',[ARController::class, 'delete'])->name('delete.ar');
+
+        });
+        Route::prefix('quiz')->group(function(){
+            Route::post('store', [QuizController::class, 'store'])->name('store.quiz');
+            Route::get('edit/{id}', [QuizController::class, 'edit'])->name('update.quiz.page');
+            Route::post('update/{id}', [QuizController::class, 'update'])->name('update.quiz');
+            Route::post('delete/{id}', [QuizController::class, 'delete'])->name('delete.quiz');
         });
     });
 });

@@ -3,11 +3,7 @@
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Kursus</h1>
         {{-- button add course --}}
-        @if (session('status'))
-            <div class="alert alert-success" role="alert">
-                {{ session('status') }}
-            </div>
-        @endif
+        @include('layouts.session')
         <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group me-2">
                 <a href="{{ route('add.course') }}" class="btn btn-sm btn-outline-secondary">Tambah Kursus</a>
@@ -15,7 +11,7 @@
         </div>
     </div>
     @if ($courses->isEmpty())
-        <div class="alert alert-danger" role="alert">
+        <div class="alert alert-danger text-light" role="alert">
             Data Kursus Kosong
         </div>
     @else
@@ -99,16 +95,24 @@
         <div class="search-filter">
             <div class="col">
                 <form action="#" method="GET">
-                    <div class="input-group mb-3">
+                    <div class="input-group input-group-outline mb-3">
                         <input type="text" class="form-control" placeholder="Search by course name"
                             aria-label="Recipient's username" aria-describedby="button-addon2" name="search">
                         <select class="" name="category">
-                            <option value="">All categories</option>
+                            <option value="select">All categories</option>
                             <option value="math">Math</option>
                             <option value="science">Science</option>
                             <option value="history">History</option>
                         </select>
-                        <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
+                        <button class="btn-search" type="submit" id="button-addon2">Search</button>
+                        <style>
+                            .btn-search{
+                                border: none;
+                                background-color: #F08A5D;
+                                color: #fff;
+                                width: 5rem;
+                            }
+                        </style>
                     </div>
                 </form>
             </div>
@@ -134,7 +138,7 @@
                                 selengkapnya</a>
                             <form action="{{ route('delete.course', $course->id) }}" method="post">
                                 @csrf
-                                <button class="btn btn-outline-danger" id="submit-delete" type="submit">Hapus
+                                <button class="btn btn-outline-danger" onclick="" id="submit-delete" type="submit">Hapus
                                     Kursus</button>
                             </form>
 

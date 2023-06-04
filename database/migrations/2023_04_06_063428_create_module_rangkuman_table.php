@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('course_id')->constrained('courses');
             $table->text('isi_rangkuman');
             $table->string('video_rangkuman');
+            $table->timestamps();
         });
     }
 
