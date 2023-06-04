@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users');
             $table->integer('total_price');
             $table->enum('status', ['pending', 'success', 'failed']);
+            $table->timestamps();
         });
     }
 
