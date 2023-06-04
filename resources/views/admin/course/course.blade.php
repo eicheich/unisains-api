@@ -128,7 +128,8 @@
                 </div>
             </div>
             <div class="tab-pane fade" id="list-view">
-                <div class="table-responsive">
+               <div class="container">
+                <div class="table-responsive text-center">
                     <table class="table table-striped">
                         <thead>
                             <tr>
@@ -154,32 +155,51 @@
                                             Rp. {{ $course->price }}
                                         @endif
                                     </td>
-                                    <td>
-                                        <a class="btn btn-outline-warning"
-                                            href="{{ route('update.course.page', $course->id) }}">Edit Kursus</a>
-                                        <a class="btn btn-outline-primary"
-                                            href="{{ route('course.show', $course->id) }}">Lihat selengkapnya</a>
-                                        <form action="{{ route('delete.course', $course->id) }}" method="post">
-                                            @csrf
-                                            <button class="btn btn-outline-danger" onclick="" type="submit">Hapus
-                                                Kursus</button>
-                                        </form>
-
+                                    <td style="vertical-align: middle; text-align: center;">
+                                        <div class="d-flex justify-content-center">
+                                            <div class="btn-group" role="group">
+                                                <form action="{{ route('update.course.page', $course->id) }}"
+                                                    method="GET">
+                                                    @csrf
+                                                    <button class="btn btn-sm btn-warning mx-1" type="submit">
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
+                                                </form>
+                                                <form action="{{ route('course.show', $course->id) }}" method="GET">
+                                                    @csrf
+                                                    <button class="btn btn-sm btn-primary mx-1" type="submit">
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
+                                                </form>
+                                                <form action="{{ route('delete.course', $course->id) }}" method="post">
+                                                    @csrf
+                                                    <button class="btn btn-sm btn-danger mx-1" onclick=""
+                                                        type="submit">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
                                     </td>
+
+
+
+
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
+               </div>
             </div>
         </div>
         </div>
     @endif
     <style>
         /* .nav-tabs .nav-link.active {
-                background-color: #F08A5D !important;
-                color: #fff;
-            } */
+                            background-color: #F08A5D !important;
+                            color: #fff;
+                        } */
 
 
         .search-filter {
