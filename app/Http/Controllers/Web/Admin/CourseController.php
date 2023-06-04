@@ -161,26 +161,7 @@ class CourseController extends Controller
         try {
             DB::beginTransaction();
 
-            // Menghapus file sertifikat
-            $old_certificate = 'storage/images/certificate/' . $course->certificate_course;
-            Storage::delete($old_certificate);
-
-            // Menghapus gambar thumbnail kursus
-            $old_image = 'storage/images/thumbnail_course/' . $course->image_course;
-            Storage::delete($old_image);
-
-            // Menghapus modul dan file-file gambar terkait
-            foreach ($module as $value) {
-                $old_module_image = 'storage/images/module/' . $value->image_module;
-                Storage::delete($old_module_image);
-            }
             DB::table('modules')->where('course_id', $id)->delete();
-
-            // Menghapus rangkuman modul dan file-file gambar terkait
-            foreach ($module_rangkuman as $value) {
-                $old_rangkuman_image = 'storage/images/module_rangkuman/' . $value->image_module_rangkuman;
-                Storage::delete($old_rangkuman_image);
-            }
             DB::table('module_rangkuman')->where('course_id', $id)->delete();
 
             // Menghapus kuis

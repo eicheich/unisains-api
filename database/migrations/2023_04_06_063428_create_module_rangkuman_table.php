@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('isi_rangkuman');
             $table->string('video_rangkuman');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
