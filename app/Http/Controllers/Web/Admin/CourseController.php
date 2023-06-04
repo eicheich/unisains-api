@@ -61,7 +61,7 @@ class CourseController extends Controller
             ]);
         }
 
-        return redirect()->route('course.page')->with('status', 'course telah di tambahkan');
+        return redirect()->route('course.page')->with('success', 'course telah di tambahkan');
     }
     public function all()
     {
@@ -149,7 +149,7 @@ class CourseController extends Controller
                 'price' => $price,
             ]);
         }
-        return redirect()->route('course.page')->with('status', 'course telah di update');
+        return redirect()->route('course.page')->with('success', 'course telah di update');
 
     }
     public function delete($id)
@@ -165,6 +165,6 @@ class CourseController extends Controller
             }
             $course->delete();
         }
-        return redirect()->route('course.page')->with('status', 'course telah di hapus');
+        return redirect()->route('course.page')->with('error', 'course telah di hapus');
     }
 }
