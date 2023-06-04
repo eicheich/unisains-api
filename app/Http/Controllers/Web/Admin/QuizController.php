@@ -18,7 +18,7 @@ class QuizController extends Controller
             'course_id' => 'required',
         ]);
         if ($validator->fails()) {
-            return redirect()->back()->with('status', $validator->errors());
+            return redirect()->back()->with('warning', $validator->errors());
         }
         try {
             $quiz = Quiz::create([
@@ -26,7 +26,7 @@ class QuizController extends Controller
                 'jawaban' => $request->jawaban,
                 'course_id' => $request->course_id,
             ]);
-            return redirect()->back()->with('status', 'Berhasil menambahkan quiz');
+            return redirect()->back()->with('success', 'Berhasil menambahkan quiz');
         } catch (\Throwable $th) {
             return redirect()->back()->with('status', $th->getMessage());
         }
@@ -45,7 +45,7 @@ class QuizController extends Controller
             'jawaban' => 'required',
         ]);
         if ($validator->fails()) {
-            return redirect()->back()->with('status', $validator->errors());
+            return redirect()->back()->with('warning', $validator->errors());
         }
         try {
             $quiz = Quiz::find($id);
@@ -53,9 +53,9 @@ class QuizController extends Controller
                 'soal' => $request->soal,
                 'jawaban' => $request->jawaban,
             ]);
-            return redirect()->route('course.show', $quiz->course_id)->with('status', 'Berhasil mengubah quiz');
+            return redirect()->route('course.show', $quiz->course_id)->with('warning', 'Berhasil mengubah quiz');
         } catch (\Throwable $th) {
-            return redirect()->back()->with('status', $th->getMessage());
+            return redirect()->back()->with('danger', $th->getMessage());
         }
         # code...
     }
