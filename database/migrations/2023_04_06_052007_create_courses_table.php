@@ -23,6 +23,8 @@ return new class extends Migration
             $table->integer('discount')->nullable();
             $table->softDeletes();
             $table->timestamps();
+            $table->string('course_code')->unique();
+            
             
         });
     }
