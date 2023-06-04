@@ -45,7 +45,7 @@
                                     <div id="collapse{{ $m->id }}" class="collapse show"
                                         aria-labelledby="heading{{ $m->id }}" data-parent="#accordion">
                                         <div class="card">
-                                            <img class="image_module"
+                                            <img class="image_modul"
                                                 src="{{ asset('storage/images/module/' . $m->image_module) }}"
                                                 alt="...">
                                             <div class="card-body">
