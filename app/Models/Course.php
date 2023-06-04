@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\CourseDeleted;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -12,6 +13,9 @@ class Course extends Model
 
     // fillabel
     protected $guarded = [];
+    protected $dispatchesEvents = [
+        'deleted' => CourseDeleted::class,
+    ];
 
     // relation
     public function category()

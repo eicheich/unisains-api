@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Module extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     protected $guarded =[];
 
@@ -17,3 +17,4 @@ class Module extends Model
         return $this->belongsTo(Course::class);
     }
 }
+
