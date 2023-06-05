@@ -37,14 +37,29 @@ class CourseController extends Controller
 
         if ($anatomi->isEmpty() && $astronomi->isEmpty()) {
             return response()->json([
-                'message' => 'course not found',
+                'message' => 'Course not found',
             ], 404);
-        } else
+        } else {
+            // Mengubah setiap item kursus untuk menyertakan URL gambar
+            $anatomi = $anatomi->map(function ($course) {
+                $course->image_course = asset('storage/images/thumbnail_course/' . $course->image_course);
+                $course->certificate_course = asset('storage/images/certificate/' . $course->certificate_course);
+                return $course;
+            });
+
+            $astronomi = $astronomi->map(function ($course) {
+                $course->image_course = asset('storage/images/thumbnail_course/' . $course->image_course);
+                $course->certificate_course = asset('storage/images/certificate/' . $course->certificate_course);
+                return $course;
+            });
+
             return response()->json([
                 'anatomi' => $anatomi,
                 'astronomi' => $astronomi,
             ], 200);
+        }
     }
+
 
     public function show($id)
     {
