@@ -59,7 +59,7 @@ class TransactionController extends Controller
             } catch (\Throwable $th) {
                 DB::rollBack();
                 return response()->json([
-                    'message' => 'Something went wrong',
+                    'status', $th->getMessage()
                 ], 500);
             }
         }
