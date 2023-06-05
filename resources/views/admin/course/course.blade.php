@@ -50,12 +50,12 @@
             </li>
         </ul>
 
-        <style>
+        {{-- <style>
             .nav-tabs .nav-link.active {
                 background-color: #F08A5D !important;
                 color: #fff;
             }
-        </style>
+        </style> --}}
 
         {{-- <script>
             const tabLinks = document.querySelectorAll('.nav-link');
