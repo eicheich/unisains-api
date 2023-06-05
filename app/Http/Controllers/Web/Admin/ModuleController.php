@@ -99,7 +99,7 @@ class ModuleController extends Controller
             'course_id' => 'required|integer',
         ]);
         if ($validator->fails()) {
-            return redirect()->back()->with('status', $validator->errors());
+            return redirect()->back()->with('error', $validator->errors());
         }
 
         $video = $request->file('video_rangkuman');
@@ -113,7 +113,7 @@ class ModuleController extends Controller
             'course_id' => $request->course_id,
         ]);
 
-        return redirect()->back()->with('status', 'Rangkuman created successfully');
+        return redirect()->back()->with('success', 'Rangkuman created successfully');
     }
 
     public function createRangkuman($course_id)

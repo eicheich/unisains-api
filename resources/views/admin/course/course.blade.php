@@ -50,14 +50,14 @@
             </li>
         </ul>
 
-        <style>
+        {{-- <style>
             .nav-tabs .nav-link.active {
                 background-color: #F08A5D !important;
                 color: #fff;
             }
-        </style>
+        </style> --}}
 
-        <script>
+        {{-- <script>
             const tabLinks = document.querySelectorAll('.nav-link');
             tabLinks.forEach(function(tab) {
                 tab.addEventListener('click', function(event) {
@@ -68,7 +68,7 @@
                     tab.classList.add('active');
                 });
             });
-        </script>
+        </script> --}}
 
 
         <div class="tab-content mt-3">
