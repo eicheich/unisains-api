@@ -11,14 +11,23 @@ class CourseController extends Controller
     public function all()
     {
         $courses = DB::table('courses')->get();
+
         if ($courses->isEmpty()) {
             return response()->json([
-                'message' => 'course not found',
+                'message' => 'Course not found',
             ], 404);
-        } else
+        } else {
+            // Mengubah setiap item kursus untuk menyertakan URL gambar
+            $courses = $courses->map(function ($course) {
+                $course->image_course = asset('storage/images/thumbnail_course/' . $course->image_course);
+                $course->certificate_course = asset('storage/images/certificate/' . $course->certificate_course);
+                return $course;
+            });
+
             return response()->json([
                 'courses' => $courses,
             ], 200);
+        }
     }
 
     public function category()
