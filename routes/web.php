@@ -80,6 +80,6 @@ Route::prefix('admin')->middleware('isAdminWeb')->group(function () {
         Route::get('show/{id}', [AuthController::class, 'show'])->name('users.show');
         Route::get('update-page/{id}', [AuthController::class, 'updatePage'])->name('update.users.page');
         Route::post('update/{id}', [AuthController::class, 'update'])->name('update.users');
-        Route::post('delete/{id}', [AuthController::class, 'delete'])->name('delete.users');
+        Route::post('delete/{id}', [UserController::class, 'delete'])->name('delete.users');
     });
 });

@@ -98,11 +98,10 @@
                                                         <i class="fas fa-eye"></i>
                                                     </button>
                                                 </form>
-                                                <form action="{{ route('delete.course', $user->id) }}" method="post"
-                                                    id="deleteForm">
+                                                <form action="{{route('delete.users', $user->id)}}" method="post" id="deleteForm">
                                                     @csrf
-                                                    <button class="btn btn-sm btn-danger mx-1" onclick=""
-                                                        id="submit-delete" type="button">
+                                                    <button class="btn btn-sm btn-danger mx-1"
+                                                        onclick="confirmDelete(event)" id="submit-delete" type="button">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                 </form>
@@ -172,11 +171,10 @@
                                                         <i class="fas fa-eye"></i>
                                                     </button>
                                                 </form>
-                                                <form action="{{ route('delete.course', $user->id) }}" method="post"
-                                                    id="deleteForm">
+                                                <form action="{{route('delete.users', $user->id)}}" method="post" id="deleteForm">
                                                     @csrf
-                                                    <button class="btn btn-sm btn-danger mx-1" onclick=""
-                                                        id="submit-delete" type="button">
+                                                    <button class="btn btn-sm btn-danger mx-1"
+                                                        onclick="confirmDelete(event)" id="submit-delete" type="button">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                 </form>
@@ -227,6 +225,15 @@
                         $('#add-acc-modal').modal('show');
                     });
                 });
+
+                function confirmDelete(event) {
+                    if (confirm("Yakin akan menghapus akun ini?")) {
+                        // Lanjutkan dengan penghapusan
+                        document.getElementById("deleteForm").submit();
+                    } else {
+                        event.preventDefault(); // Batalkan aksi jika pengguna membatalkan konfirmasi
+                    }
+                }
             </script>
     @endif
 @endsection
