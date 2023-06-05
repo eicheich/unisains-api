@@ -120,6 +120,8 @@ class CourseController extends Controller
             ->get();
 
         if ($course) {
+            $course->image_course = UrlHelper::formatImageCourseUrl($course->image_course);
+            $course->certificate_course = UrlHelper::formatCertiCourseUrl($course->certificate_course);
             return response()->json([
                 'course' => $course,
                 'modules' => $modules,
