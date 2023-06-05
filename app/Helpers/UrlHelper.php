@@ -8,6 +8,10 @@ class UrlHelper
     {
         return asset('storage/images/thumbnail_course/' . $data);
     }
+    public static function formatCertiCourseUrl($data)
+    {
+        return asset('storage/images/certificate/' . $data);
+    }
     public static function formatImageModuleUrl($data)
     {
         return asset('storage/images/module/' . $data);
