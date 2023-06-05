@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1\Client;
 
+use App\Helpers\UrlHelper;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -74,7 +75,7 @@ class CourseController extends Controller
 
     if ($course) {
         // Mengubah URL gambar dan video menjadi URL yang valid
-        $course->image_course = asset('storage/images/thumbnail_course/' . $course->image_course);
+        $course->image_course = UrlHelper::formatImageCourseUrl($course->image_course);
         $course->certificate_course = asset('storage/images/certificate/' . $course->certificate_course);
 
         foreach ($module as $moduleItem) {
