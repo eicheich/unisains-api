@@ -57,7 +57,7 @@
             }
         </style>
 
-        <script>
+        {{-- <script>
             const tabLinks = document.querySelectorAll('.nav-link');
             tabLinks.forEach(function(tab) {
                 tab.addEventListener('click', function(event) {
@@ -68,7 +68,7 @@
                     tab.classList.add('active');
                 });
             });
-        </script>
+        </script> --}}
 
 
         <div class="tab-content mt-3">
