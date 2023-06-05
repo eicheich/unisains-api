@@ -91,4 +91,6 @@ Route::prefix('admin')->middleware('isAdminWeb')->group(function () {
         Route::post('delete/{id}', [TransactionController::class, 'delete'])->name('delete.transactions');
     });
 
+        Route::post('delete/{id}', [AuthController::class, 'delete'])->name('delete.users');
+    });
 });
