@@ -3,6 +3,7 @@
 use App\Http\Controllers\Web\Admin\ARController;
 use App\Http\Controllers\Web\Admin\AuthController;
 use App\Http\Controllers\Web\Admin\CourseController;
+use App\Http\Controllers\Web\Admin\UserController;
 use App\Http\Controllers\Web\Admin\DashboardController;
 use App\Http\Controllers\Web\Admin\ModuleController;
 use App\Http\Controllers\Web\Admin\QuizController;
@@ -71,5 +72,14 @@ Route::prefix('admin')->middleware('isAdminWeb')->group(function () {
             Route::post('update/{id}', [QuizController::class, 'update'])->name('update.quiz');
             Route::post('delete/{id}', [QuizController::class, 'delete'])->name('delete.quiz');
         });
+    });
+    Route::prefix('users')->group(function () {
+        Route::get('/', [UserController::class, 'all'])->name('users.page');
+        Route::get('add', [AuthController::class, 'add'])->name('add.users');
+        Route::post('store', [AuthController::class, 'store'])->name('store.users');
+        Route::get('show/{id}', [AuthController::class, 'show'])->name('users.show');
+        Route::get('update-page/{id}', [AuthController::class, 'updatePage'])->name('update.users.page');
+        Route::post('update/{id}', [AuthController::class, 'update'])->name('update.users');
+        Route::post('delete/{id}', [AuthController::class, 'delete'])->name('delete.users');
     });
 });

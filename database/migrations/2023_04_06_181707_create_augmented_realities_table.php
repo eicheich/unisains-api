@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('course_id')->constrained('courses');
             $table->string('image_ar')->nullable();
             $table->timestamps();
+            $table->softDeletes();
 
         });
     }

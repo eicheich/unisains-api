@@ -23,7 +23,7 @@ class ModuleController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect()->back()->with('status', $validator->errors());
+            return redirect()->back()->with('warning', $validator->errors());
         }
 
         $image = $request->file('image_module');
@@ -38,7 +38,7 @@ class ModuleController extends Controller
             'course_id' => $request->course_id,
         ]);
 
-        return redirect()->back()->with('status', 'Module created successfully');
+        return redirect()->back()->with('success', 'Module created successfully');
     }
 
     public function update(Request $request, $id)

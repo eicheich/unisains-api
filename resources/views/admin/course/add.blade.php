@@ -88,7 +88,9 @@
             </div>
         </div>
         {{-- button submit --}}
-        <button type="submit" class="btn btn-primary w-5 m-5">Submit</button>
+        <div class="card mt-5">
+            <button type="submit" class="btn btn-primary">Add</button>
+        </div>
         <style>
             .btn-add {
                 margin-top: 5rem;
@@ -100,7 +102,8 @@
                 color: white;
                 /* center */
             }
-            .form-control{
+
+            .form-control {
                 width: 100%;
                 padding: 1rem;
                 height: 3rem;
