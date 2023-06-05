@@ -45,6 +45,7 @@ class CourseController extends Controller
             'certificate_course' => $certificate_name,
             'image_course' => $image_name,
             'category_id' => $request->category_id,
+            'course_code' => 'UNI' . rand(1000, 9999),
         ]);
 
         if ($request->is_paid == 1 && $request->discount !== null) {
@@ -61,7 +62,7 @@ class CourseController extends Controller
             ]);
         }
 
-        return redirect()->route('course.page')->with('status', 'course telah di tambahkan');
+        return redirect()->route('course.page')->with('success', 'course telah di tambahkan');
     }
     public function all()
     {
@@ -75,8 +76,7 @@ class CourseController extends Controller
         $modules = DB::table('modules')->where('course_id', $id)->get();
         $module_rangkuman = DB::table('module_rangkuman')->where('course_id', $id)->get();
         $ar = DB::table('augmented_realities')->where('course_id', $id)->get();
-        return view('admin.course.show', compact('course', 'modules', 'module_rangkuman','ar','quiz'));
-
+        return view('admin.course.show', compact('course', 'modules', 'module_rangkuman', 'ar', 'quiz'));
     }
     public function updatePage($id)
     {
@@ -123,7 +123,6 @@ class CourseController extends Controller
             $certificate = $request->file('certificate_course');
             $certificate_name = time() . '.' . $certificate->getClientOriginalExtension();
             $certificate->move(public_path('storage/images/certificate'), $certificate_name);
-
         } else {
             $certificate_name = $course->certificate_course;
         }
@@ -149,22 +148,38 @@ class CourseController extends Controller
                 'price' => $price,
             ]);
         }
-        return redirect()->route('course.page')->with('status', 'course telah di update');
-
+        return redirect()->route('course.page')->with('success', 'course telah di update');
     }
+
     public function delete($id)
     {
-        $course = Course::findorfail($id);
-        $old_certificate = public_path('storage/images/certificate/') . $course->certificate_course;
-        unlink($old_certificate);
-        if ($course) {
-            $old_image = public_path('storage/images/thumbnail_course/') . $course->image_course;
-            if (file_exists($old_image && $old_certificate)) {
-                unlink($old_image);
+        $course = Course::findOrFail($id);
+        $module = DB::table('modules')->where('course_id', $id)->get();
+        $module_rangkuman = DB::table('module_rangkuman')->where('course_id', $id)->get();
+        $quiz = DB::table('quizzes')->where('course_id', $id)->get();
+        $ar = DB::table('augmented_realities')->where('course_id', $id)->get();
 
-            }
+        try {
+            DB::beginTransaction();
+
+            DB::table('modules')->where('course_id', $id)->delete();
+            DB::table('module_rangkuman')->where('course_id', $id)->delete();
+
+            // Menghapus kuis
+            DB::table('quizzes')->where('course_id', $id)->delete();
+
+            // Menghapus augmented reality
+            DB::table('augmented_realities')->where('course_id', $id)->delete();
+
+            // Menghapus model course secara lunak
             $course->delete();
+
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return redirect()->route('course.page')->with('error', $th->getMessage());
         }
-        return redirect()->route('course.page')->with('status', 'course telah di hapus');
+
+        return redirect()->route('course.page')->with('success', 'Kursus telah dihapus');
     }
 }
