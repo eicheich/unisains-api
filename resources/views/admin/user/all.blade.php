@@ -3,9 +3,9 @@
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Akun</h1>
         @include('layouts.session')
-        <div class="btn-toolbar mb-2 mb-md-0">
-            <div class="btn-group me-2">
-                <button id="add-module-btn" class="btn btn-sm btn-outline-secondary mt-5" data-toggle="modal"
+        <div class="btn-toolbar">
+            <div class="btn-group">
+                <button id="add-module-btn" class="btn btn-sm btn-outline-secondary" data-toggle="modal"
                     data-target="#add-acc-modal">Tambah Akun</button>
                 @include('admin.user.partials.modalAdd')
 
@@ -44,10 +44,6 @@
                 font-size: 16px;
             }
         </style>
-        </head>
-
-        <body>
-
             <div class="container">
                 <div class="row justify-content-center mt-5">
                     <div class="col-md-6">

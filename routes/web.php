@@ -7,6 +7,7 @@ use App\Http\Controllers\Web\Admin\UserController;
 use App\Http\Controllers\Web\Admin\DashboardController;
 use App\Http\Controllers\Web\Admin\ModuleController;
 use App\Http\Controllers\Web\Admin\QuizController;
+use App\Http\Controllers\Web\Admin\TransactionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -75,11 +76,19 @@ Route::prefix('admin')->middleware('isAdminWeb')->group(function () {
     });
     Route::prefix('users')->group(function () {
         Route::get('/', [UserController::class, 'all'])->name('users.page');
-        Route::get('add', [AuthController::class, 'add'])->name('add.users');
         Route::post('store', [AuthController::class, 'store'])->name('store.users');
         Route::get('show/{id}', [AuthController::class, 'show'])->name('users.show');
         Route::get('update-page/{id}', [AuthController::class, 'updatePage'])->name('update.users.page');
         Route::post('update/{id}', [AuthController::class, 'update'])->name('update.users');
         Route::post('delete/{id}', [UserController::class, 'delete'])->name('delete.users');
     });
+    Route::prefix('transactions')->group(function () {
+        Route::get('/', [TransactionController::class, 'all'])->name('transactions.page');
+        Route::post('store', [TransactionController::class, 'store'])->name('store.transactions');
+        Route::get('show/{id}', [TransactionController::class, 'show'])->name('transactions.show');
+        Route::get('update-page/{id}', [TransactionController::class, 'updatePage'])->name('update.transactions.page');
+        Route::post('update/{id}', [TransactionController::class, 'update'])->name('update.transactions');
+        Route::post('delete/{id}', [TransactionController::class, 'delete'])->name('delete.transactions');
+    });
+
 });
