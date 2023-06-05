@@ -45,6 +45,7 @@ class CourseController extends Controller
             'certificate_course' => $certificate_name,
             'image_course' => $image_name,
             'category_id' => $request->category_id,
+            'course_code' => 'UNI' . rand(1000, 9999),
         ]);
 
         if ($request->is_paid == 1 && $request->discount !== null) {
