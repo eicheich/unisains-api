@@ -182,7 +182,6 @@
                 </div>
             </div>
         </div>
-        </div>
     @endif
     <style>
         /* .nav-tabs .nav-link.active {
