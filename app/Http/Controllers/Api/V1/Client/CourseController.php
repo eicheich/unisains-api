@@ -137,23 +137,29 @@ class CourseController extends Controller
 
     public function preview($id)
     {
-        $course = DB::table('courses')
+        $courses = DB::table('courses')
             ->where('courses.id', $id)
             ->join('categories', 'courses.category_id', '=', 'categories.id')
-            // join module and select the module course_id
             ->join('modules', 'courses.id', '=', 'modules.course_id')
             ->select('courses.id', 'courses.title_course', 'courses.description', 'courses.price', 'courses.image_course', 'categories.name_category',)
             ->get();
 
-        if ($course->isEmpty()) {
+        if ($courses->isEmpty()) {
             return response()->json([
                 'message' => 'course not found',
             ], 404);
-        } else
+        } else {
+            $courses = $courses->map(function ($course) {
+                $course->image_course = UrlHelper::formatImageCourseUrl($course->image_course);
+                return $course;
+            });
+
             return response()->json([
-                'course' => $course,
+                'course' => $courses,
             ], 200);
+        }
     }
+
 
     public function search(Request $request)
     {
