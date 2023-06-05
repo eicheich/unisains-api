@@ -67,6 +67,18 @@
             }
         </style>
         <div class="container">
+            <div class="row justify-content-center mt-5">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <input type="text" class="form-control search-input" placeholder="Cari...">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary search-button" type="button">Cari</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
             <h4 class="mt-3">Pengguna</h4>
             <div class="table-responsive text-center">
                 <table class="table table-striped">
