@@ -9,7 +9,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('store.rangkuman') }}" method="post">
+                <form action="{{ route('store.rangkuman') }}" method="post" enctype="multipart/form-data">
                     @csrf
                     <h5 class="card-title">Video Rangkuman</h5>
                     <div class="form-group">
