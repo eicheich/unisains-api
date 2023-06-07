@@ -18,6 +18,11 @@ class isAdmin
      */
     public function handle($request, Closure $next)
     {
+        // if (!auth()->check() || $request->user()->role != 'admin') {
+        //     return redirect()->route('login.page');
+        // }
+
+        // return $next($request);
         if (!$request->hasHeader('Authorization')) {
             return response()->json([
                 'message' => 'Unauthorized. Token not found.',
@@ -40,6 +45,7 @@ class isAdmin
         }
 
         return $next($request);
+
     }
 
 
