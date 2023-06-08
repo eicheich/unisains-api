@@ -53,21 +53,20 @@ Route::prefix('admin')->middleware('isAdminWeb')->group(function () {
             Route::post('update/{id}', [ModuleController::class, 'update'])->name('update.modules');
             Route::post('delete/{id}', [ModuleController::class, 'delete'])->name('delete.modules');
         });
-        Route::prefix('rangkuman')->group(function(){
+        Route::prefix('rangkuman')->group(function () {
             Route::get('create/{course_id}', [ModuleController::class, 'createRangkuman'])->name('create.rangkuman');
             Route::post('store', [ModuleController::class, 'storeRangkuman'])->name('store.rangkuman');
             Route::get('edit/{id}', [ModuleController::class, 'editRangkuman'])->name('update.rangkuman.page');
             Route::post('update/{id}', [ModuleController::class, 'updateRangkuman'])->name('update.rangkuman');
             Route::post('delete/{id}', [ModuleController::class, 'deleteRangkuman'])->name('delete.rangkuman');
         });
-        Route::prefix('ar')->group( function(){
+        Route::prefix('ar')->group(function () {
             Route::post('store', [ARController::class, 'store'])->name('store.ar');
-            Route::get('edit/{id}',[ARController::class, 'edit'])->name('edit.ar.page'); 
-            Route::post('update/{id}',[ARController::class, 'update'])->name('update.ar');
-            Route::post('delete/{id}',[ARController::class, 'delete'])->name('delete.ar');
-
+            Route::get('edit/{id}', [ARController::class, 'edit'])->name('edit.ar.page');
+            Route::post('update/{id}', [ARController::class, 'update'])->name('update.ar');
+            Route::post('delete/{id}', [ARController::class, 'delete'])->name('delete.ar');
         });
-        Route::prefix('quiz')->group(function(){
+        Route::prefix('quiz')->group(function () {
             Route::post('store', [QuizController::class, 'store'])->name('store.quiz');
             Route::get('edit/{id}', [QuizController::class, 'edit'])->name('update.quiz.page');
             Route::post('update/{id}', [QuizController::class, 'update'])->name('update.quiz');
@@ -91,6 +90,5 @@ Route::prefix('admin')->middleware('isAdminWeb')->group(function () {
         Route::post('delete/{id}', [TransactionController::class, 'delete'])->name('delete.transactions');
     });
 
-        Route::post('delete/{id}', [AuthController::class, 'delete'])->name('delete.users');
-    });
-
+    Route::post('delete/{id}', [AuthController::class, 'delete'])->name('delete.users');
+});
