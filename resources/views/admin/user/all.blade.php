@@ -12,11 +12,11 @@
             </div>
         </div>
     </div>
-    @if ($users->isEmpty())
+    {{-- @if ($users->isEmpty())
         <div class="alert alert-danger text-light" role="alert">
             Data Pengguna Kosong
         </div>
-    @else
+    @else --}}
         <style>
             .search-container {
                 display: flex;
@@ -231,5 +231,5 @@
                     }
                 }
             </script>
-    @endif
+    {{-- @endif --}}
 @endsection

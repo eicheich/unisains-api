@@ -82,7 +82,6 @@
         <div class="tab-content mt-3">
             <div class="tab-pane fade show active" id="card-view">
                 <div class="row">
-                    @foreach ($courses as $course)
                         {{-- <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
                             <!-- card content here -->
                         </div> --}}
@@ -120,7 +119,6 @@
                                 </div>
                             @endforeach
                         </div>
-                    @endforeach
                 </div>
             </div>
             <div class="tab-pane fade" id="list-view">
