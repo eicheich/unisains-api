@@ -53,6 +53,8 @@ Route::prefix('v1')->group(function () {
         Route::get('search', [CourseController::class, 'search']);
         Route::middleware('auth:sanctum')->group(function () {
             Route::get('show/{id}', [CourseController::class, 'show']);
+            Route::get('learn/{id}', [CourseController::class, 'learn']);
+            
             Route::prefix('cart')->group(function () {
                 Route::post('store', [CartController::class, 'store']);
                 Route::get('all', [CartController::class, 'all']);
@@ -68,6 +70,7 @@ Route::prefix('v1')->group(function () {
         Route::get('all', [TransactionController::class, 'all']);
         Route::post('store', [TransactionController::class, 'store']);
         Route::get('show/{id}', [TransactionController::class, 'show']);
+        Route::get('learn/{id}', [TransactionController::class, 'learn']);
         Route::post('update/{id}', [TransactionController::class, 'update']);
         Route::post('delete/{id}', [TransactionController::class, 'delete']);
     });

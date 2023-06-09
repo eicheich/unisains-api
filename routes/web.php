@@ -3,9 +3,11 @@
 use App\Http\Controllers\Web\Admin\ARController;
 use App\Http\Controllers\Web\Admin\AuthController;
 use App\Http\Controllers\Web\Admin\CourseController;
+use App\Http\Controllers\Web\Admin\UserController;
 use App\Http\Controllers\Web\Admin\DashboardController;
 use App\Http\Controllers\Web\Admin\ModuleController;
 use App\Http\Controllers\Web\Admin\QuizController;
+use App\Http\Controllers\Web\Admin\TransactionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -51,25 +53,42 @@ Route::prefix('admin')->middleware('isAdminWeb')->group(function () {
             Route::post('update/{id}', [ModuleController::class, 'update'])->name('update.modules');
             Route::post('delete/{id}', [ModuleController::class, 'delete'])->name('delete.modules');
         });
-        Route::prefix('rangkuman')->group(function(){
+        Route::prefix('rangkuman')->group(function () {
             Route::get('create/{course_id}', [ModuleController::class, 'createRangkuman'])->name('create.rangkuman');
             Route::post('store', [ModuleController::class, 'storeRangkuman'])->name('store.rangkuman');
             Route::get('edit/{id}', [ModuleController::class, 'editRangkuman'])->name('update.rangkuman.page');
             Route::post('update/{id}', [ModuleController::class, 'updateRangkuman'])->name('update.rangkuman');
             Route::post('delete/{id}', [ModuleController::class, 'deleteRangkuman'])->name('delete.rangkuman');
         });
-        Route::prefix('ar')->group( function(){
+        Route::prefix('ar')->group(function () {
             Route::post('store', [ARController::class, 'store'])->name('store.ar');
-            Route::get('edit/{id}',[ARController::class, 'edit'])->name('edit.ar.page'); 
-            Route::post('update/{id}',[ARController::class, 'update'])->name('update.ar');
-            Route::post('delete/{id}',[ARController::class, 'delete'])->name('delete.ar');
-
+            Route::get('edit/{id}', [ARController::class, 'edit'])->name('edit.ar.page');
+            Route::post('update/{id}', [ARController::class, 'update'])->name('update.ar');
+            Route::post('delete/{id}', [ARController::class, 'delete'])->name('delete.ar');
         });
-        Route::prefix('quiz')->group(function(){
+        Route::prefix('quiz')->group(function () {
             Route::post('store', [QuizController::class, 'store'])->name('store.quiz');
             Route::get('edit/{id}', [QuizController::class, 'edit'])->name('update.quiz.page');
             Route::post('update/{id}', [QuizController::class, 'update'])->name('update.quiz');
             Route::post('delete/{id}', [QuizController::class, 'delete'])->name('delete.quiz');
         });
     });
+    Route::prefix('users')->group(function () {
+        Route::get('/', [UserController::class, 'all'])->name('users.page');
+        Route::post('store', [AuthController::class, 'store'])->name('store.users');
+        Route::get('show/{id}', [AuthController::class, 'show'])->name('users.show');
+        Route::get('update-page/{id}', [AuthController::class, 'updatePage'])->name('update.users.page');
+        Route::post('update/{id}', [AuthController::class, 'update'])->name('update.users');
+        Route::post('delete/{id}', [UserController::class, 'delete'])->name('delete.users');
+    });
+    Route::prefix('transactions')->group(function () {
+        Route::get('/', [TransactionController::class, 'all'])->name('transactions.page');
+        Route::post('store', [TransactionController::class, 'store'])->name('store.transactions');
+        Route::get('show/{id}', [TransactionController::class, 'show'])->name('transactions.show');
+        Route::get('update-page/{id}', [TransactionController::class, 'updatePage'])->name('update.transactions.page');
+        Route::post('update/{id}', [TransactionController::class, 'update'])->name('update.transactions');
+        Route::post('delete/{id}', [TransactionController::class, 'delete'])->name('delete.transactions');
+    });
+
+    Route::post('delete/{id}', [AuthController::class, 'delete'])->name('delete.users');
 });

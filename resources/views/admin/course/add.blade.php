@@ -2,11 +2,7 @@
 @section('content')
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Tambah Kursus</h1>
-        @if (session('status'))
-            <div class="alert alert-success" role="alert">
-                {{ session('status') }}
-            </div>
-        @endif
+        @include('layouts.session')
         <div class="btn-toolbar mb-2 mb-md-0">
         </div>
     </div>
@@ -92,7 +88,9 @@
             </div>
         </div>
         {{-- button submit --}}
-        <button type="submit" class="btn btn-primary w-5 m-5">Submit</button>
+        <div class="card mt-5">
+            <button type="submit" class="btn btn-primary">Add</button>
+        </div>
         <style>
             .btn-add {
                 margin-top: 5rem;
@@ -104,7 +102,8 @@
                 color: white;
                 /* center */
             }
-            .form-control{
+
+            .form-control {
                 width: 100%;
                 padding: 1rem;
                 height: 3rem;

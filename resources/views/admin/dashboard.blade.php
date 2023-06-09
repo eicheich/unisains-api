@@ -1,11 +1,7 @@
 @extends('layouts.main')
 @section('content')
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        @if (session('status'))
-            <div class="alert alert-success" role="alert">
-                {{ session('status') }}
-            </div>
-        @endif
+        @include('layouts.session')
         <h1 class="h2">Dashboard</h1>
     </div>
     <div class="row">
@@ -14,7 +10,7 @@
                 <div class="card-body">Total Pengguna</div>
                 <h3 class="card-body">{{$user}}</h3>
                 <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white stretched-link" href="#">View Details</a>
+                    <a class="small text-white stretched-link" href="{{route('users.page')}}">View Details</a>
                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                 </div>
             </div>
@@ -36,7 +32,7 @@
                 <h3 class="card-body">{{$transaction}}</h3>
 
                 <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white stretched-link" href="#">View Details</a>
+                    <a class="small text-white stretched-link" href="{{route('transactions.page')}}">View Details</a>
                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                 </div>
             </div>
@@ -44,7 +40,7 @@
         <div class="col-xl-3 col-md-6">
             <div class="card bg-danger text-white mb-4">
                 <div class="card-body">Total Laporan</div>
-                <h3 class="card-body">120129</h3>
+                <h3 class="card-body">{{$report}}</h3>
                 <div class="card-footer d-flex align-items-center justify-content-between">
                     <a class="small text-white stretched-link" href="#">View Details</a>
                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>

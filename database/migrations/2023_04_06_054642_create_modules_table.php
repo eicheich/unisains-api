@@ -13,12 +13,13 @@ return new class extends Migration
     {
         Schema::create('modules', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
             $table->string('title_module');
             $table->text('materi_module');
             $table->string('image_module');
             $table->string('description');
             $table->foreignId('course_id')->constrained('courses');
+            $table->timestamps();
+            $table->softDeletes();
 
 
         });
