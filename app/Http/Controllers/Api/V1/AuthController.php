@@ -81,7 +81,9 @@ class AuthController extends Controller
             ],200);
         } else {
             return response()->json([
-                'message' => 'Logout failed',
+                'status', $th->getMessage()
+                
+                
             ],500);
         }
     }
