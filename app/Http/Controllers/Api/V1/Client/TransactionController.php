@@ -88,7 +88,7 @@ class TransactionController extends Controller
 
         if ($transaction->status == 'pending') {
             // Calculate due time as 1 day after the transaction's creation time
-            $dueTime = Carbon::parse($transaction->created_at)->addMinute();
+            $dueTime = Carbon::parse($transaction->created_at)->addDay();
             // Schedule the task to run at the due time
             Cache::put('transaction_due_' . $transaction->id, true, $dueTime);
             // Register the task
@@ -136,7 +136,7 @@ class TransactionController extends Controller
         foreach ($transactions as $transaction) {
             if ($transaction->status == 'pending') {
                 $createdAt = Carbon::parse($transaction->created_at);
-                $dueTime = $createdAt->addMinute();
+                $dueTime = $createdAt->addDay();
 
                 if ($dueTime > $currentTime) {
                     $remainingTime = $dueTime->diffForHumans($currentTime, [
