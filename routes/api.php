@@ -74,8 +74,8 @@ Route::prefix('v1')->group(function () {
         Route::post('update/{id}', [TransactionController::class, 'update']);
         Route::post('delete/{id}', [TransactionController::class, 'delete']);
     });
-    Route::prefix('report')->middleware('auth:sanctum')->group(function () {
-        Route::get('all', [ReportController::class, 'all']);
-        Route::post('store', [ReportController::class, 'store']);
+    Route::prefix('report')->group(function () {
+        Route::get('all', [ReportController::class, 'all'])->middleware('isAdmin');
+        Route::post('store', [ReportController::class, 'store'])->middleware('auth:sanctum');
     });
 });

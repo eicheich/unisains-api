@@ -45,5 +45,13 @@ class ReportController extends Controller
         }
         
     }
+    public function all() {
+        $report = DB::table('reports')->get();
+        return response()->json([
+            'message' => 'Success',
+            'data' => $report,
+        ], 200);
+        
+    }
 
 }
