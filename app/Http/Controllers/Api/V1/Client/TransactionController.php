@@ -46,13 +46,8 @@ class TransactionController extends Controller
                     'total_price' => null,
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now(),
-
                 ]);
                 DB::commit();
-
-                // Schedule the due time check
-                // $this->schedule($transaction);
-
                 return response()->json([
                     'message' => 'Transaction added',
                 ], 201);
@@ -72,10 +67,8 @@ class TransactionController extends Controller
         if ($transaction->status == 'pending') {
             // Calculate due time as 1 day after the transaction's creation time
             $dueTime = Carbon::parse($transaction->created_at)->addDay();
-
             // Schedule the task to run at the due time
             Cache::put('transaction_due_' . $transaction->id, true, $dueTime);
-
             // Register the task
             Cache::put('transaction_due_task_' . $transaction->id, function () use ($transactionId) {
                 $this->updateTransactionStatus($transactionId);
@@ -141,9 +134,4 @@ class TransactionController extends Controller
             'data' => $transactions,
         ], 200);
     }
-    // {
-    //     $user = Auth::user();
-    //     // delete transaction in 24 hours
-    //     $transaction = DB::table('transactions')->where('user_id', $user->id)->where('created_at', '<', now()->subHours(24))->delete();
-    // }
 }
