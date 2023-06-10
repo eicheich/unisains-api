@@ -125,21 +125,6 @@ class TransactionController extends Controller
             }, $dueTime);
         }
     }
-
-    public function updateTransactionStatus($transactionId)
-    {
-        $transaction = DB::table('transactions')->where('id', $transactionId)->first();
-
-        if ($transaction->status == 'pending') {
-            DB::table('transactions')->where('id', $transactionId)->update([
-                'status' => 'failed',
-                'updated_at' => Carbon::now(),
-            ]);
-
-            // Additional logic or actions can be performed here
-            // when the transaction status is updated to 'failed'
-        }
-    }
     public function all()
     {
         $user = Auth::user();
