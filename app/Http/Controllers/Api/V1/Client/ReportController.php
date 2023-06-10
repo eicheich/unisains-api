@@ -12,7 +12,7 @@ use Carbon\CarbonInterface;
 
 class ReportController extends Controller
 {
-    function store (Request $request) {
+    public function store (Request $request) {
         $user = Auth::user();
         $validator = Validator::make($request->all(), [
             'report' => 'required',
@@ -45,4 +45,5 @@ class ReportController extends Controller
         }
         
     }
+
 }
