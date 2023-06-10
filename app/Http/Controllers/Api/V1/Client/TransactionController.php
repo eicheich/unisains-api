@@ -123,6 +123,10 @@ class TransactionController extends Controller
                     ]);
                 } else {
                     $remainingTime = 'Expired';
+                    DB::table('transactions')->where('id', $transaction->id)->update([
+                        'status' => 'failed',
+                        'updated_at' => Carbon::now(),
+                    ]);
                 }
 
                 $transaction->remaining_time = $remainingTime;
