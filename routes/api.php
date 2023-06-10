@@ -55,7 +55,6 @@ Route::prefix('v1')->group(function () {
         Route::middleware('auth:sanctum')->group(function () {
             Route::get('show/{id}', [CourseController::class, 'show']);
             Route::get('learn/{id}', [CourseController::class, 'learn']);
-            
             Route::prefix('cart')->group(function () {
                 Route::post('store', [CartController::class, 'store']);
                 Route::get('all', [CartController::class, 'all']);
@@ -77,6 +76,6 @@ Route::prefix('v1')->group(function () {
     });
     Route::prefix('report')->middleware('auth:sanctum')->group(function () {
         Route::get('all', [ReportController::class, 'all']);
-        Route::get('store', [ReportController::class, 'store']);
+        Route::post('store', [ReportController::class, 'store']);
     });
 });
