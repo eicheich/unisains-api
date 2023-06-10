@@ -57,6 +57,28 @@ class TransactionController extends Controller
                     'status', $th->getMessage()
                 ], 500);
             }
+        } elseif ($course->is_paid == 1 && $course->discount == null) {
+            try {
+                DB::beginTransaction();
+                $transaction = DB::table('transactions')->insert([
+                    'user_id' => $user->id,
+                    'course_id' => $request->course_id,
+                    'status' => 'pending',
+                    'code_transaction' => 'TRU' . time(),
+                    'total_price' => $course->price,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ]);
+                DB::commit();
+                return response()->json([
+                    'message' => 'Transaction added',
+                ], 201);
+            } catch (\Throwable $th) {
+                DB::rollBack();
+                return response()->json([
+                    'status', $th->getMessage()
+                ], 500);
+            }
         }
     }
 
@@ -66,7 +88,7 @@ class TransactionController extends Controller
 
         if ($transaction->status == 'pending') {
             // Calculate due time as 1 day after the transaction's creation time
-            $dueTime = Carbon::parse($transaction->created_at)->addDay();
+            $dueTime = Carbon::parse($transaction->created_at)->addMinute();
             // Schedule the task to run at the due time
             Cache::put('transaction_due_' . $transaction->id, true, $dueTime);
             // Register the task
@@ -114,7 +136,7 @@ class TransactionController extends Controller
         foreach ($transactions as $transaction) {
             if ($transaction->status == 'pending') {
                 $createdAt = Carbon::parse($transaction->created_at);
-                $dueTime = $createdAt->addDay();
+                $dueTime = $createdAt->addMinute();
 
                 if ($dueTime > $currentTime) {
                     $remainingTime = $dueTime->diffForHumans($currentTime, [
