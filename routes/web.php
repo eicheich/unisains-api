@@ -8,6 +8,7 @@ use App\Http\Controllers\Web\Admin\DashboardController;
 use App\Http\Controllers\Web\Admin\ModuleController;
 use App\Http\Controllers\Web\Admin\QuizController;
 use App\Http\Controllers\Web\Admin\TransactionController;
+use App\Http\Controllers\Web\Admin\ReportController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -91,4 +92,12 @@ Route::prefix('admin')->middleware('isAdminWeb')->group(function () {
     });
 
     Route::post('delete/{id}', [AuthController::class, 'delete'])->name('delete.users');
+
+    Route::prefix('report')->group(function () {
+        Route::get('/', [ReportController::class, 'all'])->name('report.page');
+        Route::get('show/{id}', [ReportController::class, 'showReport'])->name('report.show');
+        Route::get('update-page/{id}', [ReportController::class, 'updatePageReport'])->name('update.report.page');
+        Route::post('update/{id}', [ReportController::class, 'updateReport'])->name('update.report');
+        Route::post('delete/{id}', [ReportController::class, 'deleteReport'])->name('delete.report');
+    });
 });
