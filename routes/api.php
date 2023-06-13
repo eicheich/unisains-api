@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\Client\CartController;
 use App\Http\Controllers\Api\V1\Client\ProfileController;
 use App\Http\Controllers\Api\V1\Client\TransactionController;
 use App\Http\Controllers\Api\V1\Client\ReportController;
+use App\Http\Controllers\Api\V1\Client\PaymentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -73,6 +74,8 @@ Route::prefix('v1')->group(function () {
         // Route::get('learn/{id}', [TransactionController::class, 'learn']);
         Route::post('update/{id}', [TransactionController::class, 'update']);
         Route::post('delete/{id}', [TransactionController::class, 'delete']);
+
+        Route::post("checkout",[PaymentController::class, 'payment']);
     });
     Route::prefix('report')->group(function () {
         Route::get('all', [ReportController::class, 'all'])->middleware('isAdmin');
