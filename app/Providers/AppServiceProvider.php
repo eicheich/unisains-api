@@ -11,7 +11,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app['config']->set('curl.certificate', storage_path('certificates/ca-bundle.crt'));
+
     }
 
     /**
