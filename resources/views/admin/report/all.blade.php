@@ -10,7 +10,7 @@
     </div>
     @if ($reports->isEmpty())
         <div class="alert alert-danger text-light" role="alert">
-            Data Transaksi Kosong
+            Data <Laporan></Laporan> Kosong
         </div>
     @else
         <style>
@@ -75,31 +75,51 @@
             </div>
         </div>
         <div class="container">
-            <h4 class="mt-3">Pengguna</h4>
+            <h4 class="mt-3">Laporan</h4>
             <div class="table-responsive text-center">
                 <table class="table table-striped">
                     <thead>
-                        <tr>
-                            <th scope="col">No.</th>
-                            <th scope="col">Nama Pengguna</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Jumlah Transaksi</th>
-                            <th scope="col">Total Transaksi</th>
-                        </tr>
+                    <tr>
+                        <th scope="col">No.</th>
+                        <th scope="col">Isi Laporan</th>
+                        <th scope="col">Nama Pengirim</th>
+                        <th scope="col">Email</th>
+                    </tr>
                     </thead>
                     <tbody>
-                        @foreach ($reports as $report)
-                            <tr>
-                                <th scope="row">{{ $loop->iteration }}</th>
-                                <td>{{ $report->user->name }}</td>
-                                <td>{{ $report->user->email }}</td>
-                                <td>{{ $report->user->transactions->count() }}</td>
-                                <td>Rp. {{ number_format($report->user->transactions->sum('total')) }}</td>
-                            </tr>
-                        @endforeach
+                    @foreach ($reports as $report)
+                        <tr>
+                            <th scope="row">{{ $loop->iteration }}</th>
+                            <td style="max-width: 256px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $report->report }}</td>
+                            <td>{{ $report->user->first_name }}</td>
+                            <td>{{ $report->user->email }}</td>
+                        </tr>
+                    @endforeach
                     </tbody>
                 </table>
             </div>
-            <h4 class="mt-3">Transaksi</h4>x  
+            <div class="d-flex justify-content-between align-items-center pt-5">
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <div class="btn-group me-2">
+                        <a href="{{ $reports->previousPageUrl() }}" class="btn btn-sm btn-primary">Previous</a>
+                    </div>
+                </div>
+
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <div class="btn-group me-2">
+                        <p class="page-info">{{ $reports->currentPage() }}</p>
+                    </div>
+                </div>
+
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <div class="btn-group me-2">
+                        <a href="{{ $reports->nextPageUrl() }}" class="btn btn-sm btn-primary">Next</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
     @endif
 @endsection
