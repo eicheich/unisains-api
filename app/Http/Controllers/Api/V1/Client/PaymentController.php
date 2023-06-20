@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Midtrans\Config;
 use Midtrans\Snap;
 use Midtrans\Transaction;
+use Midtrans\Notification;
 
 class PaymentController extends Controller
 {
@@ -57,6 +58,32 @@ class PaymentController extends Controller
 
         return response()->json([
             'snap_token' => $snapToken,
+        ]);
+    }
+    public function callback(Request $request)
+    {
+        // Validasi signature Midtrans
+        $serverKey = env('MIDTRANS_SERVER_KEY');
+        $notification = new Notification();
+
+        $isValidSignature = $notification->isValidSignature($request->getContent(), $request->header('signature'), $serverKey);
+        if (!$isValidSignature) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Invalid signature',
+            ], 400);
+        }
+
+        // Proses data transaksi
+        $orderId = $notification->order_id;
+        $transactionStatus = $notification->transaction_status;
+        // Update status transaksi di database berdasarkan $orderId dan $transactionStatus
+
+        // Kirim notifikasi ke pengguna jika diperlukan
+        // Mengembalikan respons
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Callback processed successfully',
         ]);
     }
 }
