@@ -79,6 +79,30 @@ class TransactionController extends Controller
             }
         }
         elseif ($course->is_paid == 1){
+            if ($course->discount != null){
+                $priceAfterDiscount = $course->price - ($course->price * ($course->discount / 100));
+                try {
+                    DB::beginTransaction();
+                    $transaction = DB::table('transactions')->insert([
+                        'user_id' => $user->id,
+                        'course_id' => $request->course_id,
+                        'status' => 'pending',
+                        'code_transaction' => 'TRU' . time(),
+                        'total_price' => $priceAfterDiscount,
+                        'created_at' => $carboncheck,
+                        'updated_at' => $carboncheck
+                    ]);
+                    DB::commit();
+                    return response()->json([
+                        'message' => 'Transaction added',
+                    ], 201);
+                } catch (\Throwable $th) {
+                    DB::rollBack();
+                    return response()->json([
+                        'status', $th->getMessage()
+                    ], 500);
+                }
+            }
 
         }
     }
