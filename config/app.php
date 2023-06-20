@@ -17,6 +17,7 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment
@@ -181,6 +182,9 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+//        Ixudra\Curl\CurlServiceProvider::class,
+
+
 
         /*
          * Package Service Providers...
@@ -209,6 +213,9 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
+//        'Curl' => Ixudra\Curl\Facades\Curl::class,
+
+
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 
