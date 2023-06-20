@@ -15,7 +15,7 @@ class TransactionController extends Controller
 {
     public function store(Request $request)
     {
-        $carbonckeck = Carbon::now();
+        $carboncheck = Carbon::now();
         $user = Auth::user();
         $validator = Validator::make($request->all(), [
             'course_id' => 'required',
@@ -27,6 +27,18 @@ class TransactionController extends Controller
                 'errors' => $validator->errors(),
             ], 422);
         }
+
+        $isPurchased = DB::table('my_course')
+            ->where('user_id', $user->id)
+            ->where('course_id', $request->course_id)
+            ->first();
+
+        if ($isPurchased) {
+            return response()->json([
+                'message' => 'Course already purchased',
+            ], 409);
+        } else
+
 
         $course = DB::table('courses')->where('id', $request->course_id)->first();
         if ($course == null) {
@@ -41,11 +53,19 @@ class TransactionController extends Controller
                 $transaction = DB::table('transactions')->insert([
                     'user_id' => $user->id,
                     'course_id' => $request->course_id,
-                    'status' => 'pending',
+                    'status' => 'success',
                     'code_transaction' => 'TRU' . time(),
                     'total_price' => null,
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now(),
+                    'created_at' => $carboncheck,
+                    'updated_at' => $carboncheck
+
+                ]);
+                $purchased = DB::table('my_course')->insert([
+                   'user_id' => $user->id,
+                    'course_id  ' => $request->course_id,
+                    'progress' => 'pending',
+                    'created_at' => $carboncheck,
+                    'updated_at' => $carboncheck
                 ]);
                 DB::commit();
                 return response()->json([
@@ -57,56 +77,9 @@ class TransactionController extends Controller
                     'status', $th->getMessage()
                 ], 500);
             }
-        } elseif ($course->is_paid == 1 && $course->discount == null) {
-            try {
-                DB::beginTransaction();
-                $transaction = DB::table('transactions')->insert([
-                    'user_id' => $user->id,
-                    'course_id' => $request->course_id,
-                    'status' => 'pending',
-                    'code_transaction' => 'TRU' . time(),
-                    'total_price' => $course->price,
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now(),
-                ]);
-                DB::commit();
-                return response()->json([
-                    'message' => 'Transaction added',
-                ], 201);
-            } catch (\Throwable $th) {
-                DB::rollBack();
-                return response()->json([
-                    'status', $th->getMessage()
-                ], 500);
-            }
-        } else {
-            $price_after_discount = $course->price - ($course->price * $course->discount / 100);
-            try {
-                DB::beginTransaction();
-                $transaction = DB::table('transactions')->insert([
-                    'user_id' => $user->id,
-                    'course_id' => $request->course_id,
-                    'status' => 'pending',
-                    'code_transaction' => 'TRU' . time(),
-                    'total_price' => $price_after_discount,
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now(),
-                ]);
-                DB::commit();
-                return response()->json([
-                    'message' => 'Transaction added',
-                ], 201);
-            } catch (\Throwable $th) {
-                DB::rollBack();
-                return response()->json([
-                    'status', $th->getMessage()
-                ], 500);
-            } catch (\Throwable $th) {
-                DB::rollBack();
-                return response()->json([
-                    'status', $th->getMessage()
-                ], 500);
-            }
+        }
+        elseif ($course->is_paid == 1){
+
         }
     }
 
@@ -117,12 +90,29 @@ class TransactionController extends Controller
         if ($transaction->status == 'pending') {
             // Calculate due time as 1 day after the transaction's creation time
             $dueTime = Carbon::parse($transaction->created_at)->addDay();
+
             // Schedule the task to run at the due time
             Cache::put('transaction_due_' . $transaction->id, true, $dueTime);
+
             // Register the task
             Cache::put('transaction_due_task_' . $transaction->id, function () use ($transactionId) {
                 $this->updateTransactionStatus($transactionId);
             }, $dueTime);
+        }
+    }
+
+    public function updateTransactionStatus($transactionId)
+    {
+        $transaction = DB::table('transactions')->where('id', $transactionId)->first();
+
+        if ($transaction->status == 'pending') {
+            DB::table('transactions')->where('id', $transactionId)->update([
+                'status' => 'failed',
+                'updated_at' => Carbon::now(),
+            ]);
+
+            // Additional logic or actions can be performed here
+            // when the transaction status is updated to 'failed'
         }
     }
     public function all()
@@ -158,19 +148,20 @@ class TransactionController extends Controller
                     ]);
                 } else {
                     $remainingTime = 'Expired';
-                    DB::table('transactions')->where('id', $transaction->id)->update([
-                        'status' => 'failed',
-                        'updated_at' => Carbon::now(),
-                    ]);
                 }
 
                 $transaction->remaining_time = $remainingTime;
             }
         }
 
-         return response()->json([
+        return response()->json([
             'message' => 'Success',
             'data' => $transactions,
         ], 200);
     }
+    // {
+    //     $user = Auth::user();
+    //     // delete transaction in 24 hours
+    //     $transaction = DB::table('transactions')->where('user_id', $user->id)->where('created_at', '<', now()->subHours(24))->delete();
+    // }
 }
