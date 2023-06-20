@@ -168,7 +168,7 @@ class TransactionController extends Controller
             }
         }
 
-        return response()->json([
+         return response()->json([
             'message' => 'Success',
             'data' => $transactions,
         ], 200);

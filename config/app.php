@@ -182,7 +182,7 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
-        Ixudra\Curl\CurlServiceProvider::class,
+//        Ixudra\Curl\CurlServiceProvider::class,
 
 
 
@@ -213,7 +213,7 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
-        'Curl' => Ixudra\Curl\Facades\Curl::class,
+//        'Curl' => Ixudra\Curl\Facades\Curl::class,
 
 
         // 'ExampleClass' => App\Example\ExampleClass::class,
