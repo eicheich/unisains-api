@@ -70,6 +70,7 @@ class TransactionController extends Controller
                 DB::commit();
                 return response()->json([
                     'message' => 'Transaction added',
+                    'data' => $transaction
                 ], 201);
             } catch (\Throwable $th) {
                 DB::rollBack();
@@ -95,6 +96,7 @@ class TransactionController extends Controller
                     DB::commit();
                     return response()->json([
                         'message' => 'Transaction added',
+                        'data' => $transaction
                     ], 201);
                 } catch (\Throwable $th) {
                     DB::rollBack();
