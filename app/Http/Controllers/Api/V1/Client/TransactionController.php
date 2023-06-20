@@ -104,10 +104,34 @@ class TransactionController extends Controller
                         'status', $th->getMessage()
                     ], 500);
                 }
-            }
+            } else
+                try {
+                    DB::beginTransaction();
+                    $transaction = DB::table('transactions')->insert([
+                        'user_id' => $user->id,
+                        'course_id' => $course->id,
+                        'status' => 'pending',
+                        'code_transaction' => 'TRU' . time(),
+                        'total_price' => $course->price,
+                        'created_at' => $carboncheck,
+                        'updated_at' => $carboncheck
+                    ]);
+                    DB::commit();
+                    return response()->json([
+                        'message' => 'Transaction added',
+                        'data' => $transaction
+                    ], 201);
+                } catch (\Throwable $th) {
+                    DB::rollBack();
+                    return response()->json([
+                        'status', $th->getMessage()
+                    ], 500);
+                }
+        }
+
 
         }
-    }
+
 
     public function schedule($transactionId)
     {
