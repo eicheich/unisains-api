@@ -140,7 +140,7 @@ class CourseController extends Controller
         $courses = DB::table('courses')
             ->where('courses.id', $id)
             ->join('categories', 'courses.category_id', '=', 'categories.id')
-            ->join('modules', 'courses.id', '=', 'modules.course_id')
+//            ->join('modules', 'modules.course_id', '=', 'courses.id')
             ->select('courses.id', 'courses.title_course', 'courses.description', 'courses.price', 'courses.image_course', 'categories.name_category',)
             ->get();
 
