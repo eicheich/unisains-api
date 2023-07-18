@@ -13,7 +13,7 @@ class Course extends Model
     // fillabel
     protected $guarded = [];
 //    hidden
-    protected $hidden = ['created_at', 'updated_at', 'deleted_at','course_code','category_id','image_course','certificate_course'];
+    protected $hidden = ['created_at', 'updated_at', 'deleted_at','is_paid','course_code','category_id','image_course','certificate_course'];
 //    append image and  certificate
     protected $appends = ['thumbnail' ];
 

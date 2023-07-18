@@ -19,51 +19,42 @@ class CourseController extends Controller
     }
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $request->validate([
             'title_course' => 'required',
             'description' => 'required',
             'is_paid' => 'required|boolean',
             'category_id' => 'required|integer',
-            'certificate_course' => 'required|file|mimes:pdf,jpeg,png',
             'image_course' => 'required|file|mimes:jpeg,png',
+            'price' => 'nullable|required_if:is_paid,1|numeric',
         ]);
-        if ($validator->fails()) {
-            return redirect()->back()->with('status', $validator->errors());
-        }
 
-        $certificate = $request->file('certificate_course');
-        $certificate_name = time() . '.' . $certificate->getClientOriginalExtension();
-        $certificate->move(public_path('storage/images/certificate'), $certificate_name);
+        $image_name = $this->uploadImage($request->file('image_course'));
 
-        $image = $request->file('image_course');
-        $image_name = time() . '.' . $image->getClientOriginalExtension();
-        $image->move(public_path('storage/images/thumbnail_course'), $image_name);
-        $course = Course::create([
+        $courseData = [
             'title_course' => $request->title_course,
             'description' => $request->description,
             'is_paid' => $request->is_paid,
-            'certificate_course' => $certificate_name,
             'image_course' => $image_name,
             'category_id' => $request->category_id,
             'course_code' => 'UNI' . rand(1000, 9999),
-        ]);
+        ];
 
-        if ($request->is_paid == 1 && $request->discount !== null) {
-            $price = $request->price;
-            $discount = $request->discount;
-            DB::table('courses')->where('id', $course->id)->update([
-                'price' => $price,
-                'discount' => $discount,
-            ]);
-        } elseif ($request->is_paid == 1 && $request->discount == null) {
-            $price = $request->price;
-            DB::table('courses')->where('id', $course->id)->update([
-                'price' => $price,
-            ]);
+        if ($request->is_paid == 1) {
+            $courseData['price'] = $request->price;
         }
 
-        return redirect()->route('course.page')->with('success', 'course telah di tambahkan');
+        Course::create($courseData);
+
+        return redirect()->route('course.page')->with('success', 'Course telah ditambahkan');
     }
+
+    private function uploadImage($image)
+    {
+        $image_name = time() . '.' . $image->getClientOriginalExtension();
+        $image->move(public_path('storage/images/thumbnail_course'), $image_name);
+        return $image_name;
+    }
+
     public function all()
     {
         $courses = Course::with('category')->paginate(9);
