@@ -52,6 +52,7 @@ class AuthController extends Controller
                     $token = $user->createToken('token-name')->plainTextToken;
                     return response()->json([
                         'message' => 'Login success',
+                        'user' => $user,
                         'token' => $token,
                     ],200);
                 } else {
@@ -80,7 +81,9 @@ class AuthController extends Controller
             ],200);
         } else {
             return response()->json([
-                'message' => 'Logout failed',
+                'status', $th->getMessage()
+                
+                
             ],500);
         }
     }

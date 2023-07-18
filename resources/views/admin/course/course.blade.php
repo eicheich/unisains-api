@@ -15,29 +15,16 @@
             Data Kursus Kosong
         </div>
     @else
-        <div class="search-filter">
-            <div class="col">
-                <form action="#" method="GET">
-                    <div class="input-group input-group-outline mb-3">
-                        <input type="text" class="form-control" placeholder="Search by course name"
-                            aria-label="Recipient's username" aria-describedby="button-addon2" name="search">
-                        <select class="" name="category">
-                            <option value="select">All categories</option>
-                            <option value="math">Math</option>
-                            <option value="science">Science</option>
-                            <option value="history">History</option>
-                        </select>
-                        <button class="btn-search" type="submit" id="button-addon2">Search</button>
-                        <style>
-                            .btn-search {
-                                border: none;
-                                background-color: #F08A5D;
-                                color: #fff;
-                                width: 5rem;
-                            }
-                        </style>
+        <div class="container">
+            <div class="row justify-content-center mt-5">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <input type="text" class="form-control search-input" placeholder="Cari...">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary search-button" type="button">Cari</button>
+                        </div>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
 
@@ -50,12 +37,33 @@
             </li>
         </ul>
 
-        {{-- <style>
-            .nav-tabs .nav-link.active {
-                background-color: #F08A5D !important;
-                color: #fff;
+        <style>
+            .search-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin-top: 100px;
             }
-        </style> --}}
+
+            .search-input {
+                width: 300px;
+                padding: 10px;
+                border: 2px solid #ccc;
+                border-radius: 5px;
+                font-size: 16px;
+                outline: none;
+            }
+
+            .search-button {
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                margin-left: 10px;
+                font-size: 16px;
+            }
+        </style>
 
         {{-- <script>
             const tabLinks = document.querySelectorAll('.nav-link');
@@ -74,7 +82,6 @@
         <div class="tab-content mt-3">
             <div class="tab-pane fade show active" id="card-view">
                 <div class="row">
-                    @foreach ($courses as $course)
                         {{-- <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
                             <!-- card content here -->
                         </div> --}}
@@ -112,7 +119,6 @@
                                 </div>
                             @endforeach
                         </div>
-                    @endforeach
                 </div>
             </div>
             <div class="tab-pane fade" id="list-view">
@@ -163,7 +169,7 @@
                                                         id="deleteForm">
                                                         @csrf
                                                         <button class="btn btn-sm btn-danger mx-1" onclick=""
-                                                        id="submit-delete" type="button">
+                                                            id="submit-delete" type="button">
                                                             <i class="fas fa-trash"></i>
                                                         </button>
                                                     </form>
@@ -182,13 +188,12 @@
                 </div>
             </div>
         </div>
-        </div>
     @endif
     <style>
         /* .nav-tabs .nav-link.active {
-                                    background-color: #F08A5D !important;
-                                    color: #fff;
-                                } */
+                                        background-color: #F08A5D !important;
+                                        color: #fff;
+                                    } */
 
 
         .search-filter {
@@ -277,7 +282,5 @@
                 this.form.submit();
             }
         });
-
-       
     </script>
 @endsection
