@@ -71,5 +71,15 @@ class Course extends Model
         return $this->hasMany(Quiz::class);
     }
 
+    public function rates()
+    {
+        return $this->hasMany(Rate::class);
+    }
+
+    public function ars()
+    {
+        return $this->hasMany(AugmentedReality::class);
+    }
+
 
 }

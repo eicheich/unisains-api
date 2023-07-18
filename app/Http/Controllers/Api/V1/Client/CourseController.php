@@ -58,40 +58,12 @@ class CourseController extends Controller
 
     public function learn($id)
     {
-        $course = DB::table('courses')
-            ->where('courses.id', $id)
-            ->join('categories', 'courses.category_id', '=', 'categories.id')
-            ->select('courses.*', 'categories.name_category')
-            ->first();
-        $module = DB::table('modules')->where('course_id', $id)->get();
-        $module_rangkuman = DB::table('module_rangkuman')->where('course_id', $id)->get();
-        $ar = DB::table('augmented_realities')->where('course_id', $id)->first();
-        $quiz = DB::table('quizzes')->where('course_id', $id)->get();
+        $course = Course::with(['category', 'modules', 'ars'])
+            ->find($id);
 
         if ($course) {
-            // Mengubah URL gambar dan video menjadi URL yang valid
-            $course->image_course = UrlHelper::formatImageCourseUrl($course->image_course);
-            $course->certificate_course = UrlHelper::formatCertiCourseUrl($course->certificate_course);
-
-            foreach ($module as $moduleItem) {
-                $moduleItem->image_module = UrlHelper::formatImageModuleUrl($moduleItem->image_module);
-            }
-
-            foreach ($module_rangkuman as $rangkumanItem) {
-                $rangkumanItem->video_rangkuman = UrlHelper::formatVideoUrl($rangkumanItem->video_rangkuman);
-            }
-
-
-            if ($ar) {
-                $ar->image_ar = asset('storage/images/ar/' . $ar->image_ar);
-            }
-
             return response()->json([
                 'course' => $course,
-                'module' => $module,
-                'module_rangkuman' => $module_rangkuman,
-                'ar' => $ar,
-                'quiz' => $quiz,
             ], 200);
         } else {
             return response()->json([
@@ -99,26 +71,19 @@ class CourseController extends Controller
             ], 404);
         }
     }
-
     public function show($id)
     {
-        $course = DB::table('courses')
-            ->where('courses.id', $id)
-            ->join('categories', 'courses.category_id', '=', 'categories.id')
-            ->select('courses.*', 'categories.name_category')
-            ->first();
+        $course = Course::with(['category', 'rates','modules' => function ($query) {
+            $query->select('course_id', 'title_module', 'description');
+        }])->find($id);
 
-        $modules = DB::table('modules')
-            ->select('title_module', 'description')
-            ->where('course_id', $id)
-            ->get();
 
         if ($course) {
-            $course->image_course = UrlHelper::formatImageCourseUrl($course->image_course);
-            $course->certificate_course = UrlHelper::formatCertiCourseUrl($course->certificate_course);
             return response()->json([
-                'course' => $course,
-                'modules' => $modules,
+                'message' => 'success',
+                'data' => [
+                    'course' => $course,
+                ],
             ], 200);
         } else {
             return response()->json([
@@ -131,11 +96,28 @@ class CourseController extends Controller
 
     public function preview($id)
     {
-        $courses = DB::table('courses')
-            ->where('courses.id', $id)
-            ->join('categories', 'courses.category_id', '=', 'categories.id')
-//            ->join('modules', 'modules.course_id', '=', 'courses.id')
-            ->select('courses.id', 'courses.title_course', 'courses.description', 'courses.price', 'courses.image_course', 'categories.name_category',)
+        $course = Course::with(['category', 'modules', 'rates'])
+            ->find($id);
+        if ($course) {
+            return response()->json([
+                'message' => 'success',
+                'data' => [
+                    'course' => $course,
+                ],
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'course not found',
+            ], 404);
+        }
+    }
+
+
+    public function search(Request $request)
+    {
+        $search = $request->search;
+        $courses = Course::with(['category', 'modules', 'rates'])
+            ->where('title_course', 'like', '%' . $search . '%')
             ->get();
 
         if ($courses->isEmpty()) {
@@ -152,25 +134,5 @@ class CourseController extends Controller
                 'course' => $courses,
             ], 200);
         }
-    }
-
-
-    public function search(Request $request)
-    {
-        $search = $request->search;
-        $course = DB::table('courses')
-            ->where('courses.title_course', 'like', '%' . $search . '%')
-            ->join('categories', 'courses.category_id', '=', 'categories.id')
-            ->select('courses.id', 'courses.title_course', 'courses.description', 'courses.price', 'courses.image_course', 'categories.name_category')
-            ->get();
-
-        if ($course->isEmpty()) {
-            return response()->json([
-                'message' => 'course not found',
-            ], 404);
-        } else
-            return response()->json([
-                'course' => $course,
-            ], 200);
     }
 }

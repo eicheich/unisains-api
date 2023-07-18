@@ -10,6 +10,7 @@ class Module extends Model
     use HasFactory;
 
     protected $guarded =[];
+    protected $hidden = ['created_at', 'updated_at', 'course_id'];
 
     public function course()
     {
