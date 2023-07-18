@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1\Client;
 
 use App\Helpers\UrlHelper;
 use App\Http\Controllers\Controller;
+use App\Models\Course;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -11,25 +12,22 @@ class CourseController extends Controller
 {
     public function all()
     {
-        $courses = DB::table('courses')->get();
+        $courses = Course::with('category')->get();
 
         if ($courses->isEmpty()) {
             return response()->json([
                 'message' => 'Course not found',
             ], 404);
         } else {
-            // Mengubah setiap item kursus untuk menyertakan URL gambar
-            $courses = $courses->map(function ($course) {
-                $course->image_course = asset('storage/images/thumbnail_course/' . $course->image_course);
-                $course->certificate_course = asset('storage/images/certificate/' . $course->certificate_course);
-                return $course;
-            });
-
             return response()->json([
-                'courses' => $courses,
-            ], 200);
+                'message' => 'success',
+                'data' => [
+                    'courses' => $courses,
+                ],
+            ]);
         }
     }
+
 
     public function category()
     {

@@ -10,6 +10,7 @@ class Category extends Model
     use HasFactory;
 
     protected $guarded = [];
+    protected $hidden = ['created_at', 'updated_at'];
 
     // relasi
     public function courses()

@@ -8,10 +8,44 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Course extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     // fillabel
     protected $guarded = [];
+//    hidden
+    protected $hidden = ['created_at', 'updated_at', 'deleted_at','course_code','category_id','image_course','certificate_course'];
+//    append image and  certificate
+    protected $appends = ['thumbnail' ];
+
+    public function getPriceAttribute($value)
+    {
+        if ($this->is_paid == 0) {
+            return 'free';
+        }
+
+        return $value;
+    }
+
+//    jika discount ada maka tambahkan di belakangnya %
+    public function getDiscountAttribute($value)
+    {
+        if ($value) {
+            return $value . '%';
+        }
+    }
+
+
+
+
+    public function getThumbnailAttribute()
+    {
+        return url('storage/images/thumbnail_course/' . $this->image_course);
+    }
+
+    public function getCertificateAttribute()
+    {
+        return url('storage/images/certificate/' . $this->certificate_course);
+    }
 
     // relation
     public function category()

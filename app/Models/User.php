@@ -45,6 +45,8 @@ class User extends Authenticatable
         return $this->avatar ? asset('storage/images/avatar/' . $this->avatar) : asset('storage/images/avatar/default.png');
     }
 
+
+
     /**
      * The attributes that should be cast.
      *
