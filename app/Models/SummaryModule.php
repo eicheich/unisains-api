@@ -5,23 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Quiz extends Model
+class SummaryModule extends Model
 {
     use HasFactory;
+    protected $guarded = [];
 
-    protected $fillable = [
-        'course_id',
-        'title_quiz',
-    ];
+    protected $appends = ['video'];
 
-    protected $hidden = [
-        'created_at',
-        'updated_at',
-    ];
+    public function getVideoAttribute()
+    {
+        return asset('storage/video/rangkuman/'.$this->summary_video);
+    }
+
 
     public function courses()
     {
         return $this->belongsTo(Course::class);
     }
-
 }

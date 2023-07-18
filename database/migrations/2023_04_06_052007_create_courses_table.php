@@ -15,17 +15,14 @@ return new class extends Migration
             $table->id();
             $table->string('title_course');
             $table->string('image_course');
-            $table->string('certificate_course');
             $table->text('description');
             $table->foreignId('category_id')->constrained('categories');
-            $table->enum('is_paid', [0, 1])->nullable();
+            $table->enum('is_paid', [0, 1]);
             $table->integer('price')->nullable();
-            $table->integer('discount')->nullable();
-            $table->softDeletes();
             $table->timestamps();
             $table->string('course_code')->unique();
-            
-            
+
+
         });
     }
 

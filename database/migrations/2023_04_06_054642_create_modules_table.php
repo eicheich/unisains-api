@@ -17,9 +17,8 @@ return new class extends Migration
             $table->text('materi_module');
             $table->string('image_module');
             $table->string('description');
-            $table->foreignId('course_id')->constrained('courses');
+            $table->foreignId('course_id')->constrained('courses')->cascadeOnDelete();
             $table->timestamps();
-            $table->softDeletes();
 
 
         });
