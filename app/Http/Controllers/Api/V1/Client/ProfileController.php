@@ -14,20 +14,31 @@ class ProfileController extends Controller
     {
         $user = Auth::user();
         $my_course = DB::table('my_course')
-            ->join('courses', 'courseS.id', '=', 'my_course.course_id')
+            ->join('courses', 'courses.id', '=', 'my_course.course_id')
             ->where('my_course.user_id', $user->id)
             ->first();
+
         if ($my_course == null) {
-            return response()->json([
-                'user' => $user,
-                'message' => 'You have not purchased any course',
-            ], 200);
-        } else
-            return response()->json([
-                'user' => $user,
-                'my_course' => $my_course,
-            ], 200);
+            $response = [
+                'message' => "success",
+                'data' => [
+                    'user' => $user,
+                    'my_course' => 'You have not purchased any course',
+                ],
+            ];
+        } else {
+            $response = [
+                'message' => "success",
+                'data' => [
+                    'user' => $user,
+                    'my_course' => $my_course,
+                ],
+            ];
+        }
+
+        return response()->json($response, 200);
     }
+
 
     public function update(Request $request)
     {
@@ -54,8 +65,6 @@ class ProfileController extends Controller
             $avatar = $request->file('avatar');
             $avatar_name = time() . '.' . $avatar->getClientOriginalExtension();
             $avatar->move(public_path('storage/images/avatar'), $avatar_name);
-            // unlink if ld image exist
-
         } else {
             $avatar_name = $user->avatar;
         }
@@ -70,11 +79,13 @@ class ProfileController extends Controller
             DB::commit();
             return response()->json([
                 'message' => 'Profile updated successfully',
+                'data' => $user,
             ], 200);
         } catch (\Throwable $th) {
             DB::rollback();
             return response()->json([
                 'message' => 'Something went wrong',
+                'errors' => $th->getMessage(),
             ], 500);
         }
 

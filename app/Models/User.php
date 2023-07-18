@@ -32,7 +32,18 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'created_at',
+        'updated_at',
+        'avatar'
+
     ];
+
+    protected $appends = ['image'];
+
+    public function getImageAttribute()
+    {
+        return $this->avatar ? asset('storage/images/avatar/' . $this->avatar) : asset('storage/images/avatar/default.png');
+    }
 
     /**
      * The attributes that should be cast.
