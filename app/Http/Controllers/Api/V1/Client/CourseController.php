@@ -31,32 +31,28 @@ class CourseController extends Controller
 
     public function category()
     {
-        $anatomi = DB::table('courses')->where('category_id', 1)->get();
-        $astronomi = DB::table('courses')->where('category_id', 2)->get();
+        $anatomiCourses = Course::with('category')->where('category_id', 1)->get();
+        $astronomiCourses = Course::with('category')->where('category_id', 2)->get();
 
-        if ($anatomi->isEmpty() && $astronomi->isEmpty()) {
-            return response()->json([
-                'message' => 'Course not found',
-            ], 404);
-        } else {
-            // Mengubah setiap item kursus untuk menyertakan URL gambar
-            $anatomi = $anatomi->map(function ($course) {
-                $course->image_course = asset('storage/images/thumbnail_course/' . $course->image_course);
-                $course->certificate_course = asset('storage/images/certificate/' . $course->certificate_course);
-                return $course;
-            });
+        $categories = [
+            'anatomi' => $anatomiCourses,
+            'astronomi' => $astronomiCourses,
+        ];
 
-            $astronomi = $astronomi->map(function ($course) {
-                $course->image_course = asset('storage/images/thumbnail_course/' . $course->image_course);
-                $course->certificate_course = asset('storage/images/certificate/' . $course->certificate_course);
-                return $course;
-            });
+        $response = [];
 
-            return response()->json([
-                'anatomi' => $anatomi,
-                'astronomi' => $astronomi,
-            ], 200);
+        foreach ($categories as $categoryName => $courses) {
+            if ($courses->isEmpty()) {
+                $response[$categoryName] = 'Course not found';
+            } else {
+                $response[$categoryName] = $courses;
+            }
         }
+
+        return response()->json([
+            'message' => 'success',
+            'data' => $response,
+        ], 200);
     }
 
 
