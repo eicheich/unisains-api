@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Course;
+use App\Models\Quiz;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -63,11 +64,11 @@ class CourseController extends Controller
     public function show($id)
     {
         $course = Course::with('category')->find($id);
-        $quiz = DB::table('quizzes')->where('course_id', $id)->get();
+        $quiz = Quiz::with('questions')->where('course_id', $id)->get();
         $modules = DB::table('modules')->where('course_id', $id)->get();
-        $module_rangkuman = DB::table('module_rangkuman')->where('course_id', $id)->get();
+        $summary_modules = DB::table('summary_modules')->where('course_id', $id)->get();
         $ar = DB::table('augmented_realities')->where('course_id', $id)->get();
-        return view('admin.course.show', compact('course', 'modules', 'module_rangkuman', 'ar', 'quiz'));
+        return view('admin.course.show', compact('course', 'modules', 'summary_modules', 'ar', 'quiz'));
     }
     public function updatePage($id)
     {
