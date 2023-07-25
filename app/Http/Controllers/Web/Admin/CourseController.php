@@ -84,7 +84,6 @@ class CourseController extends Controller
             'description' => 'required',
             'is_paid' => 'required|boolean',
             'category_id' => 'required|integer',
-            'certificate_course' => 'nullable|file|mimes:pdf,jpeg,png   ',
             'image_course' => 'nullable|file|mimes:jpeg,png',
         ]);
 
@@ -104,37 +103,14 @@ class CourseController extends Controller
         } else {
             $image_name = $course->image_course;
         }
-
-
-        $certificate = $request->file('certificate_course');
-        if ($request->hasFile('certificate_course')) {
-            $old_image = public_path('storage/images/certificate/') . $course->certificate_course;
-            if (file_exists($old_image)) {
-                unlink($old_image);
-            }
-            $certificate = $request->file('certificate_course');
-            $certificate_name = time() . '.' . $certificate->getClientOriginalExtension();
-            $certificate->move(public_path('storage/images/certificate'), $certificate_name);
-        } else {
-            $certificate_name = $course->certificate_course;
-        }
-
         $course->update([
             'title_course' => $request->title_course,
             'description' => $request->description,
             'is_paid' => $request->is_paid,
-            'certificate_course' => $certificate_name,
             'image_course' => $image_name,
             'category_id' => $request->category_id,
         ]);
-        if ($request->is_paid == 1 && $request->discount !== null) {
-            $price = $request->price;
-            $discount = $request->discount;
-            DB::table('courses')->where('id', $course->id)->update([
-                'price' => $price,
-                'discount' => $discount,
-            ]);
-        } elseif ($request->is_paid == 1 && $request->discount == null) {
+ if ($request->is_paid == 1 && $request->discount == null) {
             $price = $request->price;
             DB::table('courses')->where('id', $course->id)->update([
                 'price' => $price,
@@ -147,7 +123,7 @@ class CourseController extends Controller
     {
         $course = Course::findOrFail($id);
         $module = DB::table('modules')->where('course_id', $id)->get();
-        $module_rangkuman = DB::table('module_rangkuman')->where('course_id', $id)->get();
+        $module_rangkuman = DB::table('summary_modules')->where('course_id', $id)->get();
         $quiz = DB::table('quizzes')->where('course_id', $id)->get();
         $ar = DB::table('augmented_realities')->where('course_id', $id)->get();
 
@@ -155,7 +131,7 @@ class CourseController extends Controller
             DB::beginTransaction();
 
             DB::table('modules')->where('course_id', $id)->delete();
-            DB::table('module_rangkuman')->where('course_id', $id)->delete();
+            DB::table('summary_modules')->where('course_id', $id)->delete();
 
             // Menghapus kuis
             DB::table('quizzes')->where('course_id', $id)->delete();

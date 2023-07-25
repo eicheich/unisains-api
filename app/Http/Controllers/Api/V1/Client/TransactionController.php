@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\Transaction;
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
 use Illuminate\Http\Request;
@@ -102,18 +103,27 @@ class TransactionController extends Controller
         $user = Auth::user();
 
         // check if transaction exists
-        $transaction = DB::table('transactions')->where('user_id', $user->id)->get();
-        if ($transaction->count() == 0) {
+        $transactions = Transaction::with('course')->where('user_id', $user->id)->get();
+
+        if ($transactions->count() == 0) {
             return response()->json([
-                'message' => 'transaction not found',
+                'message' => 'transactions not found',
             ], 404);
         }
 
-        $transactions = DB::table('transactions')
-            ->join('courses', 'transactions.course_id', '=', 'courses.id')
-            ->select('transactions.*', 'courses.title_course', 'courses.image_course', 'courses.price', 'courses.is_paid', 'courses.description')
-            ->where('transactions.user_id', $user->id)
-            ->get();
+        return response()->json([
+            'message' => 'success',
+            'data' => [
+                'transactions' => $transactions,
+            ],
+        ], 200);
+
+
+//        $transactions = DB::table('transactions')
+//            ->join('courses', 'transactions.course_id', '=', 'courses.id')
+//            ->select('transactions.*', 'courses.title_course', 'courses.image_course', 'courses.price', 'courses.is_paid', 'courses.description')
+//            ->where('transactions.user_id', $user->id)
+//            ->get();
 
 //        $currentTime = Carbon::now();
 //
@@ -139,12 +149,5 @@ class TransactionController extends Controller
 //            }
 //        }
 
-         return response()->json([
-            'message' => 'success',
-            'data' => [
-                'transactions' => $transactions,
-
-            ],
-        ], 200);
     }
 }
