@@ -46,6 +46,21 @@ class TeacherController extends Controller
                 'error' => $e->getMessage(),
             ], 401);
         }
+    }
+
+    public function logout()
+    {
+        try {
+            auth()->user()->tokens()->delete();
+            return response()->json([
+                'message' => 'success',
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'failed',
+                'error' => $e->getMessage(),
+            ], 401);
+        }
 
     }
 }
