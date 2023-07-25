@@ -135,16 +135,16 @@
                 @else
                     @foreach ($summary_modules as $mr)
                         <div class="card">
-                            <p>{{ $mr->isi_rangkuman }}</p>
+                            <p>{{ $mr->summary }}</p>
                             <video controls>
-                                <source src="{{ asset('storage/video/rangkuman/' . $mr->video_rangkuman) }}"
+                                <source src="{{ asset('storage/video/rangkuman/' . $mr->summary_video) }}"
                                         type="video/mp4">
-                                <source src="{{ asset('storage/video/rangkuman/' . $mr->video_rangkuman) }}"
+                                <source src="{{ asset('storage/video/rangkuman/' . $mr->summary_video) }}"
                                         type="video/webm">
-                                <source src="{{ asset('storage/video/rangkuman/' . $mr->video_rangkuman) }}"
+                                <source src="{{ asset('storage/video/rangkuman/' . $mr->summary_video) }}"
                                         type="video/ogg">
                                 Your browser does not support the video tag. You can <a
-                                    href="{{ asset('storage/video/rangkuman/' . $mr->video_rangkuman) }}">download the
+                                    href="{{ asset('storage/video/rangkuman/' . $mr->summary_video) }}">download the
                                     video</a>
                                 instead.
                             </video>
@@ -198,7 +198,7 @@
                             @endforeach
                         </div>
                     </div>
-                    <button id="add-ar-btn" class="btn btn-sm btn-outline-secondary" data-toggle="modal"
+                    <button id="add-ar-btn" class="btn btn-sm btn-outline-secondary mt-4" data-toggle="modal"
                             data-target="#add-ar-modal">Tambah AR
                     </button>
                 @endif
