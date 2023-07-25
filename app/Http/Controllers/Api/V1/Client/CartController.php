@@ -24,14 +24,15 @@ class CartController extends Controller
             ], 422);
         } else
             try {
-                DB::beginTransaction();
-                $cart = DB::table('carts')->insert([
+                $cart = Cart::create([
                     'user_id' => $user->id,
                     'course_id' => $request->course_id,
                 ]);
-                DB::commit();
                 return response()->json([
-                    'message' => 'Course added to cart',
+                    'message' => 'success',
+                    'data' => [
+                        'cart' => $cart
+                    ]
                 ], 200);
             } catch (\Throwable $th) {
                 DB::rollback();
