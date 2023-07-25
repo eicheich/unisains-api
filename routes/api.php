@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\Client\CartController;
 use App\Http\Controllers\Api\V1\Client\ProfileController;
 use App\Http\Controllers\Api\V1\Client\TransactionController;
+use App\Http\Controllers\Api\V1\TeacherController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -71,5 +72,8 @@ Route::prefix('v1')->group(function () {
         Route::get('show/{id}', [TransactionController::class, 'show']);
         Route::post('update/{id}', [TransactionController::class, 'update']);
         Route::post('delete/{id}', [TransactionController::class, 'delete']);
+    });
+    Route::prefix('teacher')->group(function (){
+        Route::post('login', [TeacherController::class, 'login']);
     });
 });
