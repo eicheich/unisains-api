@@ -43,7 +43,7 @@ class TransactionController extends Controller
                     'course_id' => $request->course_id,
                     'status' => 'pending',
                     'code_transaction' => 'TRU' . time(),
-                    'total_price' => null,
+                    'total_price' => 0,
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now(),
                 ]);
@@ -57,7 +57,7 @@ class TransactionController extends Controller
                     'status', $th->getMessage()
                 ], 500);
             }
-        } elseif ($course->is_paid == 1 && $course->discount == null) {
+        } elseif ($course->is_paid == 1 ) {
             try {
                 DB::beginTransaction();
                 $transaction = DB::table('transactions')->insert([
@@ -76,35 +76,7 @@ class TransactionController extends Controller
             } catch (\Throwable $th) {
                 DB::rollBack();
                 return response()->json([
-                    'status', $th->getMessage()
-                ], 500);
-            }
-        } else {
-            $price_after_discount = $course->price - ($course->price * $course->discount / 100);
-            try {
-                DB::beginTransaction();
-                $transaction = DB::table('transactions')->insert([
-                    'user_id' => $user->id,
-                    'course_id' => $request->course_id,
-                    'status' => 'pending',
-                    'code_transaction' => 'TRU' . time(),
-                    'total_price' => $price_after_discount,
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now(),
-                ]);
-                DB::commit();
-                return response()->json([
-                    'message' => 'Transaction added',
-                ], 201);
-            } catch (\Throwable $th) {
-                DB::rollBack();
-                return response()->json([
-                    'status', $th->getMessage()
-                ], 500);
-            } catch (\Throwable $th) {
-                DB::rollBack();
-                return response()->json([
-                    'status', $th->getMessage()
+                    'message', $th->getMessage()
                 ], 500);
             }
         }
