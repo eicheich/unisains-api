@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('roadmaps', function (Blueprint $table) {
+        Schema::create('summary_modules', function (Blueprint $table) {
             $table->id();
-            $table->string('image_roadmap');
+            $table->foreignId('course_id')->constrained('courses')->cascadeOnDelete();
+            $table->text('summary');
+            $table->string('summary_video');
             $table->timestamps();
         });
     }
@@ -23,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('roadmaps');
+        Schema::dropIfExists('summary_modules');
     }
 };

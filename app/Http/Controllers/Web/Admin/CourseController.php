@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Course;
+use App\Models\Quiz;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -19,51 +20,42 @@ class CourseController extends Controller
     }
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $request->validate([
             'title_course' => 'required',
             'description' => 'required',
             'is_paid' => 'required|boolean',
             'category_id' => 'required|integer',
-            'certificate_course' => 'required|file|mimes:pdf,jpeg,png',
             'image_course' => 'required|file|mimes:jpeg,png',
+            'price' => 'nullable|required_if:is_paid,1|numeric',
         ]);
-        if ($validator->fails()) {
-            return redirect()->back()->with('status', $validator->errors());
-        }
 
-        $certificate = $request->file('certificate_course');
-        $certificate_name = time() . '.' . $certificate->getClientOriginalExtension();
-        $certificate->move(public_path('storage/images/certificate'), $certificate_name);
+        $image_name = $this->uploadImage($request->file('image_course'));
 
-        $image = $request->file('image_course');
-        $image_name = time() . '.' . $image->getClientOriginalExtension();
-        $image->move(public_path('storage/images/thumbnail_course'), $image_name);
-        $course = Course::create([
+        $courseData = [
             'title_course' => $request->title_course,
             'description' => $request->description,
             'is_paid' => $request->is_paid,
-            'certificate_course' => $certificate_name,
             'image_course' => $image_name,
             'category_id' => $request->category_id,
             'course_code' => 'UNI' . rand(1000, 9999),
-        ]);
+        ];
 
-        if ($request->is_paid == 1 && $request->discount !== null) {
-            $price = $request->price;
-            $discount = $request->discount;
-            DB::table('courses')->where('id', $course->id)->update([
-                'price' => $price,
-                'discount' => $discount,
-            ]);
-        } elseif ($request->is_paid == 1 && $request->discount == null) {
-            $price = $request->price;
-            DB::table('courses')->where('id', $course->id)->update([
-                'price' => $price,
-            ]);
+        if ($request->is_paid == 1) {
+            $courseData['price'] = $request->price;
         }
 
-        return redirect()->route('course.page')->with('success', 'course telah di tambahkan');
+        Course::create($courseData);
+
+        return redirect()->route('course.page')->with('success', 'Course telah ditambahkan');
     }
+
+    private function uploadImage($image)
+    {
+        $image_name = time() . '.' . $image->getClientOriginalExtension();
+        $image->move(public_path('storage/images/thumbnail_course'), $image_name);
+        return $image_name;
+    }
+
     public function all()
     {
         $courses = Course::with('category')->paginate(9);
@@ -72,11 +64,11 @@ class CourseController extends Controller
     public function show($id)
     {
         $course = Course::with('category')->find($id);
-        $quiz = DB::table('quizzes')->where('course_id', $id)->get();
+        $quiz = Quiz::with('questions')->where('course_id', $id)->get();
         $modules = DB::table('modules')->where('course_id', $id)->get();
-        $module_rangkuman = DB::table('module_rangkuman')->where('course_id', $id)->get();
+        $summary_modules = DB::table('summary_modules')->where('course_id', $id)->get();
         $ar = DB::table('augmented_realities')->where('course_id', $id)->get();
-        return view('admin.course.show', compact('course', 'modules', 'module_rangkuman', 'ar', 'quiz'));
+        return view('admin.course.show', compact('course', 'modules', 'summary_modules', 'ar', 'quiz'));
     }
     public function updatePage($id)
     {
