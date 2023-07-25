@@ -84,7 +84,11 @@ class Course extends Model
     public function transactions()
     {
         return $this->hasMany(Transaction::class);
+    }
 
+    public function myCourses()
+    {
+        return $this->hasMany(MyCourse::class);
     }
 
 

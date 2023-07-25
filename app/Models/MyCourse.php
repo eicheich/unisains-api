@@ -10,11 +10,16 @@ class MyCourse extends Model
     use HasFactory;
     protected $guarded = [];
     protected $hidden = ['created_at', 'updated_at'];
-    protected $appends = ['course', ];
+//    protected $appends = ['course', ];
 
     public function getCourseAttribute()
     {
         return Course::find($this->course_id);
+    }
+
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
     }
 
 

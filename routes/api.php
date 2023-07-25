@@ -62,6 +62,9 @@ Route::prefix('v1')->group(function () {
                 Route::get('all', [CartController::class, 'all']);
                 Route::post('delete/{id}', [CartController::class, 'delete']);
             });
+//            trxquiz
+            Route::post('trx-quiz', [CourseController::class, 'trxquiz']);
+
         });
     });
     Route::prefix('profile')->middleware('auth:sanctum')->group(function () {

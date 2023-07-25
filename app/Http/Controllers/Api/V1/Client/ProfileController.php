@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\MyCourse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -13,10 +14,9 @@ class ProfileController extends Controller
     public function show()
     {
         $user = Auth::user();
-        $my_course = DB::table('my_course')
-            ->join('courses', 'courses.id', '=', 'my_course.course_id')
-            ->where('my_course.user_id', $user->id)
-            ->first();
+        $my_course = MyCourse::with('course')
+            ->where('user_id', Auth::id())
+            ->get();
 
         if ($my_course == null) {
             $response = [

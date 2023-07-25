@@ -135,4 +135,8 @@ class CourseController extends Controller
             ], 200);
         }
     }
+
+    public function trxquiz(Request $request)
+    {
+    }
 }
