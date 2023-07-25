@@ -74,7 +74,7 @@ class CourseController extends Controller
     public function show($id)
     {
         $course = Course::with(['category', 'rates','modules' => function ($query) {
-            $query->select('course_id', 'title_module', 'description');
+            $query->select('course_id', 'title_module', 'description','image_module');
         }])->find($id);
 
 
