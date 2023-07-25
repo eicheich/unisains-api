@@ -43,7 +43,7 @@ class TransactionController extends Controller
                     'course_id' => $request->course_id,
                     'status' => 'pending',
                     'code_transaction' => 'TRU' . time(),
-                    'total_price' => null,
+                    'total_price' => 0,
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now(),
                 ]);
@@ -57,7 +57,7 @@ class TransactionController extends Controller
                     'status', $th->getMessage()
                 ], 500);
             }
-        } elseif ($course->is_paid == 1 && $course->discount == null) {
+        } elseif ($course->is_paid == 1 ) {
             try {
                 DB::beginTransaction();
                 $transaction = DB::table('transactions')->insert([
@@ -76,35 +76,7 @@ class TransactionController extends Controller
             } catch (\Throwable $th) {
                 DB::rollBack();
                 return response()->json([
-                    'status', $th->getMessage()
-                ], 500);
-            }
-        } else {
-            $price_after_discount = $course->price - ($course->price * $course->discount / 100);
-            try {
-                DB::beginTransaction();
-                $transaction = DB::table('transactions')->insert([
-                    'user_id' => $user->id,
-                    'course_id' => $request->course_id,
-                    'status' => 'pending',
-                    'code_transaction' => 'TRU' . time(),
-                    'total_price' => $price_after_discount,
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now(),
-                ]);
-                DB::commit();
-                return response()->json([
-                    'message' => 'Transaction added',
-                ], 201);
-            } catch (\Throwable $th) {
-                DB::rollBack();
-                return response()->json([
-                    'status', $th->getMessage()
-                ], 500);
-            } catch (\Throwable $th) {
-                DB::rollBack();
-                return response()->json([
-                    'status', $th->getMessage()
+                    'message', $th->getMessage()
                 ], 500);
             }
         }
@@ -133,7 +105,7 @@ class TransactionController extends Controller
         $transaction = DB::table('transactions')->where('user_id', $user->id)->get();
         if ($transaction->count() == 0) {
             return response()->json([
-                'message' => 'Transaction not found',
+                'message' => 'transaction not found',
             ], 404);
         }
 
@@ -143,34 +115,36 @@ class TransactionController extends Controller
             ->where('transactions.user_id', $user->id)
             ->get();
 
-        $currentTime = Carbon::now();
-
-        // Calculate the remaining time for each pending transaction
-        foreach ($transactions as $transaction) {
-            if ($transaction->status == 'pending') {
-                $createdAt = Carbon::parse($transaction->created_at);
-                $dueTime = $createdAt->addDay();
-
-                if ($dueTime > $currentTime) {
-                    $remainingTime = $dueTime->diffForHumans($currentTime, [
-                        'syntax' => CarbonInterface::DIFF_ABSOLUTE,
-                        'parts' => 2,
-                    ]);
-                } else {
-                    $remainingTime = 'Expired';
-                    DB::table('transactions')->where('id', $transaction->id)->update([
-                        'status' => 'failed',
-                        'updated_at' => Carbon::now(),
-                    ]);
-                }
-
-                $transaction->remaining_time = $remainingTime;
-            }
-        }
+//        $currentTime = Carbon::now();
+//
+//        // Calculate the remaining time for each pending transaction
+//        foreach ($transactions as $transaction) {
+//            if ($transaction->status == 'pending') {
+//                $createdAt = Carbon::parse($transaction->created_at);
+//                $dueTime = $createdAt->addDay();
+//
+//                if ($dueTime > $currentTime) {
+//                    $remainingTime = $dueTime->diffForHumans($currentTime, [
+//                        'syntax' => CarbonInterface::DIFF_ABSOLUTE,
+//                        'parts' => 2,
+//                    ]);
+//                } else {
+//                    $remainingTime = 'Expired';
+//                    DB::table('transactions')->where('id', $transaction->id)->update([
+//                        'status' => 'failed',
+//                        'updated_at' => Carbon::now(),
+//                    ]);
+//                }
+//                $transaction->remaining_time = $remainingTime;
+//            }
+//        }
 
          return response()->json([
-            'message' => 'Success',
-            'data' => $transactions,
+            'message' => 'success',
+            'data' => [
+                'transactions' => $transactions,
+
+            ],
         ], 200);
     }
 }
