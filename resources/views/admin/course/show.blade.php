@@ -17,8 +17,7 @@
                     <p>Harga : Rp. {{ $course->price }}</p>
                 @endif
                 <p>Kategori : {{ $course->category->name_category }}</p>
-                <h3>Deskripsi Kursus</h3>
-                <p>{{ $course->description }}</p>
+                <p>Deskripsi : {{ $course->description }}</p>
                 <h3>Modul</h3>
                 <ul>
                     @if ($modules->isEmpty())
@@ -26,7 +25,7 @@
                     @else
                         @foreach ($modules as $m)
                             <div id="accordion">
-                                <div class="card mt-5">
+                                <div class="card">
                                     <div class="coll-show" id="heading{{ $m->id }}">
                                         <h5 class="mb-0">
                                             <button class="btn-coll" data-toggle="collapse"
@@ -71,7 +70,7 @@
                             </div>
                         @endforeach
                     @endif
-                    <button id="add-module-btn" class="btn btn-sm btn-outline-secondary" data-toggle="modal"
+                    <button id="add-module-btn" class="btn btn-sm btn-outline-secondary mt-3" data-toggle="modal"
                             data-target="#add-module-modal">Tambah Modul
                     </button>
                     <div class="modal fade" id="add-module-modal" tabindex="-1" role="dialog"
