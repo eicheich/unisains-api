@@ -12,7 +12,8 @@ class UserController extends Controller
     {
         $users = DB::table('users')->where('role', 'user')->paginate(10);
         $admin = DB::table('users')->where('role', 'admin')->paginate(10);
-        return view('admin.user.all', compact('users', 'admin'));
+        $teacher = DB::table('users')->where('role', 'teacher')->paginate(10);
+        return view('admin.user.all', compact('users', 'admin','teacher'));
     }
 
     public function delete($id)
