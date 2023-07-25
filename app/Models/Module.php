@@ -15,7 +15,7 @@ class Module extends Model
 
     public function getImageModuleAttribute()
     {
-        return url('storage/images/module/' . $this->image);
+        return url('storage/images/module/' . $this->image_module);
     }
 
     public function course()
