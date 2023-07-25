@@ -11,11 +11,11 @@ class Module extends Model
 
     protected $guarded =[];
     protected $hidden = ['created_at', 'updated_at', 'course_id'];
-    protected $appends = ['image_module'];
+    protected $appends = ['thumbnail_module'];
 
-    public function getImageModuleAttribute()
+    public function getThumbnailModuleAttribute()
     {
-        return url('storage/images/module/' . $this->image_module);
+        return url('storage/images/thumbnail_module/' . $this->thumbnail);
     }
 
     public function course()
