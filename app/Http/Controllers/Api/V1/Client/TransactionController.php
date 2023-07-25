@@ -105,7 +105,7 @@ class TransactionController extends Controller
         $transaction = DB::table('transactions')->where('user_id', $user->id)->get();
         if ($transaction->count() == 0) {
             return response()->json([
-                'message' => 'Transaction not found',
+                'message' => 'transaction not found',
             ], 404);
         }
 
@@ -115,34 +115,36 @@ class TransactionController extends Controller
             ->where('transactions.user_id', $user->id)
             ->get();
 
-        $currentTime = Carbon::now();
-
-        // Calculate the remaining time for each pending transaction
-        foreach ($transactions as $transaction) {
-            if ($transaction->status == 'pending') {
-                $createdAt = Carbon::parse($transaction->created_at);
-                $dueTime = $createdAt->addDay();
-
-                if ($dueTime > $currentTime) {
-                    $remainingTime = $dueTime->diffForHumans($currentTime, [
-                        'syntax' => CarbonInterface::DIFF_ABSOLUTE,
-                        'parts' => 2,
-                    ]);
-                } else {
-                    $remainingTime = 'Expired';
-                    DB::table('transactions')->where('id', $transaction->id)->update([
-                        'status' => 'failed',
-                        'updated_at' => Carbon::now(),
-                    ]);
-                }
-
-                $transaction->remaining_time = $remainingTime;
-            }
-        }
+//        $currentTime = Carbon::now();
+//
+//        // Calculate the remaining time for each pending transaction
+//        foreach ($transactions as $transaction) {
+//            if ($transaction->status == 'pending') {
+//                $createdAt = Carbon::parse($transaction->created_at);
+//                $dueTime = $createdAt->addDay();
+//
+//                if ($dueTime > $currentTime) {
+//                    $remainingTime = $dueTime->diffForHumans($currentTime, [
+//                        'syntax' => CarbonInterface::DIFF_ABSOLUTE,
+//                        'parts' => 2,
+//                    ]);
+//                } else {
+//                    $remainingTime = 'Expired';
+//                    DB::table('transactions')->where('id', $transaction->id)->update([
+//                        'status' => 'failed',
+//                        'updated_at' => Carbon::now(),
+//                    ]);
+//                }
+//                $transaction->remaining_time = $remainingTime;
+//            }
+//        }
 
          return response()->json([
-            'message' => 'Success',
-            'data' => $transactions,
+            'message' => 'success',
+            'data' => [
+                'transactions' => $transactions,
+
+            ],
         ], 200);
     }
 }
