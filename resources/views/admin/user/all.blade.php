@@ -12,11 +12,11 @@
             </div>
         </div>
     </div>
-    {{-- @if ($users->isEmpty())
+    @if ($users->isEmpty())
         <div class="alert alert-danger text-light" role="alert">
             Data Pengguna Kosong
         </div>
-    @else --}}
+    @else
         <style>
             .search-container {
                 display: flex;
@@ -200,10 +200,83 @@
                             </div>
                         </div>
                     </div>
-
-
                 </div>
             </div>
+        <div class="container mt-5">
+            <h4 class="mt-3">Teacher</h4>
+            <div class="table-responsive text-center">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama Pengguna</th>
+                        <th>Email</th>
+                        <th>Nama Depan</th>
+                        <th>Nama Belakang</th>
+                        <th>Aksi</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach ($teacher as $index => $user)
+                        <tr>
+                            <td>{{ $index + 1 }}</td>
+                            <td>{{ $user->username }}</td>
+                            <td>{{ $user->email }}</td>
+                            <td>{{ $user->first_name }}</td>
+                            <td>{{ $user->last_name }}</td>
+                            <td style="vertical-align: middle; text-align: center;">
+                                <div class="d-flex justify-content-center">
+                                    <div class="btn-group" role="group">
+                                        <form action="{{ route('update.course.page', $user->id) }}" method="GET">
+                                            @csrf
+                                            <button class="btn btn-sm btn-warning mx-1" type="submit">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </form>
+                                        <form action="{{ route('course.show', $user->id) }}" method="GET">
+                                            @csrf
+                                            <button class="btn btn-sm btn-primary mx-1" type="submit">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </form>
+                                        <form action="{{route('delete.users', $user->id)}}" method="post" id="deleteForm">
+                                            @csrf
+                                            <button class="btn btn-sm btn-danger mx-1"
+                                                    onclick="confirmDelete(event)" id="submit-delete" type="button">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+                <div class="d-flex justify-content-between align-items-center pt-5">
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-group me-2">
+                            <a href="{{ $users->previousPageUrl() }}" class="btn btn-sm btn-primary">Previous</a>
+                        </div>
+                    </div>
+
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-group me-2">
+                            <p class="page-info">{{ $users->currentPage() }}</p>
+                        </div>
+                    </div>
+
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <div class="btn-group me-2">
+                            <a href="{{ $users->nextPageUrl() }}" class="btn btn-sm btn-primary">Next</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
             {{-- </div> --}}
             <style>
                 .form-control {
@@ -231,5 +304,5 @@
                     }
                 }
             </script>
-    {{-- @endif --}}
+     @endif
 @endsection
