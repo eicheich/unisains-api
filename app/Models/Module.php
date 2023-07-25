@@ -11,7 +11,7 @@ class Module extends Model
 
     protected $guarded =[];
     protected $hidden = ['created_at', 'updated_at', 'course_id'];
-    protected $appends = ['image_module'];
+    protected $appends = ['thumbnail_module'];
 
     public function getImageModuleAttribute()
     {
