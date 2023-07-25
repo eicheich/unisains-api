@@ -123,7 +123,7 @@ class CourseController extends Controller
     {
         $course = Course::findOrFail($id);
         $module = DB::table('modules')->where('course_id', $id)->get();
-        $module_rangkuman = DB::table('module_rangkuman')->where('course_id', $id)->get();
+        $module_rangkuman = DB::table('summary_modules')->where('course_id', $id)->get();
         $quiz = DB::table('quizzes')->where('course_id', $id)->get();
         $ar = DB::table('augmented_realities')->where('course_id', $id)->get();
 
@@ -131,7 +131,7 @@ class CourseController extends Controller
             DB::beginTransaction();
 
             DB::table('modules')->where('course_id', $id)->delete();
-            DB::table('module_rangkuman')->where('course_id', $id)->delete();
+            DB::table('summary_modules')->where('course_id', $id)->delete();
 
             // Menghapus kuis
             DB::table('quizzes')->where('course_id', $id)->delete();

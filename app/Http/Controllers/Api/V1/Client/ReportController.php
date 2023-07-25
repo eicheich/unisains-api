@@ -35,7 +35,8 @@ class ReportController extends Controller
             ]);
             DB::commit();
             return response()->json([
-                'message' => 'Report added',
+                'message' => 'success',
+                'data' => $report,
             ], 201);
         } catch (\Throwable $th) {
             DB::rollBack();
@@ -43,15 +44,15 @@ class ReportController extends Controller
                 'status', $th->getMessage()
             ], 500);
         }
-        
+
     }
     public function all() {
         $report = DB::table('reports')->get();
         return response()->json([
-            'message' => 'Success',
+            'message' => 'success',
             'data' => $report,
         ], 200);
-        
+
     }
 
 }
