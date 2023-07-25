@@ -30,7 +30,7 @@ class TeacherController extends Controller
             $user = auth()->user();
             if ($user->role != 'teacher') {
                 return response()->json([
-                    'message' => 'Unauthorized',
+                    'message' => 'Unauthorized, or you are not a teacher'
                 ], 401);
             }
             $token = $user->createToken('authToken')->plainTextToken;
