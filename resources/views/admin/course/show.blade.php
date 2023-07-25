@@ -238,48 +238,49 @@
                         </div>
                     </div>
                 </div>
-{{--                <h3 class="mt-5">Soal Kursus</h3>--}}
-{{--                @if ($quiz->isEmpty())--}}
-{{--                    <p>Belum ada soal kursus</p>--}}
-{{--                    <button id="add-ar-btn" class="btn btn-sm btn-outline-secondary mt-5" data-toggle="modal"--}}
-{{--                            data-target="#add-quiz-modal">Tambah Soal--}}
-{{--                    </button>--}}
-{{--                @else--}}
-{{--                    <div class="container">--}}
-{{--                        <table id="quizTable" class="table table-striped text-center">--}}
-{{--                            <thead>--}}
-{{--                            <tr>--}}
-{{--                                <th>No</th>--}}
-{{--                                <th>Soal</th>--}}
-{{--                                <th>Jawaban</th>--}}
-{{--                                <th>Actions</th>--}}
-{{--                            </tr>--}}
-{{--                            </thead>--}}
-{{--                            <tbody>--}}
-{{--                            @foreach ($quiz as $index => $quiz)--}}
-{{--                                <tr>--}}
-{{--                                    <td>{{ $index + 1 }}</td>--}}
-{{--                                    <td>{{ $quiz->soal }}</td>--}}
-{{--                                    <td>{{ $quiz->jawaban }}</td>--}}
-{{--                                    <td>--}}
-{{--                                        <a href="{{ route('update.quiz.page', $quiz->id) }}"--}}
-{{--                                           class="btn btn-primary">Edit</a>--}}
-{{--                                        <form action="{{ route('delete.quiz', $quiz->id) }}" method="post"--}}
-{{--                                              style="display: inline;">--}}
-{{--                                            @csrf--}}
-{{--                                            <button type="submit" class="btn btn-danger">Hapus Soal</button>--}}
-{{--                                        </form>--}}
-{{--                                    </td>--}}
-{{--                                </tr>--}}
-{{--                            @endforeach--}}
-{{--                            </tbody>--}}
-{{--                        </table>--}}
-{{--                    </div>--}}
-{{--                    <button id="add-ar-btn" class="btn btn-sm btn-outline-secondary mt-5" data-toggle="modal"--}}
-{{--                            data-target="#add-quiz-modal">Tambah Soal--}}
-{{--                    </button>--}}
-{{--                @endif--}}
-                @include('admin.course.partials.modalQuiz')
+                <h3 class="mt-5">Soal Kursus</h3>
+                @if ($quiz->isEmpty())
+                    <p>Belum ada soal kursus</p>
+                    <button id="add-ar-btn" class="btn btn-sm btn-outline-secondary mt-5" data-toggle="modal"
+                            data-target="#add-quiz-modal">Tambah Soal
+                    </button>
+                @else
+                    <div class="container">
+                        <table id="quizTable" class="table table-striped text-center">
+                            <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Soal</th>
+                                <th>Jawaban</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach ($quiz as $index => $quizItem)
+                                @foreach ($quizItem->questions as $question)
+                                    <tr>
+                                    <td>{{ $question->id }}</td>
+                                    <td>{{ $question->question }}</td>
+                                    <td>{{ $question->answer }}</td>
+                                    <td>
+
+                                        <a href="{{ route('update.quiz.page', $quizItem->id) }}" class="btn btn-primary">Lihat soal</a>
+                                        <form action="{{ route('delete.quiz', $quizItem->id) }}" method="post" style="display: inline;">
+                                            @csrf
+                                            <button type="submit" class="btn btn-danger">Hapus Soal</button>
+                                        </form>
+                                    </td>
+                                    </tr>
+                                @endforeach
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <button id="add-ar-btn" class="btn btn-sm btn-outline-secondary mt-5" data-toggle="modal"
+                            data-target="#add-quiz-modal">Tambah Soal
+                    </button>
+                @endif
+                @include('admin.course.partials.modalGroupQuiz')
             </div>
         </div>
     </div>
