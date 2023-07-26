@@ -64,7 +64,8 @@ Route::prefix('v1')->group(function () {
             });
 //            trxquiz
             Route::post('trx-quiz', [CourseController::class, 'trxquiz']);
-
+//            rate
+            Route::post('rate', [CourseController::class, 'rate']);
         });
     });
     Route::prefix('profile')->middleware('auth:sanctum')->group(function () {
