@@ -10,7 +10,7 @@ class MyCourse extends Model
     use HasFactory;
     protected $guarded = [];
     protected $hidden = ['created_at', 'updated_at'];
-//    protected $appends = ['course', ];
+    protected $appends = ['is_done'];
 
     public function getCourseAttribute()
     {
@@ -20,6 +20,20 @@ class MyCourse extends Model
     public function course()
     {
         return $this->belongsTo(Course::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function getIsDoneAttribute()
+    {
+        if ($this->attributes['is_done'] == 0) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
 

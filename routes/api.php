@@ -55,16 +55,14 @@ Route::prefix('v1')->group(function () {
         Route::get('preview/{id}', [CourseController::class, 'preview']);
         Route::get('search', [CourseController::class, 'search']);
         Route::middleware('auth:sanctum')->group(function () {
-            Route::get('learn/{id}', [CourseController::class, 'learn']);
+            Route::get('learn/{id}', [CourseController::class, 'learn'])->middleware('isBought');
             Route::get('show/{id}', [CourseController::class, 'show']);
             Route::prefix('cart')->group(function () {
                 Route::post('store', [CartController::class, 'store']);
                 Route::get('all', [CartController::class, 'all']);
                 Route::post('delete/{id}', [CartController::class, 'delete']);
             });
-//            trxquiz
             Route::post('trx-quiz', [CourseController::class, 'trxquiz']);
-//            rate
             Route::post('rate', [CourseController::class, 'rate']);
         });
     });
