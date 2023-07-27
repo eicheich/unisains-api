@@ -47,7 +47,7 @@ class ProfileController extends Controller
             'first_name' => 'required|string',
             'last_name' => 'required|string',
             'username' => 'required',
-            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,svg',
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -56,15 +56,15 @@ class ProfileController extends Controller
             ], 422);
         }
         if ($request->hasFile('avatar')) {
-            if ($user->avatar != null) {
-                $old_avatar = public_path('storage/images/avatar') . '/' . $user->avatar;
+            if ($user->avatar !== 'default.png') {
+                $old_avatar = public_path('storage/images/avatar/') . $user->avatar;
                 if (file_exists($old_avatar)) {
                     unlink($old_avatar);
                 }
             }
             $avatar = $request->file('avatar');
             $avatar_name = time() . '.' . $avatar->getClientOriginalExtension();
-            $avatar->move(public_path('storage/images/avatar'), $avatar_name);
+            $avatar->move(public_path('storage/images/avatar/'), $avatar_name);
         } else {
             $avatar_name = $user->avatar;
         }
@@ -78,7 +78,7 @@ class ProfileController extends Controller
             ]);
             DB::commit();
             return response()->json([
-                'message' => 'Profile updated successfully',
+                'message' => 'success',
                 'data' => $user,
             ], 200);
         } catch (\Throwable $th) {
