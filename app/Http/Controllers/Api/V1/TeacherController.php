@@ -63,4 +63,8 @@ class TeacherController extends Controller
         }
 
     }
+
+    public function dashboard()
+    {
+    }
 }

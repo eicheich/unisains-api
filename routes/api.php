@@ -87,14 +87,10 @@ Route::prefix('v1')->group(function () {
     Route::prefix('teacher')->group(function (){
         Route::post('login', [TeacherController::class, 'login']);
         Route::middleware('isTeacher')->group(function (){
-            Route::get('dashboard', [TeacherController::class, 'dashboard']);
             Route::prefix('course')->group(function (){
                 Route::get('all', [CourseController::class, 'all']);
-                Route::post('store', [CourseController::class, 'store']);
-                Route::get('show/{id}', [CourseController::class, 'show']);
-                Route::post('update/{id}', [CourseController::class, 'update']);
-                Route::post('delete/{id}', [CourseController::class, 'delete']);
             });
+            Route::get('dashboard', [TeacherController::class, 'dashboard']);
         });
     });
 });
