@@ -24,7 +24,7 @@ class TeacherController extends Controller
             $credentials = request(['email', 'password']);
             if (!auth()->attempt($credentials)) {
                 return response()->json([
-                    'message' => 'Unauthorized',
+                    'message' => 'Email or Password is wrong',
                 ], 401);
             }
             $user = auth()->user();
