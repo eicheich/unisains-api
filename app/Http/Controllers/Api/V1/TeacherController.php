@@ -47,7 +47,6 @@ class TeacherController extends Controller
             ], 401);
         }
     }
-
     public function logout()
     {
         try {
