@@ -87,12 +87,16 @@ Route::prefix('v1')->group(function () {
     Route::prefix('teacher')->group(function (){
         Route::post('login', [TeacherController::class, 'login']);
         Route::middleware('isTeacher')->group(function (){
+            Route::middleware('auth:sanctum')->group(function (){
+
             Route::post('logout', [TeacherController::class, 'logout']);
 
             Route::prefix('course')->group(function (){
                 Route::get('all', [CourseController::class, 'all']);
             });
             Route::get('dashboard', [TeacherController::class, 'dashboard']);
+            });
+
         });
     });
 });
