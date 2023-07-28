@@ -82,8 +82,6 @@ class AuthController extends Controller
         } else {
             return response()->json([
                 'status', $th->getMessage()
-                
-                
             ],500);
         }
     }

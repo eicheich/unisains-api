@@ -47,21 +47,18 @@ class TeacherController extends Controller
             ], 401);
         }
     }
-
-    public function logout()
+    public function logout(Request $request)
     {
-        try {
-            auth()->user()->tokens()->delete();
+        $token = $request->user()->currentAccessToken()->delete();
+        if ($token) {
             return response()->json([
-                'message' => 'success',
-            ], 200);
-        } catch (\Exception $e) {
+                'message' => 'Logout success',
+            ],200);
+        } else {
             return response()->json([
-                'message' => 'failed',
-                'error' => $e->getMessage(),
-            ], 401);
+                'status', $th->getMessage()
+            ],500);
         }
-
     }
 
     public function dashboard()
