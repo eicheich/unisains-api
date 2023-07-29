@@ -18,12 +18,13 @@ class DashboardController extends Controller
         $transaction = Transaction::all()->count();
         $report = Report::all()->count();
 
-        $userChart = User::selectRaw('DATE_FORMAT(created_at, "%M") as month, count(*) as count')
-            ->where('role', 'user')
-            ->groupBy('month')
-            ->get();
-        $label = $userChart->pluck('month');
-        $data = $userChart->pluck('count');
-        return view('admin.dashboard', compact('course', 'user', 'transaction', 'report'));
+        $userChart = User::selectRaw('DATE(created_at) as date, count(*) as count')
+            ->groupBy('date')
+            ->get()
+            ->pluck('count', 'date')
+            ->toArray();
+//        dd($userChart);
+        return view('admin.dashboard', compact('course', 'user', 'transaction', 'report', 'userChart'));
+
     }
 }
