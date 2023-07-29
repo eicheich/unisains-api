@@ -22,12 +22,8 @@ class DashboardController extends Controller
             ->where('role', 'user')
             ->groupBy('month')
             ->get();
-
-        $label = $userChart->keys;
-        $data = $userChart->values;
-        dd($data);
-
-
+        $label = $userChart->pluck('month');
+        $data = $userChart->pluck('count');
         return view('admin.dashboard', compact('course', 'user', 'transaction', 'report'));
     }
 }

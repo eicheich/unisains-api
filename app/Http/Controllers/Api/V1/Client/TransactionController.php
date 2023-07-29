@@ -150,4 +150,23 @@ class TransactionController extends Controller
 //        }
 
     }
+
+    public function show($id)
+    {
+        $user = Auth::user();
+        $transaction = Transaction::with('course')->where('id', $id)->where('user_id', $user->id)->first();
+
+        if ($transaction == null) {
+            return response()->json([
+                'message' => 'transaction not found',
+            ], 404);
+        }
+
+        return response()->json([
+            'message' => 'success',
+            'data' => [
+                'transaction' => $transaction,
+            ],
+        ], 200);
+    }
 }
