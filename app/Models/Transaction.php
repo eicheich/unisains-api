@@ -12,7 +12,7 @@ class Transaction extends Model
 
     protected $guarded = [];
     protected $hidden = ['updated_at'];
-    protected $appends = ['remaining_time'];
+    protected $appends = ['remaining_time','date'];
 //    append
     // Accessor to calculate the remaining time for each pending transaction
     public function getRemainingTimeAttribute()
@@ -38,6 +38,11 @@ class Transaction extends Model
         }
 
         return null; // If the status is not 'pending', return null for 'remaining_time'
+    }
+
+    public function getDateAttribute()
+    {
+        return Carbon::parse($this->created_at)->format('d F Y');
     }
 
     public function course()
