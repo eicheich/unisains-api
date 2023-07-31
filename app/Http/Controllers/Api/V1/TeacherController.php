@@ -24,7 +24,7 @@ class TeacherController extends Controller
             $credentials = request(['email', 'password']);
             if (!auth()->attempt($credentials)) {
                 return response()->json([
-                    'message' => 'Unauthorized',
+                    'message' => 'Email or Password is wrong',
                 ], 401);
             }
             $user = auth()->user();
@@ -47,20 +47,21 @@ class TeacherController extends Controller
             ], 401);
         }
     }
-
-    public function logout()
+    public function logout(Request $request)
     {
-        try {
-            auth()->user()->tokens()->delete();
+        $token = $request->user()->currentAccessToken()->delete();
+        if ($token) {
             return response()->json([
-                'message' => 'success',
-            ], 200);
-        } catch (\Exception $e) {
+                'message' => 'Logout success',
+            ],200);
+        } else {
             return response()->json([
-                'message' => 'failed',
-                'error' => $e->getMessage(),
-            ], 401);
+                'status' => 'failed',
+            ],500);
         }
+    }
 
+    public function dashboard()
+    {
     }
 }

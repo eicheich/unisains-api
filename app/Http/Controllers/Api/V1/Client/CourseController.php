@@ -5,8 +5,11 @@ namespace App\Http\Controllers\Api\V1\Client;
 use App\Helpers\UrlHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
+use App\Models\Rate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class CourseController extends Controller
 {
@@ -134,5 +137,46 @@ class CourseController extends Controller
                 'course' => $courses,
             ], 200);
         }
+    }
+
+    public function trxquiz(Request $request)
+    {
+
+    }
+
+    public function rate(Request $request)
+    {
+        $user = Auth::user();
+        $validator = Validator::make($request->all(), [
+            'course_id' => 'required|exists:courses,id',
+            'rate' => 'required|numeric|min:1|max:5',
+            'comment' => 'required'
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation error',
+                'errors' => $validator->errors(),
+            ], 422);
+        } else
+            try {
+                $rate = DB::table('rates')->insert([
+                    'user_id' => $user->id,
+                    'course_id' => $request->course_id,
+                    'rate' => $request->rate,
+                    'comment' => $request->comment,
+                    'created_at' => now()
+                    ]);
+                return response()->json([
+                    'message' => 'success',
+                    'data' => [
+                        'rate' => $rate
+                    ]
+                ], 200);
+            } catch (\Throwable $th) {
+                DB::rollback();
+                return response()->json([
+                    'message' => $th
+                ], 500);
+            }
     }
 }

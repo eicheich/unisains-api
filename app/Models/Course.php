@@ -81,5 +81,15 @@ class Course extends Model
         return $this->hasMany(AugmentedReality::class);
     }
 
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
+    public function myCourses()
+    {
+        return $this->hasMany(MyCourse::class);
+    }
+
 
 }

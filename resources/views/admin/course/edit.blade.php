@@ -63,33 +63,6 @@
                     value="{{ $course->price }}">
             </div>
         </div>
-
-        <div class="mb-3 px-5">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="discount" onchange="toggleDiscount()"
-                    {{ $course->discount ? 'checked' : '' }}>
-                <label class="form-check-label" for="discount">Diskon</label>
-            </div>
-            <div id="discount_container" style="{{ $course->discount ? '' : 'display:none' }}">
-                <input type="number" class="form-control" id="discount_value" name="discount"
-                    placeholder="Diskon Kursus (%)" value="{{ $course->discount }}">
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Gambar Sertifikat</h5>
-                <img src="{{ asset('storage/images/certificate/' . $course->certificate_course) }}" alt="" width="100px">
-                <div class="form-group">
-                    <label class="text-dom-a5" for="image">Image</label>
-                    <input id="certificate_course" type="file" class="form-control" name="certificate_course" value="{{ $course->certificate_course }}">
-                </div>
-                <div class="preview mt-3">
-                    <img id="certificate_course_preview" class="img-fluid" alt="Preview Image">
-                </div>
-            </div>
-        </div>
-        {{-- button submit --}}
         <div class="card mt-5">
             <button type="submit" class="btn btn-primary">Update</button>
         </div>
