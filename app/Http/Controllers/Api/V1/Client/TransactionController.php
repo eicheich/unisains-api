@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\MyCourse;
 use App\Models\Transaction;
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
@@ -11,6 +12,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 class TransactionController extends Controller
 {
@@ -58,7 +61,7 @@ class TransactionController extends Controller
                     'status', $th->getMessage()
                 ], 500);
             }
-        } elseif ($course->is_paid == 1 ) {
+        } elseif ($course->is_paid == 1) {
             try {
                 DB::beginTransaction();
                 $transaction = DB::table('transactions')->insert([
@@ -98,6 +101,7 @@ class TransactionController extends Controller
             }, $dueTime);
         }
     }
+
     public function all()
     {
         $user = Auth::user();
@@ -172,6 +176,7 @@ class TransactionController extends Controller
     public function quiz(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'my_course_id' => 'required|integer',
             'id' => 'required|array',
             'id.*' => 'required|integer',
             'answer' => 'required|array',
@@ -197,12 +202,84 @@ class TransactionController extends Controller
             })
             ->count();
         $userScore = $correctAnswers * 20;
-        $response = [
-            'user' => $user,
-            'total_score' => $userScore,
-        ];
-
-        return response()->json($response, 200);
+        if ($userScore >= 60) {
+            try {
+                DB::beginTransaction();
+                DB::table('my_courses')->where('id', $request->my_course_id)->update([
+                    'is_done' => "1",
+                ]);
+                DB::commit();
+                $response = [
+                    'message' => 'success',
+                    'data' => [
+                        'user_score' => $userScore,
+                    ],
+                ];
+                return response()->json($response, 200);
+            } catch (\Throwable $th) {
+                DB::rollBack();
+                return response()->json([
+                    'message' => 'An error occurred while updating the course status',
+                    'error' => $th->getMessage(),
+                ], 500);
+            }
+        } else {
+            return response()->json([
+                'message' => 'You did not pass the quiz. Please try again.',
+                'user_score' => $userScore,
+            ], 200);
+        }
     }
+
+
+
+    function sendCertificateEmail($userEmail, $userName, $certificateFilePath)
+    {
+        // Load PHPMailer
+        require 'path/to/PHPMailer/Exception.php';
+        require 'path/to/PHPMailer/PHPMailer.php';
+        require 'path/to/PHPMailer/SMTP.php';
+
+        // Create a new PHPMailer instance
+        $mail = new PHPMailer(true);
+
+        try {
+            // Server settings
+            $mail->isSMTP();
+            $mail->Host       = 'smtp.example.com';
+            $mail->SMTPAuth   = true;
+            $mail->Username   = 'your_email@example.com';
+            $mail->Password   = 'your_email_password';
+            $mail->SMTPSecure = 'tls';
+            $mail->Port       = 587;
+
+            // Sender info
+            $mail->setFrom('your_email@example.com', 'Your Name');
+
+            // Recipient
+            $mail->addAddress($userEmail, $userName);
+
+            // Email content
+            $mail->isHTML(true);
+            $mail->Subject = 'Congratulations on Passing the Quiz!';
+            $mail->Body    = 'Dear ' . $userName . ',<br><br>Congratulations! You have successfully passed the quiz. Please find attached your certificate.<br><br>Best regards,<br>Your Name';
+
+            // Attach the certificate PDF
+            $mail->addAttachment($certificateFilePath, 'Certificate.pdf');
+
+            // Send the email
+            $mail->send();
+
+            // You can perform additional actions here, such as logging the successful email sending.
+
+            return true;
+        } catch (Exception $e) {
+            // Log the error or handle it gracefully
+            return false;
+        }
+    }
+
+
+
 
 }
