@@ -169,4 +169,40 @@ class TransactionController extends Controller
             ],
         ], 200);
     }
+    public function quiz(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|array',
+            'id.*' => 'required|integer',
+            'answer' => 'required|array',
+            'answer.*' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation error',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+        $user = Auth::user();
+        $correctAnswers = DB::table('questions')
+            ->whereIn('id', $request->id)
+            ->where(function ($query) use ($request) {
+                foreach ($request->id as $key => $id) {
+                    $query->orWhere(function ($query) use ($id, $request, $key) {
+                        $query->where('id', $id)
+                            ->where('answer', $request->answer[$key]);
+                    });
+                }
+            })
+            ->count();
+        $userScore = $correctAnswers * 20;
+        $response = [
+            'user' => $user,
+            'total_score' => $userScore,
+        ];
+
+        return response()->json($response, 200);
+    }
+
 }
