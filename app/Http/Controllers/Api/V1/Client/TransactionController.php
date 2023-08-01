@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Client;
 
 use App\Http\Controllers\Controller;
+use App\Mail\MailNotify;
 use App\Models\MyCourse;
 use App\Models\Transaction;
 use Carbon\Carbon;
@@ -11,9 +12,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+//php mailer
 use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
+
+
 
 class TransactionController extends Controller
 {
@@ -190,6 +196,8 @@ class TransactionController extends Controller
             ], 422);
         }
         $user = Auth::user();
+//        file certificate
+//        $certificateFilePath = public_path('images/certificate/certificate.pdf');
         $correctAnswers = DB::table('questions')
             ->whereIn('id', $request->id)
             ->where(function ($query) use ($request) {
@@ -209,6 +217,7 @@ class TransactionController extends Controller
                     'is_done' => "1",
                 ]);
                 DB::commit();
+                Mail::to($user->email)->send(new MailNotify());
                 $response = [
                     'message' => 'success',
                     'data' => [
@@ -233,51 +242,7 @@ class TransactionController extends Controller
 
 
 
-    function sendCertificateEmail($userEmail, $userName, $certificateFilePath)
-    {
-        // Load PHPMailer
-        require 'path/to/PHPMailer/Exception.php';
-        require 'path/to/PHPMailer/PHPMailer.php';
-        require 'path/to/PHPMailer/SMTP.php';
 
-        // Create a new PHPMailer instance
-        $mail = new PHPMailer(true);
-
-        try {
-            // Server settings
-            $mail->isSMTP();
-            $mail->Host       = 'smtp.example.com';
-            $mail->SMTPAuth   = true;
-            $mail->Username   = 'your_email@example.com';
-            $mail->Password   = 'your_email_password';
-            $mail->SMTPSecure = 'tls';
-            $mail->Port       = 587;
-
-            // Sender info
-            $mail->setFrom('your_email@example.com', 'Your Name');
-
-            // Recipient
-            $mail->addAddress($userEmail, $userName);
-
-            // Email content
-            $mail->isHTML(true);
-            $mail->Subject = 'Congratulations on Passing the Quiz!';
-            $mail->Body    = 'Dear ' . $userName . ',<br><br>Congratulations! You have successfully passed the quiz. Please find attached your certificate.<br><br>Best regards,<br>Your Name';
-
-            // Attach the certificate PDF
-            $mail->addAttachment($certificateFilePath, 'Certificate.pdf');
-
-            // Send the email
-            $mail->send();
-
-            // You can perform additional actions here, such as logging the successful email sending.
-
-            return true;
-        } catch (Exception $e) {
-            // Log the error or handle it gracefully
-            return false;
-        }
-    }
 
 
 
