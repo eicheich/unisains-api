@@ -9,6 +9,6 @@
 </head>
 <body>
 <h3>HALOOOOOOO</h3>
-
+<p>{{$data['userScore']}}</p>
 </body>
 </html>

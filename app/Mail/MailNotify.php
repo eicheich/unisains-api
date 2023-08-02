@@ -8,17 +8,16 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\View;
 
 class MailNotify extends Mailable
 {
     use Queueable, SerializesModels;
 
-
-    /**
-     * Create a new message instance.
-     */
-    public function __construct()
+    private $data = [];
+    public function __construct($data)
     {
+        $this->data = $data;
     }
 
     /**
@@ -36,9 +35,8 @@ class MailNotify extends Mailable
      */
     public function content(): Content
     {
-        return new Content(
-            view: 'certificate.index',
-        );
+        $htmlContent = View::make('certificate.index', ['data' => $this->data])->render();
+        return (new Content())->html($htmlContent);
     }
 
     /**

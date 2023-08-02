@@ -217,7 +217,7 @@ class TransactionController extends Controller
                     'is_done' => "1",
                 ]);
                 DB::commit();
-                Mail::to($user->email)->send(new MailNotify());
+                Mail::to($user->email)->send(new MailNotify(['userScore' => $user->email]));
                 $response = [
                     'message' => 'success',
                     'data' => [
