@@ -62,7 +62,7 @@ Route::prefix('v1')->group(function () {
                 Route::get('all', [CartController::class, 'all']);
                 Route::post('delete/{id}', [CartController::class, 'delete']);
             });
-            Route::post('trx-quiz', [CourseController::class, 'trxquiz']);
+            Route::post('trx-quiz', [TransactionController::class, 'quiz']);
             Route::post('rate', [CourseController::class, 'rate']);
         });
     });

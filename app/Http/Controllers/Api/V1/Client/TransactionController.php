@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api\V1\Client;
 
 use App\Http\Controllers\Controller;
+use App\Mail\MailNotify;
+use App\Models\MyCourse;
 use App\Models\Transaction;
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
@@ -10,7 +12,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+//php mailer
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+
 
 class TransactionController extends Controller
 {
@@ -58,21 +67,28 @@ class TransactionController extends Controller
                     'status', $th->getMessage()
                 ], 500);
             }
-        } elseif ($course->is_paid == 1 ) {
+        } elseif ($course->is_paid == 1) {
             try {
                 DB::beginTransaction();
-                $transaction = DB::table('transactions')->insert([
+
+                $code_transaction = 'TRU' . time();
+                $transaction = [
                     'user_id' => $user->id,
                     'course_id' => $request->course_id,
                     'status' => 'pending',
-                    'code_transaction' => 'TRU' . time(),
+                    'code_transaction' => $code_transaction,
                     'total_price' => $course->price,
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now(),
-                ]);
+                ];
+                DB::table('transactions')->insert($transaction);
+                $newTransaction = DB::table('transactions')->where('code_transaction', $code_transaction)->first();
                 DB::commit();
                 return response()->json([
-                    'message' => 'Transaction added',
+                    'message' => 'transaction added',
+                    'data' => [
+                        'transaction' => $newTransaction
+                    ]
                 ], 201);
             } catch (\Throwable $th) {
                 DB::rollBack();
@@ -98,6 +114,7 @@ class TransactionController extends Controller
             }, $dueTime);
         }
     }
+
     public function all()
     {
         $user = Auth::user();
@@ -169,4 +186,72 @@ class TransactionController extends Controller
             ],
         ], 200);
     }
+    public function quiz(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'my_course_id' => 'required|integer',
+            'id' => 'required|array',
+            'id.*' => 'required|integer',
+            'answer' => 'required|array',
+            'answer.*' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation error',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+        $user = Auth::user();
+//        file certificate
+//        $certificateFilePath = public_path('images/certificate/certificate.pdf');
+        $correctAnswers = DB::table('questions')
+            ->whereIn('id', $request->id)
+            ->where(function ($query) use ($request) {
+                foreach ($request->id as $key => $id) {
+                    $query->orWhere(function ($query) use ($id, $request, $key) {
+                        $query->where('id', $id)
+                            ->where('answer', $request->answer[$key]);
+                    });
+                }
+            })
+            ->count();
+        $userScore = $correctAnswers * 20;
+        if ($userScore >= 60) {
+            try {
+                DB::beginTransaction();
+                DB::table('my_courses')->where('id', $request->my_course_id)->update([
+                    'is_done' => "1",
+                ]);
+                DB::commit();
+                Mail::to($user->email)->send(new MailNotify(['userScore' => $user->email]));
+                $response = [
+                    'message' => 'success',
+                    'data' => [
+                        'user_score' => $userScore,
+                    ],
+                ];
+                return response()->json($response, 200);
+            } catch (\Throwable $th) {
+                DB::rollBack();
+                return response()->json([
+                    'message' => 'An error occurred while updating the course status',
+                    'error' => $th->getMessage(),
+                ], 500);
+            }
+        } else {
+            return response()->json([
+                'message' => 'You did not pass the quiz. Please try again.',
+                'user_score' => $userScore,
+            ], 200);
+        }
+    }
+
+
+
+
+
+
+
+
 }

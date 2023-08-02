@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Middleware;
 
 use Closure;
@@ -11,18 +10,26 @@ class isBought
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param  \Closure  $next
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function handle(Request $request, Closure $next): Response
     {
+        // Get the authenticated user
         $user = $request->user();
-        $course = $request->route('course');
-        $myCourse = $user->myCourses()->where('course_id', $course->id)->first();
+
+        // Get the 'course' parameter from the route (assuming it's a string)
+        $course = $request->route('id');
+
+        // Check if the user has bought the course
+        $myCourse = $user->myCourses()->where('course_id', $course)->first();
         if (!$myCourse) {
             return response()->json([
-                'message' => 'You have not bought this course',
+                'message' => 'You have not purchased this course',
             ], 403);
         }
+
         return $next($request);
     }
 }

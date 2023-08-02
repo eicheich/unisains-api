@@ -11,7 +11,7 @@ class Transaction extends Model
     use HasFactory;
 
     protected $guarded = [];
-    protected $hidden = ['updated_at'];
+    protected $hidden = ['updated_at','created_at'];
     protected $appends = ['remaining_time','date'];
 //    append
     // Accessor to calculate the remaining time for each pending transaction
