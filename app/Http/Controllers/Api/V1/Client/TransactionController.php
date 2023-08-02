@@ -70,18 +70,25 @@ class TransactionController extends Controller
         } elseif ($course->is_paid == 1) {
             try {
                 DB::beginTransaction();
-                $transaction = DB::table('transactions')->insert([
+
+                $code_transaction = 'TRU' . time();
+                $transaction = [
                     'user_id' => $user->id,
                     'course_id' => $request->course_id,
                     'status' => 'pending',
-                    'code_transaction' => 'TRU' . time(),
+                    'code_transaction' => $code_transaction,
                     'total_price' => $course->price,
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now(),
-                ]);
+                ];
+                DB::table('transactions')->insert($transaction);
+                $newTransaction = DB::table('transactions')->where('code_transaction', $code_transaction)->first();
                 DB::commit();
                 return response()->json([
-                    'message' => 'Transaction added',
+                    'message' => 'transaction added',
+                    'data' => [
+                        'transaction' => $newTransaction
+                    ]
                 ], 201);
             } catch (\Throwable $th) {
                 DB::rollBack();
