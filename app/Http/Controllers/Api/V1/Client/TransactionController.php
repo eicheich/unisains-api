@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1\Client;
 
+use App\Helpers\CertificateGenerator;
 use App\Http\Controllers\Controller;
 use App\Mail\MailNotify;
 use App\Models\Certificate;
@@ -230,6 +231,7 @@ class TransactionController extends Controller
                     'is_done' => "1",
                 ]);
                 DB::commit();
+                CertificateGenerator::generate($user->first_name .' '. $user->last_name, $course->title_course, Carbon::now()->format('d F Y'), $course->id, $user->id);
                 $certificate = Certificate::where('user_id', $user->id)->where('course_id', $course->id)->first();
                 $data = [
                     'name' => $user->first_name . ' ' . $user->last_name,
