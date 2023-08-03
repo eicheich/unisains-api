@@ -12,11 +12,11 @@ const generateCertificate = (name, course, date) => {
     doc.pipe(fs.createWriteStream(`public/certificate/${name}.pdf`));
     doc.image('public/img/sertifikat.png', 0, 0, { width: 842 });
     doc.fontSize(40);
-    doc.text(name, 420, 400, { align: 'center' });
-    doc.fontSize(15);
+    doc.font('Poppins-bold').fontSize(40).text(name, 420, 400, { align: 'center' });
     doc.text(course, 420, 450, { align: 'center' });
     doc.fontSize(15);
-    doc.text(date, 420, 500, { align: 'center' });
+    doc.font('Poppins-regular').fontSize(15).text(date, 420, 500, { align: 'center' });
+
     doc.end();
 }
 
