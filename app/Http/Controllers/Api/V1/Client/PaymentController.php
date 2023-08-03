@@ -80,6 +80,35 @@ class PaymentController extends Controller
         }
 
         $transaction = DB::table('transactions')->where('id', $request->order_id)->first();
+        if ($request->transaction_status == 'capture') {
+            $transaction->update(['status' => 'success']);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'transaction success',
+            ], 200);
+        } elseif ($request->transaction_status == 'expire') {
+            $transaction->update(['status' => 'failed']);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'transaction expired',
+            ], 200);
+        } elseif ($request->transaction_status == 'cancel') {
+            $transaction->update(['status' => 'failed']);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'transaction canceled',
+            ], 200);
+        } elseif ($request->transaction_status == 'deny') {
+            $transaction->update(['status' => 'failed']);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'transaction denied',
+            ], 200);
+        }
+        return response()->json([
+            'status' => 'error',
+            'message' => 'something went wrong',
+        ], 200);
 
     }
 }
