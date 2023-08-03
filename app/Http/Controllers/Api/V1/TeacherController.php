@@ -69,7 +69,7 @@ class TeacherController extends Controller
     public function generate()
     {
         try {
-            CertificateGenerator::generate('Lionel Messi K', 'Jantung Angry Bird', '2023-08-03');
+            CertificateGenerator::generate('Lionel Messi K', 'Jantung Angry Bird', '2023-08-03', 1,3);
             return response()->json([
                 'message' => 'success',
 //                link to certificate
