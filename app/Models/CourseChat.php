@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Quiz extends Model
+class CourseChat extends Model
 {
     use HasFactory;
-
     protected $fillable = [
         'course_id',
-        'title_quiz',
+        'user_id',
+        'message',
     ];
 
     protected $hidden = [
@@ -24,9 +24,9 @@ class Quiz extends Model
         return $this->belongsTo(Course::class);
     }
 
-    public function questions()
+    public function users()
     {
-        return $this->hasMany(Question::class);
+        return $this->belongsTo(User::class);
     }
 
 }

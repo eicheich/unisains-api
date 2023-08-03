@@ -15,7 +15,7 @@
         </div>
         <div class="mb-3 px-5">
             <label for="course_description" class="form-label">Deskripsi Kursus</label>
-            <textarea class="form-control" id="course_description" name="description" rows="3"></textarea>
+            <input type="text" class="form-control" id="course_name" name="description" placeholder="">
         </div>
         <div class="card">
             <div class="card-body">
@@ -61,33 +61,6 @@
                 <input type="number" class="form-control" id="price" name="price" placeholder="Harga Kursus">
             </div>
         </div>
-
-        <div class="mb-3 px-5">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="discount" onchange="toggleDiscount()">
-                <label class="form-check-label" for="discount">Diskon</label>
-            </div>
-            <div id="discount_container" style="display:none">
-                <input type="number" class="form-control" id="discount_value" name="discount"
-                    placeholder="Diskon Kursus (%)">
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Sertifikat Kursus</h5>
-                <div class="form-group">
-                    <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="certificate" name="certificate_course"
-                            onchange="previewImage('certificate')">
-                        <label class="custom-file-label" for="certificate">Pilih file</label>
-                    </div>
-                </div>
-                <div class="preview mt-3">
-                    <img id="certificate_preview" class="img-fluid" alt="Preview Image">
-                </div>
-            </div>
-        </div>
-        {{-- button submit --}}
         <div class="card mt-5">
             <button type="submit" class="btn btn-primary">Add</button>
         </div>

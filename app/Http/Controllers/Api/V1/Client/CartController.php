@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -23,14 +24,15 @@ class CartController extends Controller
             ], 422);
         } else
             try {
-                DB::beginTransaction();
-                $cart = DB::table('carts')->insert([
+                $cart = Cart::create([
                     'user_id' => $user->id,
                     'course_id' => $request->course_id,
                 ]);
-                DB::commit();
                 return response()->json([
-                    'message' => 'Course added to cart',
+                    'message' => 'success',
+                    'data' => [
+                        'cart' => $cart
+                    ]
                 ], 200);
             } catch (\Throwable $th) {
                 DB::rollback();
@@ -43,10 +45,11 @@ class CartController extends Controller
     public function all()
     {
         $user = Auth::user();
-        $cart = DB::table('carts')
-            ->join('courses', 'courses.id', '=', 'carts.course_id')
-            ->where('carts.user_id', $user->id)
-            ->first();
+        $cart = Cart::with('course')->where('user_id', $user->id)->get();
+//        $cart = DB::table('carts')
+//            ->join('courses', 'courses.id', '=', 'carts.course_id')
+//            ->where('carts.user_id', $user->id)
+//            ->first();
         if ($cart == null) {
             return response()->json([
                 'message' => 'Cart is empty',
@@ -54,7 +57,10 @@ class CartController extends Controller
         } else {
             try {
                 return response()->json([
-                    'cart' => $cart,
+                    'message' => 'success',
+                    'data' => [
+                        'cart' => $cart
+                    ]
                 ], 200);
             } catch (\Throwable $th) {
                 DB::rollback();

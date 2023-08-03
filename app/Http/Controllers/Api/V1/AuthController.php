@@ -81,9 +81,7 @@ class AuthController extends Controller
             ],200);
         } else {
             return response()->json([
-                'status', $th->getMessage()
-                
-                
+                'status' => 'failed',
             ],500);
         }
     }

@@ -10,9 +10,17 @@ class Module extends Model
     use HasFactory;
 
     protected $guarded =[];
+    protected $hidden = ['created_at', 'updated_at', 'course_id'];
+    protected $appends = ['thumbnail_module'];
+
+    public function getThumbnailModuleAttribute()
+    {
+        return url('storage/images/module/' . $this->image_module);
+    }
 
     public function course()
     {
         return $this->belongsTo(Course::class);
     }
+
 }

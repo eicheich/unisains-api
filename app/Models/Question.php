@@ -5,28 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Quiz extends Model
+class Question extends Model
 {
     use HasFactory;
-
     protected $fillable = [
-        'course_id',
-        'title_quiz',
+        'quiz_id',
+        'question',
+        'answer',
     ];
 
     protected $hidden = [
         'created_at',
         'updated_at',
+        'answer'
     ];
 
-    public function courses()
+    public function quizzes()
     {
-        return $this->belongsTo(Course::class);
+        return $this->belongsTo(Quiz::class);
     }
-
-    public function questions()
-    {
-        return $this->hasMany(Question::class);
-    }
-
 }

@@ -17,6 +17,14 @@ class DashboardController extends Controller
         $user = User::where('role', 'user')->count();
         $transaction = Transaction::all()->count();
         $report = Report::all()->count();
-        return view('admin.dashboard', compact('course', 'user', 'transaction', 'report'));
+
+        $userChart = User::selectRaw('DATE(created_at) as date, count(*) as count')
+            ->groupBy('date')
+            ->get()
+            ->pluck('count', 'date')
+            ->toArray();
+//        dd($userChart);
+        return view('admin.dashboard', compact('course', 'user', 'transaction', 'report', 'userChart'));
+
     }
 }
