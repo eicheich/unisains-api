@@ -8,32 +8,36 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\View as ViewFacade;
-class MailNotify extends Mailable
+
+class Certificate extends Mailable
 {
     use Queueable, SerializesModels;
-    public $data = [];
-    public function __construct($data)
+
+    /**
+     * Create a new message instance.
+     */
+    public function __construct()
     {
-        $this->data = $data;
+        //
     }
+
     /**
      * Get the message envelope.
      */
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Selamat Anda Telah Menyelesaikan Kursus',
+            subject: 'Certificate',
         );
     }
+
     /**
      * Get the message content definition.
      */
     public function content(): Content
     {
         return new Content(
-            view: 'certificate.index',
+            view: 'view.name',
         );
     }
 

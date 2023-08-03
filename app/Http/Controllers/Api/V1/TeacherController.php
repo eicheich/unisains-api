@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Helpers\CertificateGenerator;
 
 class TeacherController extends Controller
 {
@@ -63,5 +64,20 @@ class TeacherController extends Controller
 
     public function dashboard()
     {
+    }
+
+    public function generate()
+    {
+        try {
+            CertificateGenerator::generate('John Awok', 'Certificate of Completion', '2023-08-03');
+            return response()->json([
+                'message' => 'success',
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'failed',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 }
