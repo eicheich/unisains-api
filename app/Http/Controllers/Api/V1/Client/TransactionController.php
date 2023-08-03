@@ -203,6 +203,11 @@ class TransactionController extends Controller
             ], 422);
         }
         $user = Auth::user();
+        $course = DB::table('my_courses')
+            ->join('courses', 'my_courses.course_id', '=', 'courses.id')
+            ->select('courses.*')
+            ->where('my_courses.id', $request->my_course_id)
+            ->first();
 //        file certificate
 //        $certificateFilePath = public_path('images/certificate/certificate.pdf');
         $correctAnswers = DB::table('questions')
@@ -224,7 +229,14 @@ class TransactionController extends Controller
                     'is_done' => "1",
                 ]);
                 DB::commit();
-                Mail::to($user->email)->send(new MailNotify(['userScore' => $user->email]));
+                $data = [
+                    'name' => $user->first_name . ' ' . $user->last_name,
+                    'score' => $userScore,
+                    'date' => Carbon::now()->format('d F Y'),
+                    'course' => $course->title_course,
+                    'link_certificate' => 'https://www.google.com',
+                ];
+                Mail::to($user->email)->send(new MailNotify($data));
                 $response = [
                     'message' => 'success',
                     'data' => [
