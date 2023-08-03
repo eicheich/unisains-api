@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1\Client;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Midtrans\Config;
@@ -31,9 +32,10 @@ class PaymentController extends Controller
         Config::$isSanitized = true;
         Config::$is3ds = true;
 
-        $total = DB::table('transactions')->where('id', $request->transaction_id)->first();
+        $trx = DB::table('transactions')->where('id', $request->transaction_id)->first();
+        $user = Auth::user();
 
-        if (!$total || !isset($total->total_price)) {
+        if (!$trx || !isset($trx->total_price)) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Invalid transaction data',
@@ -42,8 +44,14 @@ class PaymentController extends Controller
 
         $params = array(
             'transaction_details' => array(
-                'order_id' => rand(),
-                'gross_amount' => (int)$total->total_price,
+                'order_id' => $trx->id,
+                'gross_amount' => (int)$trx->total_price,
+            ),
+            'customer_details' => array(
+                'first_name' => $user->first_name,
+                'last_name' => $user->last_name,
+                'email' => $user->email,
+                'phone' => 626229933,
             ),
         );
 
@@ -62,29 +70,45 @@ class PaymentController extends Controller
     }
     public function callback(Request $request)
     {
-        // Validasi signature Midtrans
         $serverKey = env('MIDTRANS_SERVER_KEY');
-        $notification = new Notification();
-
-        $isValidSignature = $notification->isValidSignature($request->getContent(), $request->header('signature'), $serverKey);
-        if (!$isValidSignature) {
+        $hashed = hash("sha512", $request->order_id . $request->status_code . $request->gross_amount . $serverKey);
+        if (!$hashed) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Invalid signature',
             ], 400);
         }
 
-        // Proses data transaksi
-        $orderId = $notification->order_id;
-        $transactionStatus = $notification->transaction_status;
-        // Update status transaksi di database berdasarkan $orderId dan $transactionStatus
-
-        // Kirim notifikasi ke pengguna jika diperlukan
-        // Mengembalikan respons
-//
+        $transaction = DB::table('transactions')->where('id', $request->order_id)->first();
+        if ($request->transaction_status == 'capture') {
+            $transaction->update(['status' => 'success']);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'transaction success',
+            ], 200);
+        } elseif ($request->transaction_status == 'expire') {
+            $transaction->update(['status' => 'failed']);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'transaction expired',
+            ], 200);
+        } elseif ($request->transaction_status == 'cancel') {
+            $transaction->update(['status' => 'failed']);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'transaction canceled',
+            ], 200);
+        } elseif ($request->transaction_status == 'deny') {
+            $transaction->update(['status' => 'failed']);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'transaction denied',
+            ], 200);
+        }
         return response()->json([
-            'status' => 'success',
-            'message' => 'Callback processed successfully',
-        ]);
+            'status' => 'error',
+            'message' => 'something went wrong',
+        ], 200);
+
     }
 }

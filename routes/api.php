@@ -79,6 +79,7 @@ Route::prefix('v1')->group(function () {
         Route::post('delete/{id}', [TransactionController::class, 'delete']);
 //        checkout
         Route::post('checkout', [PaymentController::class, 'payment']);
+        Route::post('callback', [PaymentController::class, 'callback']);
     });
 //    report
     Route::prefix('report')->middleware('auth:sanctum')->group(function () {
