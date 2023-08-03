@@ -81,7 +81,25 @@ class PaymentController extends Controller
 
         $transaction = DB::table('transactions')->where('id', $request->order_id)->first();
         if ($request->transaction_status == 'capture') {
-            $transaction->update(['status' => 'success']);
+            try {
+                DB::beginTransaction();
+                $transaction->update([
+                    'status' => 'success',
+                ]);
+                $mycourse = DB::table('my_courses')->insert([
+                    'course_id' => $transaction->course_id,
+                    'user_id' => $transaction->user_id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+                DB::commit();
+            } catch (\Exception $e) {
+                DB::rollback();
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $e->getMessage(),
+                ], 500);
+            }
             return response()->json([
                 'status' => 'success',
                 'message' => 'transaction success',
