@@ -39,6 +39,7 @@ Route::prefix('v1')->group(function () {
             Route::post('logout', [AuthController::class, 'logout']);
         });
     });
+    Route::post('generate',[TeacherController::class, 'generate']);
     // Route::prefix('admin')->middleware('isAdmin')->group(function () {
     //     Route::get('dashboard', [DashboardController::class, 'dashboard']);
     //     Route::prefix('course')->group(function () {
