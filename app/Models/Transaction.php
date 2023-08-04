@@ -12,7 +12,7 @@ class Transaction extends Model
 
     protected $guarded = [];
     protected $hidden = ['updated_at','created_at'];
-    protected $appends = ['remaining_time','date'];
+    protected $appends = ['remaining_time','date','name'];
 //    append
     // Accessor to calculate the remaining time for each pending transaction
     public function getRemainingTimeAttribute()
@@ -54,6 +54,12 @@ class Transaction extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function getNameAttribute()
+    {
+        return $this->user->first_name.' '.$this->user->last_name;
+    }
+
 
 
 }
