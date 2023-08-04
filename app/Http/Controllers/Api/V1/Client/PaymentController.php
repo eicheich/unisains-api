@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api\V1\Client;
 
 use App\Http\Controllers\Controller;
+use App\Mail\SuccessPayment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Midtrans\Config;
 use Midtrans\Snap;
@@ -127,6 +129,19 @@ class PaymentController extends Controller
             'status' => 'error',
             'message' => 'something went wrong',
         ], 200);
+
+    }
+
+    public function test()
+    {
+        $user = Auth::user();
+        $data = [
+            'name' => $user->first_name . ' ' . $user->last_name,
+            'course' => 'Course Name',
+            'date' => now(),
+            'image' => 'https://xkeuwn.stripocdn.email/content/guids/CABINET_2e2246de1276cf1b786e85afa37898e29cd6b2e37247bb8ec807d3db6572304a/images/1690501807.png'
+        ];
+        Mail::to($user->email)->send(new SuccessPayment($data));
 
     }
 }

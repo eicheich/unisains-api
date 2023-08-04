@@ -8,32 +8,37 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\View as ViewFacade;
-class MailNotify extends Mailable
+
+class SuccessPayment extends Mailable
 {
     use Queueable, SerializesModels;
-    public $data = [];
+    public  $data = [];
+
+    /**
+     * Create a new message instance.
+     */
     public function __construct($data)
     {
         $this->data = $data;
     }
+
     /**
      * Get the message envelope.
      */
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Selamat Anda Telah Menyelesaikan Kursus',
+            subject: 'Success Payment',
         );
     }
+
     /**
      * Get the message content definition.
      */
     public function content(): Content
     {
         return new Content(
-            view: 'mail.certificate.index',
+            view: 'mail.payment.success',
         );
     }
 
