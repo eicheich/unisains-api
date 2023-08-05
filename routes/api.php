@@ -31,6 +31,7 @@ Route::get('/acces-denied', function () {
     ], 501);
 })->name('login');
 
+
 Route::prefix('v1')->group(function () {
     Route::prefix('auth')->group(function () {
         Route::post('login', [AuthController::class, 'login']);
@@ -39,7 +40,10 @@ Route::prefix('v1')->group(function () {
             Route::post('logout', [AuthController::class, 'logout']);
         });
     });
+    Route::post('callback', [PaymentController::class, 'callback']);
+
     Route::post('generate',[TeacherController::class, 'generate']);
+    Route::post('testemail',[PaymentController::class, 'test'])->middleware('auth:sanctum');
     // Route::prefix('admin')->middleware('isAdmin')->group(function () {
     //     Route::get('dashboard', [DashboardController::class, 'dashboard']);
     //     Route::prefix('course')->group(function () {
@@ -79,7 +83,6 @@ Route::prefix('v1')->group(function () {
         Route::post('delete/{id}', [TransactionController::class, 'delete']);
 //        checkout
         Route::post('checkout', [PaymentController::class, 'payment']);
-        Route::post('callback', [PaymentController::class, 'callback']);
     });
 //    report
     Route::prefix('report')->middleware('auth:sanctum')->group(function () {
