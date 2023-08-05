@@ -83,7 +83,7 @@ class PaymentController extends Controller
         }
 
         $transaction = DB::table('transactions')->where('id', $request->order_id)->first();
-        if ($request->transaction_status == 'capture') {
+        if ($request->transaction_status == 'capture' || $request->transaction_status == 'settlement') {
             try {
                 DB::beginTransaction();
                 DB::table('transactions')->where('id', $request->order_id)->update([
@@ -136,11 +136,6 @@ class PaymentController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'transaction denied',
-            ], 200);
-        } elseif ($request->transaction_status == 'settlement') {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'transaction pending',
             ], 200);
         }
         return response()->json([
