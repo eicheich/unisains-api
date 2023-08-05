@@ -202,6 +202,7 @@
                                                             <td align="center" style="padding:0;Margin:0;padding-top:10px;padding-bottom:10px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px">Punya pertanyaan?&nbsp;Email kita di&nbsp;<a target="_blank" href="mailto:universeteam2023@gmail.com" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;text-decoration:underline;color:#5C68E2;font-size:14px">universeteam@gmail.com</a></p></td>
                                                         </tr>
                                                     </table></td>
+
                                             </tr>
                                         </table></td>
                                 </tr>
