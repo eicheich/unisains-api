@@ -75,8 +75,8 @@ class CartController extends Controller
     {
         $user = Auth::user();
         $cart = DB::table('carts')
-            ->where('user_id', $user->id)
-            ->where('course_id', $id)->first();
+            ->where('id', $id)
+            ->first();
         if ($cart == null) {
             return response()->json([
                 'message' => 'Course not found in cart',
@@ -85,8 +85,7 @@ class CartController extends Controller
         try {
             DB::beginTransaction();
             $cart = DB::table('carts')
-                ->where('user_id', $user->id)
-                ->where('course_id', $id)->delete();
+                ->where('id', $id)->delete();
             DB::commit();
             return response()->json([
                 'message' => 'Course deleted from cart',
