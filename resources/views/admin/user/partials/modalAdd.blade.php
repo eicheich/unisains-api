@@ -11,6 +11,16 @@
             <div class="modal-body">
                 <form action="{{ route('store.users') }}" method="post">
                     @csrf
+{{--                    drop down role--}}
+                    <div class="form-group">
+                        <label for="module-name">Role</label>
+                        <select class="" name="role">
+                            <option value="">Pilih Role</option>
+                                <option value="admin">Admin</option>
+                                <option value="teacher">Pengajar</option>
+                                <option value="user">Pengguna</option>
+                        </select>
+                    </div>
                     <div class="form-group">
                         <label for="module-name">Nama Depan</label>
                         <input type="text" class="form-control" id="module-name" name="first_name" placeholder="Nama Depan">
@@ -38,7 +48,7 @@
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                         <button type="submit" class="btn btn-primary">Tambah</button>
                     </div>
-                    
+
                 </form>
             </div>
         </div>
