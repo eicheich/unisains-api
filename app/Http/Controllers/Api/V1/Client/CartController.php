@@ -46,10 +46,6 @@ class CartController extends Controller
     {
         $user = Auth::user();
         $cart = Cart::with('course')->where('user_id', $user->id)->get();
-//        $cart = DB::table('carts')
-//            ->join('courses', 'courses.id', '=', 'carts.course_id')
-//            ->where('carts.user_id', $user->id)
-//            ->first();
         if ($cart == null) {
             return response()->json([
                 'message' => 'Cart is empty',

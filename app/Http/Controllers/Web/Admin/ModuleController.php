@@ -18,7 +18,7 @@ class ModuleController extends Controller
         $validator = Validator::make($request->all(), [
             'title_module' => 'required|string|max:255',
             'materi_module' => 'required',
-            'description' => 'required|max:255',
+            'description' => 'required',
             'image_module' => 'required|file|mimes:jpeg,png',
         ]);
 
