@@ -65,7 +65,7 @@ Route::prefix('v1')->group(function () {
             Route::prefix('cart')->group(function () {
                 Route::post('store', [CartController::class, 'store']);
                 Route::get('all', [CartController::class, 'all']);
-                Route::post('delete/{id}', [CartController::class, 'delete']);
+                Route::delete('delete/{id}', [CartController::class, 'delete']);
             });
             Route::post('trx-quiz', [TransactionController::class, 'quiz']);
             Route::post('rate', [CourseController::class, 'rate']);
@@ -93,11 +93,11 @@ Route::prefix('v1')->group(function () {
         Route::post('login', [TeacherController::class, 'login']);
         Route::middleware('isTeacher')->group(function (){
             Route::middleware('auth:sanctum')->group(function (){
-
             Route::post('logout', [TeacherController::class, 'logout']);
-
             Route::prefix('course')->group(function (){
                 Route::get('all', [CourseController::class, 'all']);
+                Route::get('show/{id}', [CourseController::class, 'show']);
+
             });
             Route::get('dashboard', [TeacherController::class, 'dashboard']);
             });
