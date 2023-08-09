@@ -14,7 +14,7 @@ class CertificateGenerator
 //        $pdf->save(public_path('storage/images/certificate/' . $name . '.pdf'));
 //    }
     public static function generate($name, $course, $date)
-    {+
+    {
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('mail.certificate.generator', compact('name', 'course', 'date'));
         $pdf->setPaper('A4', 'landscape'); // Set the orientation to landscape
         $pdf->save(public_path('storage/images/certificate/' . $name . '.pdf'));
