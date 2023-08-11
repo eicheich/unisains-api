@@ -244,7 +244,7 @@ class TransactionController extends Controller
                 DB::table('certificates')->insert([
                     'user_id' => $user->id,
                     'course_id' => $course->id,
-                    'path' => 'certificate/' . $time . '.pdf',
+                    'path' => 'certificate/' . $course->title_course . $score_percentage . '.pdf',
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now(),
                 ]);
