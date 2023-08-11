@@ -256,7 +256,7 @@ class TransactionController extends Controller
                     'score' => $score_percentage,
                     'date' => Carbon::now()->format('d F Y'),
                     'course' => $course->title_course,
-                    'link_certificate' => 'admin.unisains.com/'.$certificate->path,
+                    'link_certificate' => 'admin.unisains.com/storage/images/'.$certificate->path,
                     'time' => $time
                 ];
                 Mail::to($user->email)->send(new MailNotify($data));
