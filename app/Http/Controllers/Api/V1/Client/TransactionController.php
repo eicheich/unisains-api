@@ -244,7 +244,7 @@ class TransactionController extends Controller
                 DB::table('certificates')->insert([
                     'user_id' => $user->id,
                     'course_id' => $course->id,
-                    'path' => 'certificate/' . $course->title_course . $score_percentage . '.pdf',
+                    'path' => 'certificate/' . $time . '.pdf',
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now(),
                 ]);
@@ -256,7 +256,8 @@ class TransactionController extends Controller
                     'score' => $score_percentage,
                     'date' => Carbon::now()->format('d F Y'),
                     'course' => $course->title_course,
-                    'link_certificate' => 'admin.unisains.com/'.$certificate->path
+                    'link_certificate' => 'admin.unisains.com/'.$certificate->path,
+                    'time' => $time
                 ];
                 Mail::to($user->email)->send(new MailNotify($data));
                 $response = [
