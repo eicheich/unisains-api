@@ -240,10 +240,11 @@ class TransactionController extends Controller
                 DB::table('my_courses')->where('id', $id)->update([
                     'is_done' => "1",
                 ]);
+                $time = Carbon::now();
                 DB::table('certificates')->insert([
                     'user_id' => $user->id,
                     'course_id' => $course->id,
-                    'path' => 'certificate/' . $user->id . '-' . $course->id . '.pdf',
+                    'path' => 'certificate/' . $time . '.pdf',
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now(),
                 ]);

@@ -20,7 +20,7 @@ class CertificateGenerator
         $time = Carbon::now();
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('mail.certificate.generator', compact('name', 'course', 'date'));
         $pdf->setPaper('A4', 'landscape'); // Set the orientation to landscape
-        $pdf->save(public_path('storage/images/certificate/' . $user->id . '-' . $course->id . '.pdf'));
+        $pdf->save(public_path('storage/images/certificate/' . $time . '.pdf'));
     }
 
 
