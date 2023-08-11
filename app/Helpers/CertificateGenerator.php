@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 //use Barryvdh\DomPDF\PDF;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
 use PDF;
 
@@ -15,11 +16,12 @@ class CertificateGenerator
 //    }
     public static function generate($name, $course, $date)
     {
+        $user = auth()->user();
+        $time = Carbon::now();
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('mail.certificate.generator', compact('name', 'course', 'date'));
         $pdf->setPaper('A4', 'landscape'); // Set the orientation to landscape
-        $pdf->save(public_path('storage/images/certificate/' . $name . '.pdf'));
+        $pdf->save(public_path('storage/images/certificate/' . $user->id . '-' . $course->id . '.pdf'));
     }
-
 
 
 }

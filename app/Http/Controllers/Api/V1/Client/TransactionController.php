@@ -240,6 +240,13 @@ class TransactionController extends Controller
                 DB::table('my_courses')->where('id', $id)->update([
                     'is_done' => "1",
                 ]);
+                DB::table('certificates')->insert([
+                    'user_id' => $user->id,
+                    'course_id' => $course->id,
+                    'path' => 'certificate/' . $user->id . '-' . $course->id . '.pdf',
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ]);
                 DB::commit();
                 CertificateGenerator::generate($user->first_name .' '. $user->last_name, $course->title_course, Carbon::now()->format('d F Y'), $course->id, $user->id);
                 $certificate = Certificate::where('user_id', $user->id)->where('course_id', $course->id)->first();
