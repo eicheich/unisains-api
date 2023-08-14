@@ -44,9 +44,16 @@ class Transaction extends Model
         return Carbon::parse($this->created_at)->addDay()->format('d F Y H:i:s');
     }
 
-
-
-
+    public function getStatusAttribute()
+    {
+        if ($this->status == 'pending') {
+            return  'Belum dibayar';
+        } elseif ($this->status === 'success') {
+            return 'Berhasil';
+        } elseif ($this->status === 'failed') {
+            return 'Gagal';
+        }
+    }
     public function getDateAttribute()
     {
         return Carbon::parse($this->created_at)->format('d F Y');
