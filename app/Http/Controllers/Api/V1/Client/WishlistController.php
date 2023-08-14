@@ -48,7 +48,32 @@ class WishlistController extends Controller
                 'message' => 'Course already in wishlist',
             ], 200);
         }
-//
+    }
+
+    public function all()
+    {
+        $user = Auth::user();
+        $wishlist = Wishlist::with('course')->where('user_id', $user->id)->get();
+        if ($wishlist == null) {
+            return response()->json([
+                'message' => 'Wishlist is empty',
+            ], 200);
+        } else {
+            try {
+                return response()->json([
+                    'message' => 'success',
+                    'data' => [
+                        'wishlist' => $wishlist
+                    ]
+                ], 200);
+            } catch (\Throwable $th) {
+                DB::rollback();
+                return response()->json([
+                    'message' => 'failed',
+                    'errors' => $th->getMessage(),
+                ], 500);
+            }
+        }
 
     }
 }
