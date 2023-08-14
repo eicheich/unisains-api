@@ -74,6 +74,30 @@ class WishlistController extends Controller
                 ], 500);
             }
         }
+    }
+
+    public function delete($id)
+    {
+        $user = Auth::user();
+        $wishlist = Wishlist::where('id', $id)->first();
+        if ($wishlist == null) {
+            return response()->json([
+                'message' => 'Course not found in wishlist',
+            ], 200);
+        } else {
+            try {
+                DB::table('wishlists')->where('id', $id)->delete();
+                return response()->json([
+                    'message' => 'success',
+                ], 200);
+            } catch (\Throwable $th) {
+                DB::rollback();
+                return response()->json([
+                    'message' => 'failed',
+                    'errors' => $th->getMessage(),
+                ], 500);
+            }
+        }
 
     }
 }
