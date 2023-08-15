@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\Client\ProfileController;
 use App\Http\Controllers\Api\V1\Client\ReportController;
 use App\Http\Controllers\Api\V1\Client\PaymentController;
 use App\Http\Controllers\Api\V1\Client\TransactionController;
+use App\Http\Controllers\Api\V1\Client\WishlistController;
 use App\Http\Controllers\Api\V1\TeacherController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -66,6 +67,11 @@ Route::prefix('v1')->group(function () {
                 Route::post('store', [CartController::class, 'store']);
                 Route::get('all', [CartController::class, 'all']);
                 Route::delete('delete/{id}', [CartController::class, 'delete']);
+            });
+            Route::prefix('wishlist')->group(function () {
+                Route::post('store', [WishlistController::class, 'store']);
+                Route::get('all', [WishlistController::class, 'all']);
+                Route::delete('delete/{id}', [WishlistController::class, 'delete']);
             });
             Route::post('trx-quiz/{id}', [TransactionController::class, 'quiz']);
             Route::post('rate', [CourseController::class, 'rate']);
