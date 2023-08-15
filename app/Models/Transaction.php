@@ -46,11 +46,12 @@ class Transaction extends Model
 
     public function getStatusAttribute()
     {
-        if ($this->status == 'pending') {
-            return  'Belum dibayar';
-        } elseif ($this->status === 'success') {
-            return 'Berhasil';
-        } elseif ($this->status === 'failed') {
+//        cek status, jika status pending ganti belum di bayar
+        if ($this->attributes['status'] == 'pending'){
+            return 'Belum Dibayar';
+        } elseif ($this->attributes['status'] == 'success'){
+            return 'Selesai';
+        } elseif ($this->attributes['status'] == 'failed'){
             return 'Gagal';
         }
     }
