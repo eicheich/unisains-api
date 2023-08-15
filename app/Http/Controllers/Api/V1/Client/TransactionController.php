@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Client;
 
 use App\Helpers\CertificateGenerator;
+use App\Helpers\StatusHelper;
 use App\Http\Controllers\Controller;
 use App\Mail\MailNotify;
 use App\Models\Certificate;
@@ -120,8 +121,9 @@ class TransactionController extends Controller
     public function all()
     {
         $user = Auth::user();
-
-        // check if transaction exists
+//        panggil function statusUpdate dari StatusHelper
+        $statusHelper = new StatusHelper();
+        $statusHelper->statusUpdate();
         $transactions = Transaction::with('course')->where('user_id', $user->id)->get();
 
         if ($transactions->count() == 0) {
@@ -173,6 +175,8 @@ class TransactionController extends Controller
     public function show($id)
     {
         $user = Auth::user();
+        $statusHelper = new StatusHelper();
+        $statusHelper->statusUpdate();
         $transaction = Transaction::with('course')->where('id', $id)->where('user_id', $user->id)->first();
 
         if ($transaction == null) {
