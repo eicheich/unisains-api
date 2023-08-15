@@ -23,23 +23,37 @@ class CartController extends Controller
                 'errors' => $validator->errors(),
             ], 422);
         } else
-            try {
-                $cart = Cart::create([
-                    'user_id' => $user->id,
-                    'course_id' => $request->course_id,
-                ]);
+        {
+            $cart = Cart::where('user_id', $user->id)
+                ->where('course_id', $request->course_id)
+                ->first();
+            if ($cart) {
                 return response()->json([
-                    'message' => 'success',
-                    'data' => [
-                        'cart' => $cart
-                    ]
+                    'message' => 'Course already in cart',
                 ], 200);
-            } catch (\Throwable $th) {
-                DB::rollback();
-                return response()->json([
-                    'message' => 'Something went wrong',
-                ], 500);
+            } else {
+                try {
+                    DB::beginTransaction();
+                    $cart = Cart::create([
+                        'user_id' => $user->id,
+                        'course_id' => $request->course_id,
+                    ]);
+                    DB::commit();
+                    return response()->json([
+                        'message' => 'success',
+                        'data' => [
+                            'cart' => $cart
+                        ]
+                    ], 200);
+                } catch (\Throwable $th) {
+                    DB::rollback();
+                    return response()->json([
+                        'message' => 'Something went wrong',
+                    ], 500);
+                }
             }
+        }
+
     }
 
     public function all()
