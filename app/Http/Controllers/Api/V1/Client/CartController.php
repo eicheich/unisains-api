@@ -23,7 +23,7 @@ class CartController extends Controller
                 'errors' => $validator->errors(),
             ], 422);
         } else
-+``        {
+        {
             $cart = Cart::where('user_id', $user->id)
                 ->where('course_id', $request->course_id)
                 ->first();
