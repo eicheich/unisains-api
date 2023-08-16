@@ -25,7 +25,7 @@
                     @else
                         @foreach ($modules as $m)
                             <div id="accordion">
-                                <div class="card">
+                                <div class="card mt-3">
                                     <div class="coll-show" id="heading{{ $m->id }}">
                                         <h5 class="mb-0">
                                             <button class="btn-coll" data-toggle="collapse"

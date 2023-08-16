@@ -10,8 +10,8 @@ class Course extends Model
 {
     use HasFactory;
     protected $guarded = [];
-    protected $hidden = ['created_at', 'updated_at', 'deleted_at','is_paid','course_code','category_id','image_course','certificate_course'];
-    protected $appends = ['thumbnail','is_purchased' ];
+    protected $hidden = ['created_at', 'updated_at', 'deleted_at','is_paid','course_code','category_id','image_course','certificate_course','is_public'];
+    protected $appends = ['thumbnail','is_purchased', 'is_wishlist'];
     public function getPriceAttribute($value)
     {
         if ($this->is_paid == 0) {
@@ -95,6 +95,24 @@ class Course extends Model
     public function certificates()
     {
         return $this->hasMany(Certificate::class);
+    }
+
+//    tampilkan yg is_public nya 1
+    public function scopeIsPublic($query)
+    {
+        return $query->where('is_public', 1);
+    }
+
+    public function getIsWishlistAttribute()
+    {
+        $user = auth()->user();
+        if ($user) {
+            $wishlist = Wishlist::where('user_id', $user->id)->where('course_id', $this->id)->first();
+            if ($wishlist) {
+                return true;
+            }
+        }
+        return false;
     }
 
 

@@ -52,14 +52,8 @@
                     <span class="nav-link-text ms-1">Transaksi</span>
                 </a>
             </li>
+
             <li class="nav-item">
-                <a class="nav-link text-white " href="#">
-                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="material-icons opacity-10">view_in_ar</i>
-                    </div>
-                    <span class="nav-link-text ms-1">Augmented Reality</span>
-                </a>
-            </li><li class="nav-item">
                 <a class="nav-link text-white " href="{{route('report.page')}}">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="material-icons opacity-10">analytics</i>
@@ -73,9 +67,9 @@
             <li class="nav-item">
                 <a class="nav-link text-white " href="#">
                     <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="material-icons opacity-10">delete</i>
+                        <i class="material-icons opacity-10">view_in_ar</i>
                     </div>
-                    <span class="nav-link-text ms-1">Kotak Sampah</span>
+                    <span class="nav-link-text ms-1">Augmented Reality</span>
                 </a>
             </li>
 
@@ -100,16 +94,6 @@
                     </button>
                 </li>
             </form>
-
-
-            {{-- <li class="nav-item">
-                <a class="nav-link text-white" href="../pages/sign-up.html">
-                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="material-icons opacity-10">assignment</i>
-                    </div>
-                    <span class="nav-link-text ms-1">Log out</span>
-                </a>
-            </li> --}}
         </ul>
     </div>
     <script>

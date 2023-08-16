@@ -38,6 +38,7 @@ class AuthController extends Controller
             'username' => 'required|unique:users,username',
             'email' => 'required|unique:users,email',
             'password' => 'required',
+            'role' => 'required',
         ]);
         if ($validator->fails()) {
             return redirect()->back()->with('error', $validator->errors());
@@ -50,6 +51,7 @@ class AuthController extends Controller
                 'last_name' => $request->last_name,
                 'username' => $request->username,
                 'email' => $request->email,
+                'role' => $request->role, // 'admin', 'teacher', 'student
                 'password' => bcrypt($request->password),
             ]);
             DB::commit();
@@ -59,5 +61,5 @@ class AuthController extends Controller
             return redirect()->back()->with('error', $th->getMessage());
         }
     }
-   
+
 }

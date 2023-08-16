@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Client;
 
 use App\Helpers\CertificateGenerator;
+use App\Helpers\StatusHelper;
 use App\Http\Controllers\Controller;
 use App\Mail\MailNotify;
 use App\Models\Certificate;
@@ -120,8 +121,9 @@ class TransactionController extends Controller
     public function all()
     {
         $user = Auth::user();
-
-        // check if transaction exists
+//        panggil function statusUpdate dari StatusHelper
+        $statusHelper = new StatusHelper();
+        $statusHelper->statusUpdate();
         $transactions = Transaction::with('course')->where('user_id', $user->id)->get();
 
         if ($transactions->count() == 0) {
@@ -173,6 +175,8 @@ class TransactionController extends Controller
     public function show($id)
     {
         $user = Auth::user();
+        $statusHelper = new StatusHelper();
+        $statusHelper->statusUpdate();
         $transaction = Transaction::with('course')->where('id', $id)->where('user_id', $user->id)->first();
 
         if ($transaction == null) {
@@ -188,63 +192,82 @@ class TransactionController extends Controller
             ],
         ], 200);
     }
-    public function quiz(Request $request)
+
+    public function quiz(Request $request, $id)
     {
+        $user = Auth::user();
         $validator = Validator::make($request->all(), [
-            'my_course_id' => 'required|integer',
-            'id' => 'required|array',
-            'id.*' => 'required|integer',
+            'question_id' => 'required|array',
+            'question_id.*' => 'required',
             'answer' => 'required|array',
             'answer.*' => 'required',
         ]);
-
         if ($validator->fails()) {
             return response()->json([
                 'message' => 'Validation error',
                 'errors' => $validator->errors(),
             ], 422);
         }
-        $user = Auth::user();
+        $id = $user->id; // Assuming you need the user's ID to fetch the course
         $course = DB::table('my_courses')
             ->join('courses', 'my_courses.course_id', '=', 'courses.id')
             ->select('courses.*')
-            ->where('my_courses.id', $request->my_course_id)
+            ->where('my_courses.user_id', $id) // Assuming you want to match the user_id, change 'id' to 'user_id' if needed
             ->first();
-//        file certificate
-//        $certificateFilePath = public_path('images/certificate/certificate.pdf');
-        $correctAnswers = DB::table('questions')
-            ->whereIn('id', $request->id)
-            ->where(function ($query) use ($request) {
-                foreach ($request->id as $key => $id) {
-                    $query->orWhere(function ($query) use ($id, $request, $key) {
-                        $query->where('id', $id)
-                            ->where('answer', $request->answer[$key]);
-                    });
-                }
-            })
-            ->count();
-        $userScore = $correctAnswers * 20;
-        if ($userScore >= 60) {
+
+        if (!$course) {
+            return response()->json([
+                'message' => 'Course not found',
+            ], 404);
+        }
+        $questions = DB::table('questions')
+            ->whereIn('id', $request->question_id)
+            ->get();
+
+        $correct_answers = [];
+        foreach ($questions as $question) {
+            $correct_answers[$question->id] = $question->correct_answer;
+        }
+        $given_answers = $request->answer;
+        $correct_count = 0;
+        foreach ($given_answers as $key => $given_answer) {
+            $question_id = $request->question_id[$key];
+            if (isset($correct_answers[$question_id]) && $given_answer === $correct_answers[$question_id]) {
+                $correct_count++;
+            }
+        }
+        $total_questions = count($questions);
+        $score_percentage = $correct_count * 20;
+        if ($score_percentage >= 80) {
             try {
                 DB::beginTransaction();
-                DB::table('my_courses')->where('id', $request->my_course_id)->update([
+                DB::table('my_courses')->where('id', $id)->update([
                     'is_done' => "1",
+                ]);
+                $time = $user->id;
+                DB::table('certificates')->insert([
+                    'user_id' => $user->id,
+                    'course_id' => $course->id,
+                    'path' => 'certificate/' . $time . '.pdf',
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
                 ]);
                 DB::commit();
                 CertificateGenerator::generate($user->first_name .' '. $user->last_name, $course->title_course, Carbon::now()->format('d F Y'), $course->id, $user->id);
                 $certificate = Certificate::where('user_id', $user->id)->where('course_id', $course->id)->first();
                 $data = [
                     'name' => $user->first_name . ' ' . $user->last_name,
-                    'score' => $userScore,
+                    'score' => $score_percentage,
                     'date' => Carbon::now()->format('d F Y'),
                     'course' => $course->title_course,
-                    'link_certificate' => 'admin.unisains.com/'.$certificate->path
+                    'link_certificate' => 'admin.unisains.com/storage/images/'.$certificate->path,
+                    'time' => $time
                 ];
                 Mail::to($user->email)->send(new MailNotify($data));
                 $response = [
                     'message' => 'success',
                     'data' => [
-                        'user_score' => $userScore,
+                        'user_score' => $score_percentage,
                     ],
                 ];
                 return response()->json($response, 200);
@@ -256,11 +279,10 @@ class TransactionController extends Controller
                 ], 500);
             }
         } else {
-            return response()->json([
-                'message' => 'You did not pass the quiz. Please try again.',
-                'user_score' => $userScore,
-            ], 200);
+            return response()->json(['message' => $score_percentage]);
         }
+
+
     }
 
 

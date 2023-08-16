@@ -15,20 +15,13 @@ class CourseController extends Controller
 {
     public function all()
     {
-        $courses = Course::with('category')->get();
-
-        if ($courses->isEmpty()) {
-            return response()->json([
-                'message' => 'Course not found',
-            ], 404);
-        } else {
-            return response()->json([
+        $courses = Course::with('category')->where('is_public', 1)->get();
+        return response()->json([
                 'message' => 'success',
                 'data' => [
                     'courses' => $courses,
                 ],
-            ]);
-        }
+            ], 200);
     }
 
 

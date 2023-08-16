@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\Client\ProfileController;
 use App\Http\Controllers\Api\V1\Client\ReportController;
 use App\Http\Controllers\Api\V1\Client\PaymentController;
 use App\Http\Controllers\Api\V1\Client\TransactionController;
+use App\Http\Controllers\Api\V1\Client\WishlistController;
 use App\Http\Controllers\Api\V1\TeacherController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -31,6 +32,7 @@ Route::get('/acces-denied', function () {
     ], 501);
 })->name('login');
 
+
 Route::prefix('v1')->group(function () {
     Route::prefix('auth')->group(function () {
         Route::post('login', [AuthController::class, 'login']);
@@ -39,7 +41,10 @@ Route::prefix('v1')->group(function () {
             Route::post('logout', [AuthController::class, 'logout']);
         });
     });
+    Route::post('callback', [PaymentController::class, 'callback']);
+
     Route::post('generate',[TeacherController::class, 'generate']);
+    Route::post('testemail',[PaymentController::class, 'test'])->middleware('auth:sanctum');
     // Route::prefix('admin')->middleware('isAdmin')->group(function () {
     //     Route::get('dashboard', [DashboardController::class, 'dashboard']);
     //     Route::prefix('course')->group(function () {
@@ -61,9 +66,14 @@ Route::prefix('v1')->group(function () {
             Route::prefix('cart')->group(function () {
                 Route::post('store', [CartController::class, 'store']);
                 Route::get('all', [CartController::class, 'all']);
-                Route::post('delete/{id}', [CartController::class, 'delete']);
+                Route::delete('delete/{id}', [CartController::class, 'delete']);
             });
-            Route::post('trx-quiz', [TransactionController::class, 'quiz']);
+            Route::prefix('wishlist')->group(function () {
+                Route::post('store', [WishlistController::class, 'store']);
+                Route::get('all', [WishlistController::class, 'all']);
+                Route::delete('delete/{id}', [WishlistController::class, 'delete']);
+            });
+            Route::post('trx-quiz/{id}', [TransactionController::class, 'quiz']);
             Route::post('rate', [CourseController::class, 'rate']);
         });
     });
@@ -79,7 +89,6 @@ Route::prefix('v1')->group(function () {
         Route::post('delete/{id}', [TransactionController::class, 'delete']);
 //        checkout
         Route::post('checkout', [PaymentController::class, 'payment']);
-        Route::post('callback', [PaymentController::class, 'callback']);
     });
 //    report
     Route::prefix('report')->middleware('auth:sanctum')->group(function () {
@@ -90,11 +99,11 @@ Route::prefix('v1')->group(function () {
         Route::post('login', [TeacherController::class, 'login']);
         Route::middleware('isTeacher')->group(function (){
             Route::middleware('auth:sanctum')->group(function (){
-
             Route::post('logout', [TeacherController::class, 'logout']);
-
             Route::prefix('course')->group(function (){
                 Route::get('all', [CourseController::class, 'all']);
+                Route::get('show/{id}', [TeacherController::class, 'show']);
+                Route::post('update/{id}', [TeacherController::class, 'update']);
             });
             Route::get('dashboard', [TeacherController::class, 'dashboard']);
             });

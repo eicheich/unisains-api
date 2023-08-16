@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Api\V1\Client;
 
 use App\Http\Controllers\Controller;
+use App\Mail\SuccessPayment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Midtrans\Config;
 use Midtrans\Snap;
@@ -80,11 +83,12 @@ class PaymentController extends Controller
         }
 
         $transaction = DB::table('transactions')->where('id', $request->order_id)->first();
-        if ($request->transaction_status == 'capture') {
+        if ($request->transaction_status == 'capture' || $request->transaction_status == 'settlement') {
             try {
                 DB::beginTransaction();
-                $transaction->update([
+                DB::table('transactions')->where('id', $request->order_id)->update([
                     'status' => 'success',
+                    'updated_at' => now(),
                 ]);
                 $mycourse = DB::table('my_courses')->insert([
                     'course_id' => $transaction->course_id,
@@ -92,6 +96,17 @@ class PaymentController extends Controller
                     'created_at' => now(),
                     'updated_at' => now(),
                 ]);
+                $user = DB::table('users')->where('id', $transaction->user_id)->first();
+                Mail::to($user->email)->send(new SuccessPayment([
+                    'name' => $user->first_name . ' ' . $user->last_name,
+//                    'course' => $transaction->course_name,
+                    'date' => Carbon::now()->format('d F Y'),
+                    'id' => $transaction->id,
+                    'email' => $user->email,
+                    'paymentMethod' => $request->payment_type,
+                    'total' => $transaction->total_price,
+//                    'image' => $transaction->course_thumbnail
+                ]));
                 DB::commit();
             } catch (\Exception $e) {
                 DB::rollback();
@@ -127,6 +142,35 @@ class PaymentController extends Controller
             'status' => 'error',
             'message' => 'something went wrong',
         ], 200);
+
+    }
+
+    public function test()
+    {
+        $user = Auth::user();
+        $data = [
+            'name' => $user->first_name . ' ' . $user->last_name,
+            'course' => 'Jantung Abraham Lincoln',
+            'date' => now(),
+            'id' => 5263919,
+            'email' => $user->email,
+            'paymentMethod' => 'BCA',
+            'total' => 100000,
+            'image' => 'https://xkeuwn.stripocdn.email/content/guids/CABINET_2e2246de1276cf1b786e85afa37898e29cd6b2e37247bb8ec807d3db6572304a/images/1690501807.png'
+        ];
+        try {
+            Mail::to($user->email)->send(new SuccessPayment($data));
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'email sent',
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
 
     }
 }
