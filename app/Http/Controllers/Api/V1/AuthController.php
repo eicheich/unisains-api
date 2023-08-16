@@ -7,34 +7,46 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use App\Notifications\EmailVerificationNotification;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
     public function register(Request $request)
     {
-        $validator = $this->validate($request, [
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'string|max:255',
             'email' => 'required|email|unique:users',
-            'username' => 'required|unique:users',
-            'password' => 'required',
+            'username' => 'required|string|unique:users',
+            'password' => 'required|string|min:8',
         ]);
 
         if ($validator) {
-            DB::table('users')->insert([
-                'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
-                'email' => $request->email,
-                'username' => $request->username,
-                'password' => Hash::make($request->password),
-            ]);
-            return response()->json([
-                'message' => 'User created successfully',
-            ],201);
-        } else {
-            return response()->json([
-                'message' => $validator,
-            ],400);
+            try {
+                DB::beginTransaction();
+                $user = User::create([
+                    'first_name' => $request->first_name,
+                    'last_name' => $request->last_name,
+                    'email' => $request->email,
+                    'username' => $request->username,
+                    'password' => Hash::make($request->password),
+                ]);
+                $token = $user->createToken('token-verify')->plainTextToken;
+                $user->notify(new EmailVerificationNotification());
+                DB::commit();
+                return response()->json([
+                    'message' => 'Register success',
+                    'user' => $user,
+                    'token-verify' => $token,
+                ], 200);
+            } catch (\Exception $e) {
+                DB::rollBack();
+                return response()->json([
+                    'message' => 'Register failed',
+                    'error' => $e->getMessage(),
+                ], 400);
+            }
         }
     }
 
