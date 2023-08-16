@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\V1\Client\CourseController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\Client\CartController;
 use App\Http\Controllers\Api\V1\Client\ProfileController;
+use App\Http\Controllers\Api\V1\EmailVerifController;
 use App\Http\Controllers\Api\V1\Client\ReportController;
 use App\Http\Controllers\Api\V1\Client\PaymentController;
 use App\Http\Controllers\Api\V1\Client\TransactionController;
@@ -39,6 +40,7 @@ Route::prefix('v1')->group(function () {
         Route::post('register', [AuthController::class, 'register']);
         Route::middleware('auth:sanctum')->group(function () {
             Route::post('logout', [AuthController::class, 'logout']);
+            Route::post('verif-email', [EmailVerifController::class, 'verifEmail']);
         });
     });
     Route::post('callback', [PaymentController::class, 'callback']);

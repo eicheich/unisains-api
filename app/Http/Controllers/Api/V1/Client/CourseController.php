@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\V1\Client;
 use App\Helpers\UrlHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
+use App\Models\Question;
+use App\Models\Quiz;
 use App\Models\Rate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -54,12 +56,19 @@ class CourseController extends Controller
 
     public function learn($id)
     {
-        $course = Course::with(['category', 'modules', 'ars'])
+        $course = Course::with(['category', 'modules','summary_modules', 'ars'])
             ->find($id);
+        $quizzez = DB::table('quizzes')
+            ->where('course_id', $id)
+            ->first();
+        $question = Question::with('answers')
+            ->where('quiz_id', $quizzez->id)
+            ->get();
 
         if ($course) {
             return response()->json([
                 'course' => $course,
+                'quizzez' => $question,
             ], 200);
         } else {
             return response()->json([

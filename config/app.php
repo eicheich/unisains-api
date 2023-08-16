@@ -184,6 +184,7 @@ return [
         Illuminate\View\ViewServiceProvider::class,
 //        Ixudra\Curl\CurlServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
+        Ichtrojan\Otp\OtpServiceProvider::class,
 
 
 
@@ -215,6 +216,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
 //        'Curl' => Ixudra\Curl\Facades\Curl::class,
+    'otp' => Ichtrojan\Otp\Otp::class,
 
 
         // 'ExampleClass' => App\Example\ExampleClass::class,
