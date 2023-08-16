@@ -115,5 +115,10 @@ class Course extends Model
         return false;
     }
 
+    public function summary_modules()
+    {
+        return $this->hasMany(SummaryModule::class);
+    }
+
 
 }
