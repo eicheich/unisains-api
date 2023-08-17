@@ -97,4 +97,18 @@ class AuthController extends Controller
             ],500);
         }
     }
+
+    public function v1resetPassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|exists:users',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Email verification failed',
+                'error' => $validator->errors(),
+            ], 400);
+        }
+
+    }
 }
