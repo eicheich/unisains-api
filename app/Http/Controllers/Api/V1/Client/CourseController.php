@@ -56,7 +56,7 @@ class CourseController extends Controller
 
     public function learn($id)
     {
-        $course = Course::with(['category', 'modules', 'ars'])
+        $course = Course::with(['category', 'modules','summary_modules', 'ars'])
             ->find($id);
         $quizzez = DB::table('quizzes')
             ->where('course_id', $id)
