@@ -52,9 +52,9 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $validator = $this->validate($request, [
+        $validator = Validator::make($request->all(), [
             'email' => 'required|email',
-            'password' => 'required',
+            'password' => 'required|string|min:8',
         ]);
 
         if ($validator) {
@@ -97,5 +97,4 @@ class AuthController extends Controller
             ],500);
         }
     }
-
 }
