@@ -78,11 +78,9 @@ class CourseController extends Controller
     }
     public function show($id)
     {
-        $course = Course::with(['category', 'rates','modules' => function ($query) {
+        $course = Course::with(['category', 'rates.user','modules' => function ($query) {
             $query->select('course_id', 'title_module', 'description','image_module');
         }])->find($id);
-
-
         if ($course) {
             return response()->json([
                 'message' => 'success',
