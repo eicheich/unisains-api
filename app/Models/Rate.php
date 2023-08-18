@@ -13,7 +13,7 @@ class Rate extends Model
     protected $hidden = ['created_at', 'updated_at', 'user_id', 'course_id'];
 
 //    appends
-    protected $appends = ['avgRate'];
+//    protected $appends = [];
 
     public function courses()
     {
@@ -25,26 +25,9 @@ class Rate extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function getAvgRateAttribute()
-    {
-        return $this->avgRate($this->id);
-    }
 
-    public static function avgRate($courseId)
-    {
-        $rates = Rate::where('course_id', $courseId)->get();
-        $totalRate = 0;
 
-        foreach ($rates as $rate) {
-            $totalRate += $rate->rate;
-        }
 
-        if (count($rates) > 0) {
-            return $totalRate / count($rates);
-        } else {
-            return 0;
-        }
-    }
 
 
 
