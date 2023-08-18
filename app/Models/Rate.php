@@ -12,6 +12,9 @@ class Rate extends Model
     protected $guarded = [];
     protected $hidden = ['created_at', 'updated_at', 'user_id', 'course_id'];
 
+//    appends
+//    protected $appends = [];
+
     public function courses()
     {
         return $this->belongsTo(Course::class);

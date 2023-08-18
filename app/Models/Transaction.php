@@ -12,7 +12,7 @@ class Transaction extends Model
 
     protected $guarded = [];
     protected $hidden = ['updated_at','created_at'];
-    protected $appends = ['expired_date','date','name'];
+    protected $appends = ['expired_date','date','name','is_purchased'];
 //    append
     // Accessor to calculate the remaining time for each pending transaction
 //    public function getRemainingTimeAttribute()
@@ -73,6 +73,15 @@ class Transaction extends Model
     public function getNameAttribute()
     {
         return $this->user->first_name.' '.$this->user->last_name;
+    }
+
+    public function getIsPurchasedAttribute()
+    {
+        if ($this->status == 'Selesai'){
+            return true;
+        } else {
+            return false;
+        }
     }
 
 
