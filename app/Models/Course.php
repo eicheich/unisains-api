@@ -11,7 +11,7 @@ class Course extends Model
     use HasFactory;
     protected $guarded = [];
     protected $hidden = ['created_at', 'updated_at', 'deleted_at','is_paid','course_code','category_id','image_course','certificate_course','is_public'];
-    protected $appends = ['thumbnail','is_purchased', 'is_wishlist','avgRate','in_cart'];
+    protected $appends = ['thumbnail','is_purchased', 'is_wishlist','avgRate','in_cart','totalRate'];
     public function getPriceAttribute($value)
     {
         if ($this->is_paid == 0) {
@@ -150,6 +150,11 @@ class Course extends Model
             }
         }
         return false;
+    }
+    public function getTotalRateAttribute()
+    {
+        $rate = Rate::where('course_id', $this->id)->get();
+        return count($rate);
     }
 
 
