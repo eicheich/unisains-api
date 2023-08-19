@@ -244,7 +244,7 @@ class TransactionController extends Controller
                 DB::table('my_courses')->where('id', $id)->update([
                     'is_done' => "1",
                 ]);
-                $time = $user->id.'-'.$course->id;
+                $time = $user->id.$course->id;
                 DB::table('certificates')->insert([
                     'user_id' => $user->id,
                     'course_id' => $course->id,
@@ -253,7 +253,7 @@ class TransactionController extends Controller
                     'updated_at' => Carbon::now(),
                 ]);
                 DB::commit();
-                CertificateGenerator::generate($user->first_name .' '. $user->last_name, $course->title_course, Carbon::now()->format('d F Y'), $course->id, $user->id);
+                CertificateGenerator::generate($user->first_name .' '. $user->last_name, $course->title_course, Carbon::now()->format('d F Y'), $course->id, $user->id, $time);
                 $certificate = Certificate::where('user_id', $user->id)->where('course_id', $course->id)->first();
                 $data = [
                     'name' => $user->first_name . ' ' . $user->last_name,
