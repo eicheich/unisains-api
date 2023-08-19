@@ -9,10 +9,24 @@ class Quiz extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'course_id',
+        'title_quiz',
+    ];
 
-    public function course()
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
+
+    public function courses()
     {
         return $this->belongsTo(Course::class);
-    }   
+    }
+
+    public function questions()
+    {
+        return $this->hasMany(Question::class);
+    }
+
 }

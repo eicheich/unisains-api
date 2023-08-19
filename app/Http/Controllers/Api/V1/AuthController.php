@@ -4,45 +4,66 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Notifications\ResetPasswordNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use App\Notifications\EmailVerificationNotification;
+use Illuminate\Support\Facades\Validator;
+use Ichtrojan\Otp\Otp;
 
 class AuthController extends Controller
 {
+    private $otp;
+
+    public function __construct()
+    {
+        $this->otp = new Otp();
+    }
     public function register(Request $request)
     {
-        $validator = $this->validate($request, [
-            'first_name' => 'required|string',
-            'last_name' => 'required|string',
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'string|max:255',
             'email' => 'required|email|unique:users',
-            'username' => 'required|unique:users',
-            'password' => 'required',
+            'username' => 'required|string|unique:users',
+            'password' => 'required|string|min:8',
         ]);
 
         if ($validator) {
-            DB::table('users')->insert([
-                'first_name' => $request->first_name,
-                'last_name' => $request->last_name,
-                'email' => $request->email,
-                'username' => $request->username,
-                'password' => Hash::make($request->password),
-            ]);
-            return response()->json([
-                'message' => 'User created successfully',
-            ],201);
-        } else {
-            return response()->json([
-                'message' => $validator,
-            ],400);
+            try {
+                DB::beginTransaction();
+                $user = User::create([
+                    'first_name' => $request->first_name,
+                    'last_name' => $request->last_name,
+                    'email' => $request->email,
+                    'username' => $request->username,
+                    'password' => Hash::make($request->password),
+                ]);
+                $token = $user->createToken('token-verify')->plainTextToken;
+                $user->notify(new EmailVerificationNotification());
+                DB::commit();
+                return response()->json([
+                    'message' => 'Register success',
+                    'user' => $user,
+                    'token-verify' => $token,
+                ], 200);
+            } catch (\Exception $e) {
+                DB::rollBack();
+                return response()->json([
+                    'message' => 'Register failed',
+                    'error' => $e->getMessage(),
+                ], 400);
+            }
         }
     }
 
     public function login(Request $request)
     {
-        $validator = $this->validate($request, [
+        $validator = Validator::make($request->all(), [
             'email' => 'required|email',
-            'password' => 'required',
+            'password' => 'required|string|min:8',
         ]);
 
         if ($validator) {
@@ -52,6 +73,7 @@ class AuthController extends Controller
                     $token = $user->createToken('token-name')->plainTextToken;
                     return response()->json([
                         'message' => 'Login success',
+                        'user' => $user,
                         'token' => $token,
                     ],200);
                 } else {
@@ -80,9 +102,67 @@ class AuthController extends Controller
             ],200);
         } else {
             return response()->json([
-                'message' => 'Logout failed',
+                'status' => 'failed',
             ],500);
         }
     }
 
+    public function forgotPassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|exists:users',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Email verification failed',
+                'error' => $validator->errors(),
+            ], 400);
+        }
+        $user = User::where('email', $request->email)->first();
+        $token = $user->createToken('token-forgotpw')->plainTextToken;
+        $user->notify(new ResetPasswordNotification());
+        return response()->json([
+            'message' => 'success',
+            'token' => $token,
+        ],200);
+    }
+    public function resetPassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'otp' => 'required|numeric|digits:6',
+            'password' => 'required|string|min:8',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Email verification failed',
+                'error' => $validator->errors(),
+            ], 400);
+        }
+        $user = Auth::user();
+        $otp2 = $this->otp->validate($user->email, $request->otp);
+        if (!$otp2->status) {
+            return response()->json([
+                'message' => 'error',
+                'error' => $otp2,
+            ],401);
+        }
+        try {
+            DB::beginTransaction();
+            $user->password = Hash::make($request->password);
+            $user->save();
+            DB::commit();
+            return response()->json([
+                'message' => 'success',
+            ],200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'message' => 'error',
+                'error' => $e->getMessage(),
+            ],500);
+        }
+
+
+
+    }
 }

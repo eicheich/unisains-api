@@ -32,7 +32,21 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'created_at',
+        'updated_at',
+        'avatar',
+        'email_verified_at',
+
     ];
+
+    protected $appends = ['image'];
+
+    public function getImageAttribute()
+    {
+        return $this->avatar ? asset('storage/images/avatar/' . $this->avatar) : asset('storage/images/avatar/default.png');
+    }
+
+
 
     /**
      * The attributes that should be cast.
@@ -46,5 +60,26 @@ class User extends Authenticatable
     public function courses()
     {
         return $this->belongsToMany(Course::class, 'user_courses');
+    }
+
+    public function reports()
+    {
+        return $this->hasMany(Report::class);
+    }
+
+    public function myCourses()
+    {
+        return $this->hasMany(MyCourse::class);
+    }
+
+    public function certificates()
+    {
+        return $this->hasMany(Certificate::class);
+    }
+
+    public function rates()
+    {
+        return $this->hasMany(Rate::class);
+
     }
 }

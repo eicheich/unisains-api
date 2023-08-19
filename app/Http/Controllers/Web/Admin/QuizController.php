@@ -13,8 +13,7 @@ class QuizController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'soal' => 'required',
-            'jawaban' => 'required',
+            'title_quiz' => 'required',
             'course_id' => 'required',
         ]);
         if ($validator->fails()) {
@@ -22,8 +21,7 @@ class QuizController extends Controller
         }
         try {
             $quiz = Quiz::create([
-                'soal' => $request->soal,
-                'jawaban' => $request->jawaban,
+                'title_quiz' => $request->title_quiz,
                 'course_id' => $request->course_id,
             ]);
             return redirect()->back()->with('success', 'Berhasil menambahkan quiz');
@@ -59,5 +57,5 @@ class QuizController extends Controller
         }
         # code...
     }
-    
+
 }

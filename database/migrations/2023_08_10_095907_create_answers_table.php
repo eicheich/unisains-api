@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('module_rangkuman', function (Blueprint $table) {
+        Schema::create('answers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('course_id')->constrained('courses');
-            $table->text('isi_rangkuman');
-            $table->string('video_rangkuman');
             $table->timestamps();
+            $table->foreignId('question_id')->constrained('questions')->cascadeOnDelete();
+            $table->string('answer');
+            $table->enum('value', ['a', 'b','c','d']);
         });
     }
 
@@ -25,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('module_rangkuman');
+        Schema::dropIfExists('answers');
     }
 };

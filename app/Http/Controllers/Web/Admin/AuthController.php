@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
@@ -28,5 +29,37 @@ class AuthController extends Controller
         auth()->logout();
         return redirect()->route('login.page');
     }
-   
+
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'first_name' => 'required|string|max:100',
+            'last_name' => 'required|string|max:100',
+            'username' => 'required|unique:users,username',
+            'email' => 'required|unique:users,email',
+            'password' => 'required',
+            'role' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()->with('error', $validator->errors());
+        }
+
+        try {
+            DB::beginTransaction();
+            $user = DB::table('users')->insert([
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'username' => $request->username,
+                'email' => $request->email,
+                'role' => $request->role, // 'admin', 'teacher', 'student
+                'password' => bcrypt($request->password),
+            ]);
+            DB::commit();
+            return redirect()->back()->with('success', ' created successfully');
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return redirect()->back()->with('error', $th->getMessage());
+        }
+    }
+
 }

@@ -18,7 +18,7 @@ class ModuleController extends Controller
         $validator = Validator::make($request->all(), [
             'title_module' => 'required|string|max:255',
             'materi_module' => 'required',
-            'description' => 'required|max:255',
+            'description' => 'required',
             'image_module' => 'required|file|mimes:jpeg,png',
         ]);
 
@@ -99,7 +99,7 @@ class ModuleController extends Controller
             'course_id' => 'required|integer',
         ]);
         if ($validator->fails()) {
-            return redirect()->back()->with('status', $validator->errors());
+            return redirect()->back()->with('error', $validator->errors());
         }
 
         $video = $request->file('video_rangkuman');
@@ -107,13 +107,13 @@ class ModuleController extends Controller
         $video->move(public_path('storage/video/rangkuman'), $video_name);
 
         // db insert into
-        $rangkuman = DB::table('module_rangkuman')->insert([
-            'isi_rangkuman' => $request->isi_rangkuman,
-            'video_rangkuman' => $video_name,
+        $rangkuman = DB::table('summary_modules')->insert([
+            'summary' => $request->isi_rangkuman,
+            'summary_video' => $video_name,
             'course_id' => $request->course_id,
         ]);
 
-        return redirect()->back()->with('status', 'Rangkuman created successfully');
+        return redirect()->back()->with('success', 'Rangkuman created successfully');
     }
 
     public function createRangkuman($course_id)
@@ -124,7 +124,7 @@ class ModuleController extends Controller
 
     public function editRangkuman($id)
     {
-        $rangkuman = DB::table('module_rangkuman')->where('id', $id)->first();
+        $rangkuman = DB::table('summary_modules')->where('id', $id)->first();
         return view('admin.course.module.rangkuman.edit', compact('rangkuman'));
     }
 
@@ -138,22 +138,22 @@ class ModuleController extends Controller
             return redirect()->back()->with('status', $validator->errors());
         }
 
-        $rangkuman = DB::table('module_rangkuman')->where('id', $id)->first();
-        if ($request->hasFile('video_rangkuman')) {
+        $rangkuman = DB::table('summary_modules')->where('id', $id)->first();
+        if ($request->hasFile('summary_video')) {
             $old_video = public_path('storage/video/rangkuman/') . $rangkuman->video_rangkuman;
             if (file_exists($old_video)) {
                 unlink($old_video);
             }
-            $video = $request->file('video_rangkuman');
+            $video = $request->file('summary_video');
             $video_name = time() . '.' . $video->getClientOriginalExtension();
             $video->move(public_path('storage/video/rangkuman'), $video_name);
         } else {
-            $video_name = $rangkuman->video_rangkuman;
+            $video_name = $rangkuman->summary_video;
         }
         // db update
-        $rangkuman = DB::table('module_rangkuman')->where('id', $id)->update([
-            'isi_rangkuman' => $request->isi_rangkuman,
-            'video_rangkuman' => $video_name,
+        $rangkuman = DB::table('summary_modules')->where('id', $id)->update([
+            'summary' => $request->isi_rangkuman,
+            'summary_video' => $video_name,
         ]);
 
         return redirect()->route('course.page')->with('status', 'Rangkuman updated successfully');

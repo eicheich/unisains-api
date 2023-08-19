@@ -17,6 +17,7 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment
@@ -69,7 +70,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'Asia/Jakarta',
 
     /*
     |--------------------------------------------------------------------------
@@ -181,6 +182,11 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+//        Ixudra\Curl\CurlServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
+        Ichtrojan\Otp\OtpServiceProvider::class,
+
+
 
         /*
          * Package Service Providers...
@@ -209,6 +215,10 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
+//        'Curl' => Ixudra\Curl\Facades\Curl::class,
+    'otp' => Ichtrojan\Otp\Otp::class,
+
+
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 

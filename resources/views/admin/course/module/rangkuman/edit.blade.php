@@ -16,11 +16,11 @@
             <div class="card-body">
                 <h5 class="card-title">Video Rangkuman</h5>
                 <video class="video-control" controls>
-                    <source src="{{ asset('storage/video/rangkuman/' . $rangkuman->video_rangkuman) }}" type="video/mp4">
-                    <source src="{{ asset('storage/video/rangkuman/' . $rangkuman->video_rangkuman) }}" type="video/webm">
-                    <source src="{{ asset('storage/video/rangkuman/' . $rangkuman->video_rangkuman) }}" type="video/ogg">
+                    <source src="{{ asset('storage/video/rangkuman/' . $rangkuman->summary_video) }}" type="video/mp4">
+                    <source src="{{ asset('storage/video/rangkuman/' . $rangkuman->summary_video) }}" type="video/webm">
+                    <source src="{{ asset('storage/video/rangkuman/' . $rangkuman->summary_video) }}" type="video/ogg">
                     Your browser does not support the video tag. You can <a
-                        href="{{ asset('storage/video/rangkuman/' . $rangkuman->video_rangkuman) }}">download the
+                        href="{{ asset('storage/video/rangkuman/' . $rangkuman->summary_video) }}">download the
                         video</a>
                     instead.
                 </video>
@@ -109,7 +109,7 @@
         }
     </style>
     <script>
-        document.getElementById('isi').value = "{{ $rangkuman->isi_rangkuman }}";
+        document.getElementById('isi').value = "{{ $rangkuman->summary }}";
 
     </script>
 @endsection
