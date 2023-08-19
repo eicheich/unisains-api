@@ -65,9 +65,11 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <i class="fas fa-chart-bar me-1"></i>
-                    Chart Transaksi
+                    Chart Transaksi (Perkembangan Bulanan)
                 </div>
-                <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
+                <div class="card-body">
+                    <canvas id="myLineTrxChart" width="100%" height="100%"></canvas>
+                </div>
             </div>
         </div>
     </div>
@@ -90,6 +92,38 @@
                     data: counts,
                     backgroundColor: 'rgba(75, 192, 192, 0.2)',
                     borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1,
+                    fill: true,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        type: 'category', // Use a category axis for the x-axis (months are categories)
+                    },
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        var transactionChart = @json($transactionChart);
+        var monthsTrx = Object.keys(transactionChart);
+        var countsTrx = Object.values(transactionChart);
+
+        var trxCtx = document.getElementById('myLineTrxChart').getContext('2d');
+        var myLineTrxChart = new Chart(trxCtx, {
+            type: 'line', // Line chart
+            data: {
+                labels: monthsTrx,
+                datasets: [{
+                    label: 'Transaction Count',
+                    data: countsTrx,
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
                     borderWidth: 1,
                     fill: true,
                 }]

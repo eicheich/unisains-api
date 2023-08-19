@@ -23,9 +23,12 @@ class DashboardController extends Controller
             ->get()
             ->pluck('count', 'month')
             ->toArray();
-
-//        dd($userChart);
-        return view('admin.dashboard', compact('course', 'user', 'transaction', 'report', 'userChart'));
+        $transactionChart = Transaction::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, count(*) as count')
+            ->groupBy('month')
+            ->get()
+            ->pluck('count', 'month')
+            ->toArray();
+        return view('admin.dashboard', compact('course', 'user', 'transaction', 'report', 'userChart', 'transactionChart'));
 
     }
 }
