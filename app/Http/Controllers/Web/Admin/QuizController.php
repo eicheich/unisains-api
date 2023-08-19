@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Web\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Answer;
 use App\Models\Course;
+use App\Models\Question;
 use App\Models\Quiz;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class QuizController extends Controller
@@ -13,17 +16,43 @@ class QuizController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'title_quiz' => 'required',
-            'course_id' => 'required',
+            'question' => 'required',
+            'correct_answer' => 'required',
+            'a' => 'required',
+            'b' => 'required',
+            'c' => 'required',
+            'd' => 'required',
         ]);
         if ($validator->fails()) {
             return redirect()->back()->with('warning', $validator->errors());
         }
         try {
-            $quiz = Quiz::create([
-                'title_quiz' => $request->title_quiz,
-                'course_id' => $request->course_id,
+            $question = Question::create([
+                'question' => $request->question,
+                'correct_answer' => $request->correct_answer,
+                'quiz_id' => $request->quiz_id,
             ]);
+            Answer::create([
+                'answer' => $request->a,
+                'value' => 'a',
+                'question_id' => $question->id,
+            ]);
+            Answer::create([
+                'answer' => $request->b,
+                'value' => 'b',
+                'question_id' => $question->id,
+            ]);
+            Answer::create([
+                'answer' => $request->c,
+                'value' => 'c',
+                'question_id' => $question->id,
+            ]);
+            Answer::create([
+                'answer' => $request->d,
+                'value' => 'd',
+                'question_id' => $question->id,
+            ]);
+
             return redirect()->back()->with('success', 'Berhasil menambahkan quiz');
         } catch (\Throwable $th) {
             return redirect()->back()->with('status', $th->getMessage());
