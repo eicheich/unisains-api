@@ -34,7 +34,8 @@ class User extends Authenticatable
         'remember_token',
         'created_at',
         'updated_at',
-        'avatar'
+        'avatar',
+        'email_verified_at',
 
     ];
 
@@ -74,5 +75,11 @@ class User extends Authenticatable
     public function certificates()
     {
         return $this->hasMany(Certificate::class);
+    }
+
+    public function rates()
+    {
+        return $this->hasMany(Rate::class);
+
     }
 }
