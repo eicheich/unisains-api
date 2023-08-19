@@ -53,13 +53,14 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <i class="fas fa-chart-area me-1"></i>
-                    Chart Pengguna (Perkembangan Harian)
+                    Chart Pengguna (Perkembangan Bulanan)
                 </div>
                 <div class="card-body">
                     <canvas id="myLineChart" width="100%" height="100%"></canvas>
                 </div>
             </div>
         </div>
+
         <div class="col-xl-6">
             <div class="card mb-4">
                 <div class="card-header">
@@ -73,18 +74,17 @@
     <script src="{{asset('js/datatables-simple-demo.js')}}"></script>
     <script src="{{asset('js/scripts.js')}}"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script>
         var userChart = @json($userChart);
-
-        // Extract dates and counts from the userChart object
-        var dates = Object.keys(userChart);
+        var months = Object.keys(userChart);
         var counts = Object.values(userChart);
 
         var ctx = document.getElementById('myLineChart').getContext('2d');
         var myLineChart = new Chart(ctx, {
-            type: 'pie',
+            type: 'line', // Line chart
             data: {
-                labels: dates,
+                labels: months,
                 datasets: [{
                     label: 'User Count',
                     data: counts,
@@ -99,13 +99,7 @@
                 maintainAspectRatio: false,
                 scales: {
                     x: {
-                        type: 'time', // Use a time axis for the x-axis to handle dates
-                        time: {
-                            unit: 'day', // Display the data by day
-                            displayFormats: {
-                                day: 'YYYY-MM-DD' // Format to display on the x-axis
-                            }
-                        }
+                        type: 'category', // Use a category axis for the x-axis (months are categories)
                     },
                     y: {
                         beginAtZero: true
