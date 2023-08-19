@@ -244,7 +244,7 @@ class TransactionController extends Controller
                 DB::table('my_courses')->where('id', $id)->update([
                     'is_done' => "1",
                 ]);
-                $time = $user->id;
+                $time = $user->id.'-'.$course->id;
                 DB::table('certificates')->insert([
                     'user_id' => $user->id,
                     'course_id' => $course->id,
