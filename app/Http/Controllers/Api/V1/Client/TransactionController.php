@@ -253,7 +253,7 @@ class TransactionController extends Controller
                     'updated_at' => Carbon::now(),
                 ]);
                 DB::commit();
-                CertificateGenerator::generate($user->first_name .' '. $user->last_name, $course->title_course, Carbon::now()->format('d F Y'), $course->id, $user->id, $time);
+                CertificateGenerator::generate($user->first_name .' '. $user->last_name, $course->title_course, Carbon::now()->format('d F Y'),$score_percentage, $time);
                 $certificate = Certificate::where('user_id', $user->id)->where('course_id', $course->id)->first();
                 $data = [
                     'name' => $user->first_name . ' ' . $user->last_name,
