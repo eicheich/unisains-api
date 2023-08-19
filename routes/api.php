@@ -36,11 +36,13 @@ Route::get('/acces-denied', function () {
 
 Route::prefix('v1')->group(function () {
     Route::prefix('auth')->group(function () {
+        route::post('forgot-password', [AuthController::class, 'forgotPassword']);
         Route::post('login', [AuthController::class, 'login']);
         Route::post('register', [AuthController::class, 'register']);
         Route::middleware('auth:sanctum')->group(function () {
             Route::post('logout', [AuthController::class, 'logout']);
             Route::post('verif-email', [EmailVerifController::class, 'verifEmail']);
+            Route::post('reset-password', [AuthController::class, 'resetPassword']);
         });
     });
     Route::post('callback', [PaymentController::class, 'callback']);

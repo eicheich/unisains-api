@@ -8,7 +8,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Ichtrojan\Otp\Otp;
 
-class EmailVerificationNotification extends Notification
+class ResetPasswordNotification extends Notification
 {
     use Queueable;
     public $message;
@@ -17,14 +17,13 @@ class EmailVerificationNotification extends Notification
     public $subject;
     private $otp;
 
-
     /**
      * Create a new notification instance.
      */
     public function __construct()
     {
-        $this->message = 'Gunakan kode ini untuk verifikasi email anda: ';
-        $this->subject = 'Verifikasi Email';
+        $this->message = 'Gunakan kode ini untuk reset password anda: ';
+        $this->subject = 'Reset Password';
         $this->mailer = 'smtp';
         $this->fromEmail = config('mail.from.address');
         $this->otp = new Otp();
@@ -47,7 +46,7 @@ class EmailVerificationNotification extends Notification
     {
         $otp = $this->otp->generate($notifiable->email,6,60);
         return (new MailMessage)
-                    ->mailer('smtp')->subject($this->subject)->greeting('Halo, ' . $notifiable->first_name)
+            ->mailer('smtp')->subject($this->subject)->greeting('Halo, ' . $notifiable->first_name)
             ->line($this->message)->line('kode : '. $otp->token);
     }
 

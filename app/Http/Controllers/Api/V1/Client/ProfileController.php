@@ -48,6 +48,7 @@ class ProfileController extends Controller
             'last_name' => 'required|string',
             'username' => 'required',
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,svg',
+            'email' => 'required|email|unique:users,email,'
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -75,6 +76,7 @@ class ProfileController extends Controller
                 'last_name' => $request->last_name,
                 'username' => $request->username,
                 'avatar' => $avatar_name,
+                'email' => $request->email,
             ]);
             DB::commit();
             return response()->json([
