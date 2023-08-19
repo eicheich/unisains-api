@@ -41,7 +41,8 @@ class Transaction extends Model
 //    }
     public function getExpiredDateAttribute()
     {
-        return Carbon::parse($this->created_at)->addDay()->format('d F Y H:i:s');
+        $exp =  Carbon::parse($this->created_at)->addDay();
+        return $exp->isoFormat('D MMMM Y HH:mm:ss');
     }
 
     public function getStatusAttribute()
@@ -57,7 +58,10 @@ class Transaction extends Model
     }
     public function getDateAttribute()
     {
-        return Carbon::parse($this->created_at)->format('d F Y');
+        $date = Carbon::parse($this->created_at);
+        $formattedDate = $date->isoFormat('D MMMM Y');
+
+        return $formattedDate;
     }
 
     public function course()
