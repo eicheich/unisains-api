@@ -46,6 +46,7 @@ class EmailVerifController extends Controller
                 $user->email_verified_at = now();
                 $user->save();
                 DB::commit();
+                activity()->causedBy($user)->log('Verified Email '. $user->email);
                 return response()->json([
                     'message' => 'Email verification success',
                     'user' => $user,

@@ -72,6 +72,65 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-history me-1"></i>
+                        Aktivitas Pengguna (Terbaru)
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            @foreach($activityLog as $log)
+                                <li class="list-group-item p-3">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-grow-1">
+                                            <h6 class="card-title">{{ $log->description }}</h6>
+                                            <small class="text-muted">{{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $log->created_at)->format('d F Y, H:i:s') }}</small>
+                                        </div>
+                                        <div class="flex-shrink-0">
+                                            @if($log->causer_type === 'App\Models\User')
+                                                <i class="fas fa-user-circle fa-2x text-primary"></i>
+                                            @elseif($log->causer_type === 'App\Models\Course')
+                                                <i class="fas fa-book fa-2x text-success"></i>
+                                            @elseif($log->causer_type === 'App\Models\Transaction')
+                                                <i class="fas fa-exchange-alt fa-2x text-warning"></i>
+                                            @else
+                                                <i class="fas fa-info-circle fa-2x text-secondary"></i>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </li>
+                            @endforeach
+                                <hr>
+                                <div class="d-flex justify-content-between align-items-center pt-5">
+                                    <div class="btn-toolbar mb-2 mb-md-0">
+                                        <div class="btn-group me-2">
+                                            <a href="{{ $activityLog->previousPageUrl() }}" class="btn btn-sm btn-primary">Previous</a>
+                                        </div>
+                                    </div>
+
+                                    <div class="btn-toolbar mb-2 mb-md-0">
+                                        <div class="btn-group me-2">
+                                            <p class="page-info">{{ $activityLog->currentPage() }}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="btn-toolbar mb-2 mb-md-0">
+                                        <div class="btn-group me-2">
+                                            <a href="{{ $activityLog->nextPageUrl() }}" class="btn btn-sm btn-primary">Next</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
     </div>
     <script src="{{asset('js/datatables-simple-demo.js')}}"></script>
     <script src="{{asset('js/scripts.js')}}"></script>

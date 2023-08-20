@@ -46,9 +46,11 @@ class AuthController extends Controller
                     'username' => $request->username,
                     'password' => Hash::make($request->password),
                 ]);
+                activity()->causedBy($user)->log('Created Account '. $user->email);
                 $token = $user->createToken('token-verify')->plainTextToken;
                 $user->notify(new EmailVerificationNotification());
                 DB::commit();
+                activity()->causedBy($user)->log('Requested OTP for Verify Email '. $user->email);
                 return response()->json([
                     'message' => 'Register success',
                     'user' => $user,
@@ -79,6 +81,7 @@ class AuthController extends Controller
             if ($user) {
                 if (Hash::check($request->password, $user->password)) {
                     $token = $user->createToken('token-name')->plainTextToken;
+                    activity()->causedBy($user)->log('Logged In '. $user->email);
                     return response()->json([
                         'message' => 'Login success',
                         'user' => $user,
@@ -103,15 +106,19 @@ class AuthController extends Controller
     }
     public function logout(Request $request)
     {
-        $token = $request->user()->currentAccessToken()->delete();
+        $user = $request->user();
+        $token = $user->currentAccessToken()->delete();
         if ($token) {
+            activity()
+                ->causedBy($user)
+                ->log('Logged Out ' . $user->email);
             return response()->json([
                 'message' => 'Logout success',
-            ],200);
+            ], 200);
         } else {
             return response()->json([
                 'status' => 'failed',
-            ],500);
+            ], 500);
         }
     }
 
@@ -129,6 +136,7 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
         $token = $user->createToken('token-forgotpw')->plainTextToken;
         $user->notify(new ResetPasswordNotification());
+        activity()->causedBy($user)->log('Requested OTP Reset Password '. $user->email);
         return response()->json([
             'message' => 'success',
             'token' => $token,
@@ -159,6 +167,7 @@ class AuthController extends Controller
             $user->password = Hash::make($request->password);
             $user->save();
             DB::commit();
+            activity()->causedBy($user)->log('Reset Password '. $user->email);
             return response()->json([
                 'message' => 'success',
             ],200);
