@@ -87,4 +87,24 @@ class QuizController extends Controller
         # code...
     }
 
+    public function delete($id)
+    {
+        $question = Question::find($id);
+        if ($question){
+            try {
+                DB::beginTransaction();
+                Answer::where('question_id', $question->id)->delete();
+                $question->delete();
+                DB::commit();
+                return redirect()->back()->with('success', 'Berhasil menghapus quiz');
+            } catch (\Exception $e) {
+                DB::rollBack();
+                return redirect()->back()->with('error', $e->getMessage());
+            }
+        }
+    }
+
+
+
+
 }

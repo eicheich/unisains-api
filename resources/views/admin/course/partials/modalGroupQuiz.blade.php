@@ -14,7 +14,7 @@
                     <h5>Soal</h5>
                     <div class="form-group">
                         <label for="module-name">Pertanyaan</label>
-                        <input type="text" class="form-control" id="module-name" name="question" placeholder="Pertanyaan">
+                        <input type="text" class="form-control" id="module-name" name="question" placeholder="Pertanyaan" required>
                         <hr>
                         <div class="form-group">
                             <label for="module-name">Jawaban Benar</label>
@@ -47,19 +47,19 @@
                         <h5>Jawaban Pilihan Ganda</h5>
                         <div class="opsi-jawaban">
                             <label for="module-name">Opsi A</label>
-                            <input type="text" class="form-control" id="module-name" name="a" placeholder="Opsi A">
+                            <input type="text" class="form-control" id="module-name" name="a" placeholder="Opsi A" required>
                         </div>
                         <div class="opsi-jawaban">
                             <label for="module-name">Opsi B</label>
-                            <input type="text" class="form-control" id="module-name" name="b" placeholder="Opsi B">
+                            <input type="text" class="form-control" id="module-name" name="b" placeholder="Opsi B" required>
                         </div>
                         <div class="opsi-jawaban">
                             <label for="module-name">Opsi C</label>
-                            <input type="text" class="form-control" id="module-name" name="c" placeholder="Opsi C">
+                            <input type="text" class="form-control" id="module-name" name="c" placeholder="Opsi C" required>
                         </div>
                         <div class="opsi-jawaban">
                             <label for="module-name">Opsi D</label>
-                            <input type="text" class="form-control" id="module-name" name="d" placeholder="Opsi D">
+                            <input type="text" class="form-control" id="module-name" name="d" placeholder="Opsi D" required>
                         </div>
 
 

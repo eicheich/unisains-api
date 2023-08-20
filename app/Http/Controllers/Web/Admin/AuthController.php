@@ -62,4 +62,11 @@ class AuthController extends Controller
         }
     }
 
+//    show
+    public function show($id)
+    {
+        $user = DB::table('users')->where('id', $id)->first();
+        return view('admin.user.show', compact('user'));
+    }
+
 }
