@@ -73,24 +73,24 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-6">
                 <div class="card mb-4">
                     <div class="card-header">
-                        Activity Log
+                        Aktivitas Terbaru (Hari Ini)
                     </div>
                     <div class="card-body">
-                        <ul class="list-groups">
+                        <ul class="list-groups  justify-content-between">
                             @foreach($activityLog as $log)
-                                <li class="list-group-item">
-                                    {{ $log->description }}
+                                <li class="list-group-item p-2">
+                                    <div class="card-description">
+                                        <strong>{{ $log->description }}</strong>
+                                    </div>
+                                    <small>{{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $log->created_at)->format('d F Y, H:i:s') }}</small>
                                     <br>
-{{--                                    <small>{{ $log->created_at->format('d F Y, H:i:s') }}</small>--}}
                                 </li>
                             @endforeach
                         </ul>
                     </div>
                 </div>
-            </div>
         </div>
 
     </div>
