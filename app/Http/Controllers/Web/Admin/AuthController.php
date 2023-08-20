@@ -18,6 +18,7 @@ class AuthController extends Controller
     {
         $credentials = $request->only('email', 'password');
         if (auth()->attempt($credentials)) {
+            $user = auth()->user();
             return redirect()->route('dashboard.page');
         } else {
             return redirect()->back()->withErrors(['password' => 'Password is incorrect']);

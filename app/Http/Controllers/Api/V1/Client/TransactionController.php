@@ -7,6 +7,7 @@ use App\Helpers\StatusHelper;
 use App\Http\Controllers\Controller;
 use App\Mail\MailNotify;
 use App\Models\Certificate;
+use App\Models\Course;
 use App\Models\MyCourse;
 use App\Models\Transaction;
 use Carbon\Carbon;
@@ -61,6 +62,7 @@ class TransactionController extends Controller
                     'updated_at' => Carbon::now(),
                 ]);
                 DB::commit();
+                activity()->causedBy($transaction)->log('Added Transaction '. $user->email);
                 return response()->json([
                     'message' => 'Transaction added',
                 ], 201);
@@ -87,6 +89,8 @@ class TransactionController extends Controller
                 DB::table('transactions')->insert($transaction);
                 $newTransaction = DB::table('transactions')->where('code_transaction', $code_transaction)->first();
                 DB::commit();
+                $trx = Transaction::where('code_transaction', $code_transaction)->first();
+                activity()->causedBy($trx)->log('Added Transaction '. $user->email);
                 return response()->json([
                     'message' => 'transaction added',
                     'data' => [
@@ -264,6 +268,8 @@ class TransactionController extends Controller
                     'time' => $time
                 ];
                 Mail::to($user->email)->send(new MailNotify($data));
+                $modelCourse = Course::find($course->id);
+                activity()->causedBy($user)->log('Completed the course ' . $user->email);
                 $response = [
                     'message' => 'success',
                     'data' => [
