@@ -71,6 +71,8 @@ class AuthController extends Controller
             if ($user) {
                 if (Hash::check($request->password, $user->password)) {
                     $token = $user->createToken('token-name')->plainTextToken;
+//                    acgtiviy log
+                    activity()->causedBy($user)->log($user->email.' login');
                     return response()->json([
                         'message' => 'Login success',
                         'user' => $user,
