@@ -19,7 +19,8 @@ class DashboardController extends Controller
         $transaction = Transaction::all()->count();
         $report = Report::all()->count();
 //        lihat semua data dari tabeel activity_log dari yg terbaru
-        $activityLog = DB::table('activity_log')->orderByDesc('created_at')->get();
+        $activityLog = DB::table('activity_log')->orderByDesc('created_at')->paginate(10);
+
 
         $userChart = User::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, count(*) as count')
             ->groupBy('month')

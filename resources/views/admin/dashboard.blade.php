@@ -73,25 +73,41 @@
             </div>
         </div>
         <div class="row">
+            <div class="col-md-12">
                 <div class="card mb-4">
                     <div class="card-header">
-                        Aktivitas Terbaru (Hari Ini)
+                        <i class="fas fa-history me-1"></i>
+                        Aktivitas Pengguna (Terbaru)
                     </div>
                     <div class="card-body">
-                        <ul class="list-groups  justify-content-between">
+                        <ul class="list-group">
                             @foreach($activityLog as $log)
-                                <li class="list-group-item p-2">
-                                    <div class="card-description">
-                                        <strong>{{ $log->description }}</strong>
+                                <li class="list-group-item p-3">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-grow-1">
+                                            <h6 class="card-title">{{ $log->description }}</h6>
+                                            <small class="text-muted">{{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $log->created_at)->format('d F Y, H:i:s') }}</small>
+                                        </div>
+                                        <div class="flex-shrink-0">
+                                            @if($log->causer_type === 'App\Models\User')
+                                                <i class="fas fa-user-circle fa-2x text-primary"></i>
+                                            @elseif($log->causer_type === 'App\Models\Course')
+                                                <i class="fas fa-book fa-2x text-success"></i>
+                                            @elseif($log->causer_type === 'App\Models\Transaction')
+                                                <i class="fas fa-exchange-alt fa-2x text-warning"></i>
+                                            @else
+                                                <i class="fas fa-info-circle fa-2x text-secondary"></i>
+                                            @endif
+                                        </div>
                                     </div>
-                                    <small>{{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $log->created_at)->format('d F Y, H:i:s') }}</small>
-                                    <br>
                                 </li>
                             @endforeach
                         </ul>
                     </div>
                 </div>
+            </div>
         </div>
+
 
     </div>
     <script src="{{asset('js/datatables-simple-demo.js')}}"></script>
