@@ -31,7 +31,12 @@ class AuthController extends Controller
             'password' => 'required|string|min:8',
         ]);
 
-        if ($validator) {
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation error',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
             try {
                 DB::beginTransaction();
                 $user = User::create([
@@ -57,16 +62,19 @@ class AuthController extends Controller
                 ], 400);
             }
         }
-    }
-
     public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required|string|min:8',
         ]);
-
-        if ($validator) {
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation error',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+        try {
             $user = User::where('email', $request->email)->first();
             if ($user) {
                 if (Hash::check($request->password, $user->password)) {
@@ -86,13 +94,13 @@ class AuthController extends Controller
                     'message' => 'User not found',
                 ],400);
             }
-        } else {
+        } catch (\Exception $e) {
             return response()->json([
-                'message' => $validator,
+                'message' => 'Login failed',
+                'error' => $e->getMessage(),
             ],400);
         }
     }
-
     public function logout(Request $request)
     {
         $token = $request->user()->currentAccessToken()->delete();

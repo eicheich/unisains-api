@@ -68,7 +68,6 @@
                                 <th>Nama Depan</th>
                                 <th>Nama Belakang</th>
                                 <th>Aksi</th>
-
                             </tr>
                         </thead>
                         <tbody>
@@ -88,7 +87,7 @@
                                                         <i class="fas fa-edit"></i>
                                                     </button>
                                                 </form>
-                                                <form action="{{ route('course.show', $user->id) }}" method="GET">
+                                                <form action="{{ route('users.show', $user->id) }}" method="GET">
                                                     @csrf
                                                     <button class="btn btn-sm btn-primary mx-1" type="submit">
                                                         <i class="fas fa-eye"></i>

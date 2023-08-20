@@ -55,7 +55,7 @@
   --bs-white: #fff;
   --bs-dark-blue: #1A237E;
   --bs-primary-rgb: 233, 30, 99;
-  --bs-secondary-rgb: , 128, 154;
+  --bs-secondary-rgb: 128, 154;
   --bs-success-rgb: 76, 175, 80;
   --bs-info-rgb: 26, 115, 232;
   --bs-warning-rgb: 251, 140, 0;
@@ -66,7 +66,7 @@
   --bs-dark-blue-rgb: 26, 35, 126;
   --bs-white-rgb: 255, 255, 255;
   --bs-black-rgb: 0, 0, 0;
-  --bs-body-color-rgb: , 128, 154;
+  --bs-body-color-rgb: 128, 154;
   --bs-body-bg-rgb: 255, 255, 255;
   --bs-font-sans-serif: "Roboto", Helvetica, Arial, sans-serif;
   --bs-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
@@ -2773,9 +2773,10 @@ progress {
 .form-control:focus {
   color: #495057;
   background-color: transparent;
-  border-color: transparent;
+  border-color: #bac8f3;
   outline: 0;
   box-shadow: none;
+
 }
 
 .form-control::-webkit-date-and-time-value {
@@ -20689,14 +20690,14 @@ fieldset:disabled .btn {
 
 .btn-secondary,
 .btn.bg-gradient-secondary {
-  box-shadow: 0 3px 3px 0 rgba(, 128, 154, 0.15), 0 3px 1px -2px rgba(, 128, 154, 0.2), 0 1px 5px 0 rgba(, 128, 154, 0.15);
+    box-shadow: 0 14px 26px -12px rgba(128, 128, 128, 0.4), 0 4px 23px 0 rgba(128, 128, 128, 0.15), 0 8px 10px -5px rgba(128, 128, 128, 0.2);
 }
 
 .btn-secondary:hover,
 .btn.bg-gradient-secondary:hover {
   background-color: #7b809a;
   border-color: #7b809a;
-  box-shadow: 0 14px 26px -12px rgba(, 128, 154, 0.4), 0 4px 23px 0 rgba(, 128, 154, 0.15), 0 8px 10px -5px rgba(, 128, 154, 0.2);
+    box-shadow: 0 14px 26px -12px rgba(128, 128, 128, 0.4), 0 4px 23px 0 rgba(128, 128, 128, 0.15), 0 8px 10px -5px rgba(128, 128, 128, 0.2);
 }
 
 .btn-secondary .btn.bg-outline-secondary,
