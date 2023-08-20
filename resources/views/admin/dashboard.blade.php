@@ -102,6 +102,28 @@
                                     </div>
                                 </li>
                             @endforeach
+                                <hr>
+                                <div class="d-flex justify-content-between align-items-center pt-5">
+                                    <div class="btn-toolbar mb-2 mb-md-0">
+                                        <div class="btn-group me-2">
+                                            <a href="{{ $activityLog->previousPageUrl() }}" class="btn btn-sm btn-primary">Previous</a>
+                                        </div>
+                                    </div>
+
+                                    <div class="btn-toolbar mb-2 mb-md-0">
+                                        <div class="btn-group me-2">
+                                            <p class="page-info">{{ $activityLog->currentPage() }}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="btn-toolbar mb-2 mb-md-0">
+                                        <div class="btn-group me-2">
+                                            <a href="{{ $activityLog->nextPageUrl() }}" class="btn btn-sm btn-primary">Next</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+
                         </ul>
                     </div>
                 </div>
