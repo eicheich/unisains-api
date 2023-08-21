@@ -292,7 +292,7 @@ class TransactionController extends Controller
                 ], 500);
             }
         } else {
-            return response()->json(['message' => $score_percentage]);
+            return response()->json(['message' => 'failed', 'data' => ['user_score' => $score_percentage]], 200);
         }
 
 
