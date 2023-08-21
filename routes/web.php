@@ -70,7 +70,7 @@ Route::prefix('admin')->middleware('isAdminWeb')->group(function () {
         });
         Route::prefix('quiz')->group(function () {
             Route::post('store', [QuizController::class, 'store'])->name('store.quiz');
-            Route::get('edit/{id}', [QuizController::class, 'edit'])->name('update.quiz.page');
+            Route::get('edit/{id}', [QuizController::class, 'edit'])->name('quiz.edit');
             Route::get('show/{id}', [QuizController::class, 'show'])->name('quiz.show');
             Route::post('update/{id}', [QuizController::class, 'update'])->name('update.quiz');
             Route::post('delete/{id}', [QuizController::class, 'delete'])->name('delete.quiz');
@@ -103,5 +103,6 @@ Route::prefix('admin')->middleware('isAdminWeb')->group(function () {
         Route::get('update-page/{id}', [ReportController::class, 'updatePageReport'])->name('update.report.page');
         Route::post('update/{id}', [ReportController::class, 'updateReport'])->name('update.report');
         Route::post('delete/{id}', [ReportController::class, 'deleteReport'])->name('delete.report');
+        Route::get('search', [ReportController::class, 'search'])->name('report.search');
     });
 });

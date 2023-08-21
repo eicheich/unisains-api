@@ -61,30 +61,47 @@ class QuizController extends Controller
 
     public function edit($id)
     {
-        $quiz = Quiz::find($id);
-        return view('admin.course.quiz.edit', compact('quiz'));
+        $question = Question::with('answers')->where('id', $id)->first();
+        $answer = Answer::where('question_id', $id)->get();
+        return view('admin.course.quiz.edit', compact('question','answer'));
     }
 
-    public function update(Request $request, $id)
+
+        public function update(Request $request, $id)
     {
+        // Validasi input dari form
         $validator = Validator::make($request->all(), [
-            'soal' => 'required',
-            'jawaban' => 'required',
+            'question' => 'required',
+            'correct_answer' => 'required',
+            'answer.*' => 'required',
         ]);
-        if ($validator->fails()) {
-            return redirect()->back()->with('warning', $validator->errors());
+
+        // Cari pertanyaan berdasarkan ID
+        $question = Question::find($id);
+
+        if (!$question) {
+            return redirect()->back()->with('error', 'Pertanyaan tidak ditemukan.');
         }
+
+        // Update pertanyaan
         try {
-            $quiz = Quiz::find($id);
-            $quiz->update([
-                'soal' => $request->soal,
-                'jawaban' => $request->jawaban,
-            ]);
-            return redirect()->route('course.show', $quiz->course_id)->with('warning', 'Berhasil mengubah quiz');
+            $question->question = $request->input('question');
+            $question->correct_answer = $request->input('correct_answer');
+            $question->save();
+
+            // Update jawaban
+            foreach ($request->input('answer') as $index => $answerText) {
+                $answer = Answer::find($index);
+                if ($answer) {
+                    $answer->answer = $answerText;
+                    $answer->save();
+                }
+            }
         } catch (\Throwable $th) {
-            return redirect()->back()->with('danger', $th->getMessage());
+            return redirect()->back()->with('error', $th->getMessage());
         }
-        # code...
+
+        return redirect()->route('course.page')->with('success', 'Pertanyaan berhasil diperbarui.');
     }
 
     public function delete($id)
@@ -106,11 +123,14 @@ class QuizController extends Controller
 
     public function show($id)
     {
-        $question = Question::with('answers')->where('quiz_id', $id)->get();
-        $answer = Answer::where('question_id', $question->id)->get();
-        return view('admin.course.quiz.show', compact('question','answer'));
+        $questions = Question::with('answers')->where('id', $id)->get();
+
+        $answer = Answer::where('question_id', $id)->get();
+        return view('admin.course.quiz.show', compact('questions','answer'));
 
     }
+
+
 
 
 

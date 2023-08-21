@@ -27,6 +27,7 @@ class CourseController extends Controller
             'category_id' => 'required|integer',
             'image_course' => 'required|file|mimes:jpeg,png',
             'price' => 'nullable|required_if:is_paid,1|numeric',
+            'link_chat' => 'required',
         ]);
 
         $image_name = $this->uploadImage($request->file('image_course'));
@@ -38,6 +39,7 @@ class CourseController extends Controller
             'image_course' => $image_name,
             'category_id' => $request->category_id,
             'course_code' => 'UNI' . rand(1000, 9999),
+            'link_chat' => $request->link_chat,
         ];
 
         if ($request->is_paid == 1) {

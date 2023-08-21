@@ -264,7 +264,7 @@
                                     <td>{{ $question->correct_answer }}</td>
                                     <td>
 
-                                        <a href="{{ route('quiz.show', $quizItem->id) }}" class="btn btn-primary">Detail</a>
+                                        <a href="{{ route('quiz.edit', $question->id) }}" class="btn btn-primary">Edit</a>
                                         <form action="{{ route('delete.quiz', $quizItem->id) }}" method="post" style="display: inline;">
                                             @csrf
                                             <button type="submit" class="btn btn-danger">Hapus Soal</button>
