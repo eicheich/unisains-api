@@ -48,6 +48,12 @@ class TransactionController extends Controller
                 'message' => 'Course not found',
             ], 404);
         }
+        $my_course = DB::table('my_courses')->where('user_id', $user->id)->where('course_id', $request->course_id)->first();
+        if ($my_course) {
+            return response()->json([
+                'message' => 'You already have this course',
+            ], 200);
+        }
 
         if ($course->is_paid == 0) {
             try {
@@ -61,6 +67,7 @@ class TransactionController extends Controller
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now(),
                 ]);
+                DB::table('carts')->where('user_id', $user->id)->where('course_id', $request->course_id)->delete();
                 DB::commit();
                 activity()->causedBy($transaction)->log('Added Transaction '. $user->email);
                 return response()->json([
