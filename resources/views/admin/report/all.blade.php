@@ -87,7 +87,6 @@
                         <th scope="col">Isi Laporan</th>
                         <th scope="col">Nama Pengirim</th>
                         <th scope="col">Email</th>
-                        <th scope="col">Aksi</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -98,13 +97,13 @@
                             <td style="max-width: 256px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $report->report }}</td>
                             <td>{{ $report->user->first_name }}</td>
                             <td>{{ $report->user->email }}</td>
-                            <td>
-                                <form action="{{ route('users.show', $report->id) }}" method="GET">
-                                    @csrf
-                                    <button class="btn btn-sm btn-primary mx-1" type="submit">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                </form>
+{{--                            <td>--}}
+{{--                                <form action="{{ route('users.show', $report->id) }}" method="GET">--}}
+{{--                                    @csrf--}}
+{{--                                    <button class="btn btn-sm btn-primary mx-1" type="submit">--}}
+{{--                                        <i class="fas fa-eye"></i>--}}
+{{--                                    </button>--}}
+{{--                                </form>--}}
                         </tr>
                     @endforeach
                     </tbody>
