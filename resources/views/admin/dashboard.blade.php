@@ -42,7 +42,7 @@
                 <div class="card-body">Total Laporan</div>
                 <h3 class="card-body">{{$report}}</h3>
                 <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white stretched-link" href="#">View Details</a>
+                    <a class="small text-white stretched-link" href="{{route('report.page')}}">Lihat Detail</a>
                     <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                 </div>
             </div>

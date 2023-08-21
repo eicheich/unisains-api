@@ -11,6 +11,48 @@
         </div>
     </div>
     @if ($courses->isEmpty())
+        <div class="container">
+            <div class="row justify-content-center mt-5">
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <form action="{{route('transactions.search')}}" class="d-flex justify-content-between" method="get">
+                            <input type="text" class="form-control search-input" name="search" placeholder="Cari nama kursus. . .">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary search-button" type="submit">Cari</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <style>
+            .search-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin-top: 100px;
+            }
+
+            .search-input {
+                width: 300px;
+                padding: 10px;
+                border: 2px solid #ccc;
+                border-radius: 5px;
+                font-size: 16px;
+                outline: none;
+            }
+
+            .search-button {
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                margin-left: 10px;
+                font-size: 16px;
+            }
+        </style>
+        <hr>
         <div class="alert alert-danger text-light" role="alert">
             Data Kursus Kosong
         </div>
@@ -20,7 +62,7 @@
                 <div class="col-md-4">
                     <div class="input-group">
                         <form action="{{route('course.search')}}" class="d-flex justify-content-between" method="get">
-                            <input type="text" class="form-control search-input" name="search" placeholder="Cari...">
+                            <input type="text" class="form-control search-input" name="search" placeholder="Cari nama kursus. . .">
                             <div class="input-group-append">
                                 <button class="btn btn-primary search-button" type="submit">Cari</button>
                             </div>
@@ -109,13 +151,42 @@
                                             <a class="btn btn-outline-primary"
                                                 href="{{ route('course.show', $course->id) }}">Lihat
                                                 selengkapnya</a>
-                                            <form action="{{ route('delete.course', $course->id) }}" method="post">
+{{--                                            <a class="btn btn-outline-danger"--}}
+{{--                                                href="{{ route('delete.course', $course->id) }}" id="delete-btn" onclick="confirmation(event)">Hapus</a>--}}
+                                            <form action="{{ route('delete.course', $course->id) }}" method="post" id="delete-form">
                                                 @csrf
-                                                <button class="btn btn-outline-danger" onclick="" id="submit-delete"
-                                                    type="submit">Hapus
-                                                    Kursus</button>
+                                                @method('DELETE')
+                                                <button class="btn btn-outline-danger" onclick="confirmation(event)" type="button">Hapus Kursus</button>
                                             </form>
+                                            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                                            <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+                                            <script>
+                                                function confirmation(ev) {
+                                                    ev.preventDefault();
+                                                    var urlToRedirect = ev.currentTarget.getAttribute('action');
+                                                    console.log(urlToRedirect);
+                                                    swal({
+                                                        title: "Are you sure to Delete this post",
+                                                        text: "You will not be able to revert this!",
+                                                        icon: "warning",
+                                                        buttons: true,
+                                                        dangerMode: true,
+                                                    })
+                                                        .then((willCancel) => {
+                                                            if (willCancel) {
 
+
+
+                                                                window.location.href = urlToRedirect;
+
+                                                            }
+
+
+                                                        });
+
+
+                                                }
+                                            </script>
                                         </div>
                                     </div>
                                 </div>
@@ -123,6 +194,7 @@
                         </div>
                 </div>
             </div>
+            @include('sweetalert::alert')
             <div class="tab-pane fade" id="list-view">
                 <div class="container">
                     <div class="table-responsive text-center">

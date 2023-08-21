@@ -10,7 +10,7 @@
     </div>
     @if ($reports->isEmpty())
         <div class="alert alert-danger text-light" role="alert">
-            Data <Laporan></Laporan> Kosong
+            Data Laporan Kosong
         </div>
     @else
         <style>
@@ -81,18 +81,28 @@
                     <thead>
                     <tr>
                         <th scope="col">No.</th>
+                        <th scope="col">Tanggal</th>
                         <th scope="col">Isi Laporan</th>
                         <th scope="col">Nama Pengirim</th>
                         <th scope="col">Email</th>
+                        <th scope="col">Aksi</th>
                     </tr>
                     </thead>
                     <tbody>
                     @foreach ($reports as $report)
                         <tr>
                             <th scope="row">{{ $loop->iteration }}</th>
+                            <td>{{ $report->date }}</td>
                             <td style="max-width: 256px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $report->report }}</td>
                             <td>{{ $report->user->first_name }}</td>
                             <td>{{ $report->user->email }}</td>
+                            <td>
+                                <form action="{{ route('users.show', $report->id) }}" method="GET">
+                                    @csrf
+                                    <button class="btn btn-sm btn-primary mx-1" type="submit">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </form>
                         </tr>
                     @endforeach
                     </tbody>

@@ -11,7 +11,7 @@ class ReportController extends Controller
 {
     public function all(){
 //        report with paginate
-        $reports = Report::with('user')->paginate(10);
+        $reports = Report::with('user')->orderBy('created_at', 'DESC')->paginate(10);
 
         return view('admin.report.all', compact('reports'));
 

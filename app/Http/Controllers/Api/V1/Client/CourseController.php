@@ -163,6 +163,11 @@ class CourseController extends Controller
                 'errors' => $validator->errors(),
             ], 422);
         } else
+            if (Rate::where('user_id', $user->id)->where('course_id', $request->course_id)->exists()) {
+                return response()->json([
+                    'message' => 'You have rated this course',
+                ], 422);
+            } else
             try {
                 $rate = DB::table('rates')->insert([
                     'user_id' => $user->id,

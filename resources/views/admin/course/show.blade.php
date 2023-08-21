@@ -21,7 +21,7 @@
                 <h3>Modul</h3>
                 <ul>
                     @if ($modules->isEmpty())
-                        <p>Belum ada modul rangkuman</p>
+                        <p>Belum ada Modul</p>
                     @else
                         @foreach ($modules as $m)
                             <div id="accordion">
