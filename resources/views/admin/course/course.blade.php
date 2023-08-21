@@ -17,12 +17,14 @@
     @else
         <div class="container">
             <div class="row justify-content-center mt-5">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="input-group">
-                        <input type="text" class="form-control search-input" placeholder="Cari...">
-                        <div class="input-group-append">
-                            <button class="btn btn-primary search-button" type="button">Cari</button>
-                        </div>
+                        <form action="{{route('course.search')}}" class="d-flex justify-content-between" method="get">
+                            <input type="text" class="form-control search-input" name="search" placeholder="Cari...">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary search-button" type="submit">Cari</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
