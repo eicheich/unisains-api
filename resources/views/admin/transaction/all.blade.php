@@ -9,9 +9,74 @@
         </div>
     </div>
     @if ($transactions->isEmpty())
+        <div class="container">
+            <div class="row justify-content-center mt-5">
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <form action="{{route('transactions.search')}}" class="d-flex justify-content-between" method="get">
+                            <input type="text" class="form-control search-input" name="search" placeholder="Cari kode transaksi. . .">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary search-button" type="submit">Cari</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr>
         <div class="alert alert-danger text-light" role="alert">
             Data Transaksi Kosong
         </div>
+        <style>
+            .search-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin-top: 100px;
+            }
+
+            .search-input {
+                width: 300px;
+                padding: 10px;
+                border: 2px solid #ccc;
+                border-radius: 5px;
+                font-size: 16px;
+                outline: none;
+            }
+
+            .search-button {
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                margin-left: 10px;
+                font-size: 16px;
+            }
+
+            .status-box {
+                display: inline-block;
+                padding: 4px 8px;
+                border-radius: 4px;
+                font-weight: bold;
+            }
+
+            .status-box.failed {
+                background-color: rgba(255, 0, 0, 0.5);
+                color: #ffffff;
+            }
+
+            .status-box.pending {
+                background-color: rgba(255, 204, 0, 0.5);
+                color: #ffffff;
+            }
+
+            .status-box.success {
+                background-color: rgba(0, 204, 0, 0.5);
+                color: #ffffff;
+            }
+        </style>
     @else
         <style>
             .search-container {
@@ -67,7 +132,7 @@
                 <div class="col-md-4">
                     <div class="input-group">
                         <form action="{{route('transactions.search')}}" class="d-flex justify-content-between" method="get">
-                            <input type="text" class="form-control search-input" name="search" placeholder="Cari nama atau email. . .">
+                            <input type="text" class="form-control search-input" name="search" placeholder="Cari kode transaksi. . .">
                             <div class="input-group-append">
                                 <button class="btn btn-primary search-button" type="submit">Cari</button>
                             </div>

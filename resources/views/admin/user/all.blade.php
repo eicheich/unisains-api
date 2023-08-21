@@ -88,23 +88,10 @@
                                     <td style="vertical-align: middle; text-align: center;">
                                         <div class="d-flex justify-content-center">
                                             <div class="btn-group" role="group">
-                                                <form action="{{ route('update.course.page', $user->id) }}" method="GET">
-                                                    @csrf
-                                                    <button class="btn btn-sm btn-warning mx-1" type="submit">
-                                                        <i class="fas fa-edit"></i>
-                                                    </button>
-                                                </form>
                                                 <form action="{{ route('users.show', $user->id) }}" method="GET">
                                                     @csrf
                                                     <button class="btn btn-sm btn-primary mx-1" type="submit">
                                                         <i class="fas fa-eye"></i>
-                                                    </button>
-                                                </form>
-                                                <form action="{{route('delete.users', $user->id)}}" method="post" id="deleteForm">
-                                                    @csrf
-                                                    <button class="btn btn-sm btn-danger mx-1"
-                                                            onclick="confirmDelete(event)" id="submit-delete" type="button">
-                                                        <i class="fas fa-trash"></i>
                                                     </button>
                                                 </form>
                                             </div>
@@ -165,23 +152,10 @@
                                     <td style="vertical-align: middle; text-align: center;">
                                         <div class="d-flex justify-content-center">
                                             <div class="btn-group" role="group">
-                                                <form action="{{ route('update.course.page', $user->id) }}" method="GET">
-                                                    @csrf
-                                                    <button class="btn btn-sm btn-warning mx-1" type="submit">
-                                                        <i class="fas fa-edit"></i>
-                                                    </button>
-                                                </form>
                                                 <form action="{{ route('users.show', $user->id) }}" method="GET">
                                                     @csrf
                                                     <button class="btn btn-sm btn-primary mx-1" type="submit">
                                                         <i class="fas fa-eye"></i>
-                                                    </button>
-                                                </form>
-                                                <form action="{{route('delete.users', $user->id)}}" method="post" id="deleteForm">
-                                                    @csrf
-                                                    <button class="btn btn-sm btn-danger mx-1"
-                                                        onclick="confirmDelete(event)" id="submit-delete" type="button">
-                                                        <i class="fas fa-trash"></i>
                                                     </button>
                                                 </form>
                                             </div>
