@@ -67,7 +67,9 @@ class AuthController extends Controller
     public function show($id)
     {
         $user = DB::table('users')->where('id', $id)->first();
-        return view('admin.user.show', compact('user'));
+//        activity_log dari user ini
+        $activity_logs = DB::table('activity_log')->where('causer_id', $id)->paginate(10);
+        return view('admin.user.show', compact('user','activity_logs'));
     }
 
 }
