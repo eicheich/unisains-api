@@ -162,4 +162,12 @@ class CourseController extends Controller
 
         return redirect()->route('course.page')->with('success', 'Kursus telah dihapus');
     }
+
+    public function search(Request $request)
+    {
+        $search = $request->search;
+        $courses = Course::where('title_course', 'like', '%' . $search . '%')->paginate(9);
+        return view('admin.course.course', compact('courses'));
+
+    }
 }
