@@ -5,7 +5,7 @@
         @include('layouts.session')
     </div>
     <div class="row justify-content-center py-5">
-        <div class="col-md-6">
+        <div class="col-md-7">
             <div class="card p-2">
                 <div class="d-flex align-items-center justify-content-between">
                     <div class="card-body">
@@ -29,19 +29,21 @@
         </div>
     </div>
 
-    <div class="row justify-content-center">
-        <div class="col-md-8">
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-7">
             <div class="card">
                 <div class="card-header">
                     Riwayat Aktivitas Pengguna
                 </div>
                 <div class="card-body">
                     <ul class="list-group">
-                        @foreach($activity_logs as $activity_log)
+                        @forelse($activity_logs as $activity_log)
                             <li class="list-group-item">
                                 <span class="font-weight-bold">{{ $activity_log->created_at }}</span> - {{ $activity_log->description }}
                             </li>
-                        @endforeach
+                        @empty
+                            <li class="list-group-item">Tidak ada riwayat aktivitas yang tersedia.</li>
+                        @endforelse
                     </ul>
                 </div>
                 <div class="card-footer">
