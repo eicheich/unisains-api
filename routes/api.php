@@ -63,7 +63,7 @@ Route::prefix('v1')->group(function () {
         Route::get('all', [CourseController::class, 'all']);
         Route::get('category', [CourseController::class, 'category']);
         Route::get('preview/{id}', [CourseController::class, 'preview']);
-        Route::get('search/{search}', [CourseController::class, 'search']);
+        Route::get('search', [CourseController::class, 'search']);
         Route::middleware('auth:sanctum')->group(function () {
             Route::get('learn/{id}', [CourseController::class, 'learn'])->middleware('isBought');
             Route::get('show/{id}', [CourseController::class, 'show']);

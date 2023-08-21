@@ -116,24 +116,29 @@ class CourseController extends Controller
     }
 
 
-    public function search($search)
+    public function search(Request $request)
     {
-        $courses = Course::with(['category', 'modules', 'rates'])
+        $search = $request->input('search');
+        $courses = Course::with(['category','rates'])
             ->where('title_course', 'like', '%' . $search . '%')
             ->get();
 
+//        jika input kosong tampilkan semua
+        if ($search == null) {
+            $courses = Course::with(['category','rates'])
+                ->get();
+        }
+
         if ($courses->isEmpty()) {
             return response()->json([
-                'message' => 'course not found',
+                'message' => 'Course not found',
             ], 404);
         } else {
-            $courses = $courses->map(function ($course) {
-                $course->image_course = UrlHelper::formatImageCourseUrl($course->image_course);
-                return $course;
-            });
-
             return response()->json([
-                'course' => $courses,
+                'message' => 'success',
+                'data' => [
+                    'courses' => $courses,
+                ],
             ], 200);
         }
     }
