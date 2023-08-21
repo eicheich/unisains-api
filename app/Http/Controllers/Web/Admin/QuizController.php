@@ -104,6 +104,14 @@ class QuizController extends Controller
         }
     }
 
+    public function show($id)
+    {
+        $question = Question::with('answers')->where('quiz_id', $id)->get();
+        $answer = Answer::where('question_id', $question->id)->get();
+        return view('admin.course.quiz.show', compact('question','answer'));
+
+    }
+
 
 
 

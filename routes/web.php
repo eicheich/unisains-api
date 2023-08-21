@@ -71,6 +71,7 @@ Route::prefix('admin')->middleware('isAdminWeb')->group(function () {
         Route::prefix('quiz')->group(function () {
             Route::post('store', [QuizController::class, 'store'])->name('store.quiz');
             Route::get('edit/{id}', [QuizController::class, 'edit'])->name('update.quiz.page');
+            Route::get('show/{id}', [QuizController::class, 'show'])->name('quiz.show');
             Route::post('update/{id}', [QuizController::class, 'update'])->name('update.quiz');
             Route::post('delete/{id}', [QuizController::class, 'delete'])->name('delete.quiz');
         });
