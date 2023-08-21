@@ -118,7 +118,7 @@
                                 <td style="vertical-align: middle; text-align: center;">
                                     <div class="d-flex justify-content-center">
                                         <div class="btn-group" role="group">
-                                            <form action="{{ route('course.show', $transaction->id) }}" method="GET">
+                                            <form action="{{ route('transactions.show', $transaction->id) }}" method="GET">
                                                 @csrf
                                                 <button class="btn btn-sm btn-primary mx-1" type="submit">
                                                     <i class="fas fa-eye"></i>

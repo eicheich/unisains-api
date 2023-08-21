@@ -59,7 +59,7 @@ class CartController extends Controller
     public function all()
     {
         $user = Auth::user();
-        $cart = Cart::with('course')->where('user_id', $user->id)->get();
+        $cart = Cart::with('course')->where('user_id', $user->id)->orderBy('desc', 'created_at')->get();
         if ($cart == null) {
             return response()->json([
                 'message' => 'Cart is empty',
