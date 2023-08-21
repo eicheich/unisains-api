@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1\Client;
 
 use App\Http\Controllers\Controller;
 use App\Mail\SuccessPayment;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -83,7 +84,6 @@ class PaymentController extends Controller
         }
 
         $transaction = DB::table('transactions')->where('id', $request->order_id)->first();
-        $trx = Transaction::where('id', $request->order_id)->first();
         if ($request->transaction_status == 'capture' || $request->transaction_status == 'settlement') {
             try {
                 DB::beginTransaction();
@@ -109,7 +109,8 @@ class PaymentController extends Controller
 //                    'image' => $transaction->course_thumbnail
                 ]));
                 DB::commit();
-                activity()->causedBy($trx)->log('Success Payment '. $user->email);
+                $modelUser = User::find($user->id);
+                activity()->causedBy($modelUser)->log('Success Payment '. $user->email);
             } catch (\Exception $e) {
                 DB::rollback();
                 return response()->json([
