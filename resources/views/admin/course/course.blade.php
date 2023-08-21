@@ -109,12 +109,34 @@
                                             <a class="btn btn-outline-primary"
                                                 href="{{ route('course.show', $course->id) }}">Lihat
                                                 selengkapnya</a>
-                                            <form action="{{ route('delete.course', $course->id) }}" method="post">
+                                            <form action="{{ route('delete.course', $course->id) }}" method="post" id="delete-form">
                                                 @csrf
-                                                <button class="btn btn-outline-danger" onclick="" id="submit-delete"
-                                                    type="submit">Hapus
-                                                    Kursus</button>
+                                                <button class="btn btn-outline-danger" onclick="confirmDelete(event)" type="button">Hapus Kursus</button>
                                             </form>
+
+                                            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                                            <script>
+                                                function confirmDelete(event) {
+                                                    event.preventDefault();
+
+                                                    Swal.fire({
+                                                        title: 'Konfirmasi Penghapusan',
+                                                        text: "Apakah Anda yakin ingin menghapus kursus ini?",
+                                                        icon: 'warning',
+                                                        showCancelButton: true,
+                                                        confirmButtonColor: '#d33',
+                                                        cancelButtonColor: '#3085d6',
+                                                        confirmButtonText: 'Ya, Hapus!',
+                                                        cancelButtonText: 'Batal'
+                                                    }).then((result) => {
+                                                        if (result.isConfirmed) {
+                                                            document.getElementById('delete-form').submit();
+                                                        }
+                                                    });
+                                                }
+                                            </script>
+
+
 
                                         </div>
                                     </div>
