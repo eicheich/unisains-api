@@ -194,7 +194,6 @@
                         </div>
                 </div>
             </div>
-            @include('sweetalert::alert')
             <div class="tab-pane fade" id="list-view">
                 <div class="container">
                     <div class="table-responsive text-center">
