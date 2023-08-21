@@ -16,4 +16,12 @@ class ReportController extends Controller
         return view('admin.report.all', compact('reports'));
 
     }
+
+    public function search(Request $request)
+    {
+        $reports = Report::with('user')->where('report', 'LIKE', "%$request->search%")->orderBy('created_at', 'DESC')->paginate(10);
+
+        return view('admin.report.all', compact('reports'));
+
+    }
 }

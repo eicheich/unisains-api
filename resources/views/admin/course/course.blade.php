@@ -155,38 +155,19 @@
 {{--                                                href="{{ route('delete.course', $course->id) }}" id="delete-btn" onclick="confirmation(event)">Hapus</a>--}}
                                             <form action="{{ route('delete.course', $course->id) }}" method="post" id="delete-form">
                                                 @csrf
-                                                @method('DELETE')
-                                                <button class="btn btn-outline-danger" onclick="confirmation(event)" type="button">Hapus Kursus</button>
+                                                <button class="btn btn-outline-danger" type="button" onclick="showConfirmation()">Hapus Kursus</button>
                                             </form>
-                                            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-                                            <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
                                             <script>
-                                                function confirmation(ev) {
-                                                    ev.preventDefault();
-                                                    var urlToRedirect = ev.currentTarget.getAttribute('action');
-                                                    console.log(urlToRedirect);
-                                                    swal({
-                                                        title: "Are you sure to Delete this post",
-                                                        text: "You will not be able to revert this!",
-                                                        icon: "warning",
-                                                        buttons: true,
-                                                        dangerMode: true,
-                                                    })
-                                                        .then((willCancel) => {
-                                                            if (willCancel) {
-
-
-
-                                                                window.location.href = urlToRedirect;
-
-                                                            }
-
-
-                                                        });
-
-
+                                                function showConfirmation() {
+                                                    if (confirm("Apakah Anda yakin ingin menghapus kursus ini?")) {
+                                                        // Jika pengguna menyetujui, submit form
+                                                        document.getElementById('delete-form').submit();
+                                                    }
                                                 }
                                             </script>
+
+                                            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                                            <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
                                         </div>
                                     </div>
                                 </div>

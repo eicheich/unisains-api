@@ -1,29 +1,50 @@
 @extends('layouts.main')
 @section('content')
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Edit Soal</h1>
+        <h1 class="h2">Edit Modul</h1>
         @include('layouts.session')
         <div class="btn-toolbar mb-2 mb-md-0">
         </div>
     </div>
-    <form action="{{ route('update.quiz', $quiz->id) }}" method="post" enctype="multipart/form-data">
+    <form action="{{route('update.quiz', $question->id)}}" method="post">
         @csrf
-        <div class="card">
-            <div class="form-group">
-                <label for="module-name">Soal</label>
-                <input type="text" class="form-control" id="module-name" name="soal" value="{{ $quiz->soal }}"
-                    placeholder="Soal">
-            </div>
-            <div class="form-group">
-                <label for="module-name">Jawaban</label>
-                <input type="text" class="form-control" id="module-name" name="jawaban" value="{{ $quiz->jawaban }}"
-                    placeholder="Jawaban dari Soal">
-            </div>
-
+        <div class="mb-3 px-5">
+            <label for="course_name" class="form-label">Pertanyaan</label>
+            <input type="text" class="form-control" id="" name="question" placeholder=""
+                   value="{{ $question->question }}">
         </div>
+        <div class="mb-3 px-5">
+            <label for="module-name">Jawaban Benar = {{$question->correct_answer}}</label>
+            <div class="option">
+                <div class="radio" >
+                    <input type="radio" name="correct_answer" value="a" id="jawaban-a">
+                    <label for="jawaban-a">A</label>
+                </div>
+                <div class="radio">
+                    <input type="radio" name="correct_answer" value="b" id="jawaban-b">
+                    <label for="jawaban-b">B</label>
+                </div>
+                <div class="radio">
+                    <input type="radio" name="correct_answer" value="c" id="jawaban-c">
+                    <label for="jawaban-c">C</label>
+                </div>
+                <div class="radio">
+                    <input type="radio" name="correct_answer" value="d" id="jawaban-d">
+                    <label for="jawaban-d">D</label>
+                </div>
+            </div>
+        </div>
+        @foreach($answer as $key => $value)
+            <div class="mb-3 px-5">
+                <label for="course_name" class="form-label">Jawaban {{$value->value}}</label>
+                <input type="text" class="form-control" id="" name="answer[]" placeholder=""
+                       value="{{ $value->answer }}">
+            </div>
+        @endforeach
         <div class="card mt-5">
             <button type="submit" class="btn btn-primary">Submit</button>
         </div>
+
 
     </form>
     <style>
@@ -94,21 +115,4 @@
             margin: 0 auto;
         }
     </style>
-    <script>
-        function previewImage(inputId) {
-            var preview = document.querySelector('#' + inputId + '_preview');
-            var file = document.querySelector('#' + inputId).files[0];
-            var reader = new FileReader();
-
-            reader.onloadend = function() {
-                preview.src = reader.result;
-            }
-
-            if (file) {
-                reader.readAsDataURL(file);
-            } else {
-                preview.src = "";
-            }
-        }
-    </script>
 @endsection

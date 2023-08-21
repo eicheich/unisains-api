@@ -61,6 +61,10 @@
                 <input type="number" class="form-control" id="price" name="price" placeholder="Harga Kursus">
             </div>
         </div>
+        <div class="mb-3 px-5">
+            <label for="course_name" class="form-label">Link Percakapan</label>
+            <input type="text" class="form-control" id="course_name" name="link_chat" placeholder="">
+        </div>
         <div class="card mt-5">
             <button type="submit" class="btn btn-primary">Add</button>
         </div>
