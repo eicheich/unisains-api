@@ -47,6 +47,7 @@ Route::prefix('admin')->middleware('isAdminWeb')->group(function () {
         Route::get('update-page/{id}', [CourseController::class, 'updatePage'])->name('update.course.page');
         Route::post('update/{id}', [CourseController::class, 'update'])->name('update.course');
         Route::post('delete/{id}', [CourseController::class, 'delete'])->name('delete.course');
+        Route::get('search', [CourseController::class, 'search'])->name('course.search');
 
         Route::prefix('modules')->group(function () {
             Route::post('store', [ModuleController::class, 'store'])->name('store.modules');
@@ -81,6 +82,7 @@ Route::prefix('admin')->middleware('isAdminWeb')->group(function () {
         Route::get('update-page/{id}', [AuthController::class, 'updatePage'])->name('update.users.page');
         Route::post('update/{id}', [AuthController::class, 'update'])->name('update.users');
         Route::post('delete/{id}', [UserController::class, 'delete'])->name('delete.users');
+        Route::get('search', [UserController::class, 'search'])->name('users.search');
     });
     Route::prefix('transactions')->group(function () {
         Route::get('/', [TransactionController::class, 'all'])->name('transactions.page');
@@ -89,6 +91,7 @@ Route::prefix('admin')->middleware('isAdminWeb')->group(function () {
         Route::get('update-page/{id}', [TransactionController::class, 'updatePage'])->name('update.transactions.page');
         Route::post('update/{id}', [TransactionController::class, 'update'])->name('update.transactions');
         Route::post('delete/{id}', [TransactionController::class, 'delete'])->name('delete.transactions');
+        Route::get('search', [TransactionController::class, 'search'])->name('transactions.search');
     });
 
     Route::post('delete/{id}', [AuthController::class, 'delete'])->name('delete.users');

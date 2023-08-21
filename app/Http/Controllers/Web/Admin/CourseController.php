@@ -44,7 +44,19 @@ class CourseController extends Controller
             $courseData['price'] = $request->price;
         }
 
-        Course::create($courseData);
+        try {
+            DB::beginTransaction();
+//            store course
+            $course = Course::create($courseData);
+            Quiz::create([
+                'course_id' => $course->id,
+                'title_quiz' => $course->title_course,
+            ]);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', $e->getMessage());
+        }
 
         return redirect()->route('course.page')->with('success', 'Course telah ditambahkan');
     }
@@ -149,5 +161,13 @@ class CourseController extends Controller
         }
 
         return redirect()->route('course.page')->with('success', 'Kursus telah dihapus');
+    }
+
+    public function search(Request $request)
+    {
+        $search = $request->search;
+        $courses = Course::where('title_course', 'like', '%' . $search . '%')->paginate(9);
+        return view('admin.course.course', compact('courses'));
+
     }
 }

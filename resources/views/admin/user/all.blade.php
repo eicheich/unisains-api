@@ -46,21 +46,28 @@
         </style>
             <div class="container">
                 <div class="row justify-content-center mt-5">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="input-group">
-                            <input type="text" class="form-control search-input" placeholder="Cari...">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary search-button" type="button">Cari</button>
-                            </div>
+                            <form action="{{route('users.search')}}" class="d-flex justify-content-between" method="get">
+                                <input type="text" class="form-control search-input" name="search" placeholder="Cari nama atau email. . .">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary search-button" type="submit">Cari</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="container">
                 <h4 class="mt-3">Pengguna</h4>
-                <div class="table-responsive text-center">
-                    <table class="table table-striped">
-                        <thead>
+                @if ($users->isEmpty())
+                    <div class="alert alert-danger text-light" role="alert">
+                        Data Pengguna Kosong
+                    </div>
+                @else
+                    <div class="table-responsive text-center">
+                        <table class="table table-striped">
+                            <thead>
                             <tr>
                                 <th>No</th>
                                 <th>Nama Pengguna</th>
@@ -68,10 +75,9 @@
                                 <th>Nama Depan</th>
                                 <th>Nama Belakang</th>
                                 <th>Aksi</th>
-
                             </tr>
-                        </thead>
-                        <tbody>
+                            </thead>
+                            <tbody>
                             @foreach ($users as $index => $user)
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
@@ -88,7 +94,7 @@
                                                         <i class="fas fa-edit"></i>
                                                     </button>
                                                 </form>
-                                                <form action="{{ route('course.show', $user->id) }}" method="GET">
+                                                <form action="{{ route('users.show', $user->id) }}" method="GET">
                                                     @csrf
                                                     <button class="btn btn-sm btn-primary mx-1" type="submit">
                                                         <i class="fas fa-eye"></i>
@@ -97,7 +103,7 @@
                                                 <form action="{{route('delete.users', $user->id)}}" method="post" id="deleteForm">
                                                     @csrf
                                                     <button class="btn btn-sm btn-danger mx-1"
-                                                        onclick="confirmDelete(event)" id="submit-delete" type="button">
+                                                            onclick="confirmDelete(event)" id="submit-delete" type="button">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                 </form>
@@ -106,21 +112,20 @@
                                     </td>
                                 </tr>
                             @endforeach
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                        @endif
                     <div class="d-flex justify-content-between align-items-center pt-5">
                         <div class="btn-toolbar mb-2 mb-md-0">
                             <div class="btn-group me-2">
                                 <a href="{{ $users->previousPageUrl() }}" class="btn btn-sm btn-primary">Previous</a>
                             </div>
                         </div>
-
                         <div class="btn-toolbar mb-2 mb-md-0">
                             <div class="btn-group me-2">
                                 <p class="page-info">{{ $users->currentPage() }}</p>
                             </div>
                         </div>
-
                         <div class="btn-toolbar mb-2 mb-md-0">
                             <div class="btn-group me-2">
                                 <a href="{{ $users->nextPageUrl() }}" class="btn btn-sm btn-primary">Next</a>
@@ -132,6 +137,11 @@
             <div class="container mt-5">
                 <h4 class="mt-3">Admin</h4>
                 <div class="table-responsive text-center">
+                    @if ($admin->isEmpty())
+                        <div class="alert alert-danger text-light" role="alert">
+                            Data Admin Kosong
+                        </div>
+                    @else
                     <table class="table table-striped">
                         <thead>
                             <tr>
@@ -161,7 +171,7 @@
                                                         <i class="fas fa-edit"></i>
                                                     </button>
                                                 </form>
-                                                <form action="{{ route('course.show', $user->id) }}" method="GET">
+                                                <form action="{{ route('users.show', $user->id) }}" method="GET">
                                                     @csrf
                                                     <button class="btn btn-sm btn-primary mx-1" type="submit">
                                                         <i class="fas fa-eye"></i>
@@ -181,6 +191,7 @@
                             @endforeach
                         </tbody>
                     </table>
+                    @endif
                     <div class="d-flex justify-content-between align-items-center pt-5">
                         <div class="btn-toolbar mb-2 mb-md-0">
                             <div class="btn-group me-2">
@@ -202,80 +213,7 @@
                     </div>
                 </div>
             </div>
-        <div class="container mt-5">
-            <h4 class="mt-3">Teacher</h4>
-            <div class="table-responsive text-center">
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Nama Pengguna</th>
-                        <th>Email</th>
-                        <th>Nama Depan</th>
-                        <th>Nama Belakang</th>
-                        <th>Aksi</th>
-
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @foreach ($teacher as $index => $user)
-                        <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td>{{ $user->username }}</td>
-                            <td>{{ $user->email }}</td>
-                            <td>{{ $user->first_name }}</td>
-                            <td>{{ $user->last_name }}</td>
-                            <td style="vertical-align: middle; text-align: center;">
-                                <div class="d-flex justify-content-center">
-                                    <div class="btn-group" role="group">
-                                        <form action="{{ route('update.course.page', $user->id) }}" method="GET">
-                                            @csrf
-                                            <button class="btn btn-sm btn-warning mx-1" type="submit">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                        </form>
-                                        <form action="{{ route('course.show', $user->id) }}" method="GET">
-                                            @csrf
-                                            <button class="btn btn-sm btn-primary mx-1" type="submit">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                        </form>
-                                        <form action="{{route('delete.users', $user->id)}}" method="post" id="deleteForm">
-                                            @csrf
-                                            <button class="btn btn-sm btn-danger mx-1"
-                                                    onclick="confirmDelete(event)" id="submit-delete" type="button">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
-                <div class="d-flex justify-content-between align-items-center pt-5">
-                    <div class="btn-toolbar mb-2 mb-md-0">
-                        <div class="btn-group me-2">
-                            <a href="{{ $users->previousPageUrl() }}" class="btn btn-sm btn-primary">Previous</a>
-                        </div>
-                    </div>
-
-                    <div class="btn-toolbar mb-2 mb-md-0">
-                        <div class="btn-group me-2">
-                            <p class="page-info">{{ $users->currentPage() }}</p>
-                        </div>
-                    </div>
-
-                    <div class="btn-toolbar mb-2 mb-md-0">
-                        <div class="btn-group me-2">
-                            <a href="{{ $users->nextPageUrl() }}" class="btn btn-sm btn-primary">Next</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
+        ?x`
 
             {{-- </div> --}}
             <style>

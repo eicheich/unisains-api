@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Web\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Course;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -31,5 +33,31 @@ class UserController extends Controller
             DB::rollback();
             return redirect()->back()->with('error', $th->getMessage());
         }
+    }
+
+    public function search(Request $request)
+    {
+//        cari dari username atau email
+        $search = $request->search;
+        $users = User::where(function($query) use ($search) {
+            $query->where('username', 'like', '%' . $search . '%')
+                ->orWhere('email', 'like', '%' . $search . '%');
+        })->paginate(9);
+        $admin = User::where('role', 'admin')
+            ->where(function($query) use ($search) {
+                $query->where('username', 'like', '%' . $search . '%')
+                    ->orWhere('email', 'like', '%' . $search . '%');
+            })
+            ->paginate(9);
+        $teacher = User::where('role', 'teacher')
+            ->where(function($query) use ($search) {
+                $query->where('username', 'like', '%' . $search . '%')
+                    ->orWhere('email', 'like', '%' . $search . '%');
+            })
+            ->paginate(9);
+
+        return view('admin.user.all', compact('users','admin','teacher'));
+
+
     }
 }

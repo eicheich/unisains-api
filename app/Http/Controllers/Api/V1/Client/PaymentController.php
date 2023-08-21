@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1\Client;
 
 use App\Http\Controllers\Controller;
 use App\Mail\SuccessPayment;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -108,6 +109,8 @@ class PaymentController extends Controller
 //                    'image' => $transaction->course_thumbnail
                 ]));
                 DB::commit();
+                $modelUser = User::find($user->id);
+                activity()->causedBy($modelUser)->log('Success Payment '. $user->email);
             } catch (\Exception $e) {
                 DB::rollback();
                 return response()->json([
