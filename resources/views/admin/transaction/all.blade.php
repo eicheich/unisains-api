@@ -23,7 +23,6 @@
                 </div>
             </div>
         </div>
-
         <hr>
         <div class="alert alert-danger text-light" role="alert">
             Data Transaksi Kosong
@@ -148,6 +147,7 @@
                     <thead>
                         <tr>
                             <th>No</th>
+                            <th>Tanggal</th>
                             <th>Kode Transaksi</th>
                             <th>Kursus</th>
                             <th>Pengguna</th>
@@ -159,6 +159,7 @@
                         @foreach ($transactions as $index => $transaction)
                             <tr>
                                 <td>{{ $index + 1 }}</td>
+                                <td>{{ $transaction->date }}</td>
                                 <td>{{ $transaction->code_transaction }}</td>
                                 <td>{{ $transaction->course->title_course }}</td>
                                 <td>{{ $transaction->user->email }}</td>

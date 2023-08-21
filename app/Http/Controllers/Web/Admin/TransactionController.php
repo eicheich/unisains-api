@@ -10,7 +10,7 @@ class TransactionController extends Controller
 {
     public function all()
     {
-        $transactions = Transaction::with(['user', 'course'])->paginate(10);
+        $transactions = Transaction::with(['user', 'course'])->orderBy('created_at', 'DESC')->paginate(10);
         return view('admin.transaction.all', compact('transactions'));
     }
 

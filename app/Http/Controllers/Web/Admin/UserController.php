@@ -12,8 +12,8 @@ class UserController extends Controller
 {
     public function all()
     {
-        $users = DB::table('users')->where('role', 'user')->paginate(10);
-        $admin = DB::table('users')->where('role', 'admin')->paginate(10);
+        $users = DB::table('users')->where('role', 'user')->orderBy('created_at', 'DESC')->paginate(10);
+        $admin = DB::table('users')->where('role', 'admin')->orderBy('created_at', 'DESC')->paginate(10);
         $teacher = DB::table('users')->where('role', 'teacher')->paginate(10);
         return view('admin.user.all', compact('users', 'admin','teacher'));
     }

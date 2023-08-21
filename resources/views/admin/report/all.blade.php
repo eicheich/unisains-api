@@ -81,6 +81,7 @@
                     <thead>
                     <tr>
                         <th scope="col">No.</th>
+                        <th scope="col">Tanggal</th>
                         <th scope="col">Isi Laporan</th>
                         <th scope="col">Nama Pengirim</th>
                         <th scope="col">Email</th>
@@ -91,6 +92,7 @@
                     @foreach ($reports as $report)
                         <tr>
                             <th scope="row">{{ $loop->iteration }}</th>
+                            <td>{{ $report->date }}</td>
                             <td style="max-width: 256px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $report->report }}</td>
                             <td>{{ $report->user->first_name }}</td>
                             <td>{{ $report->user->email }}</td>
