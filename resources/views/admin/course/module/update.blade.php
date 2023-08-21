@@ -29,11 +29,11 @@
         </div>
         <div class="mb-3 px-5">
             <label for="course_description" class="form-label">Deskripsi Modul</label>
-            <textarea class="form-control" id="module_description" name="description" rows="3"></textarea>
+            <textarea class="form-control" id="module_description" name="description"></textarea>
         </div>
         <div class="mb-3 px-5">
             <label for="course_description" class="form-label">Materi Modul</label>
-            <textarea class="form-control" id="module_materi" name="materi_module" rows="3"></textarea>
+            <textarea class="form-control" id="module_materi" name="materi_module"></textarea>
         </div>
         <div class="card mt-5">
             <button type="submit" class="btn btn-primary">Submit</button>

@@ -10,7 +10,7 @@
         @csrf
         <div class="mb-3 px-5">
             <label for="isi" class="form-label">Isi Rangkuman</label>
-            <textarea class="form-control" id="isi" name="isi_rangkuman" ></textarea>
+            <textarea class="form-control" id="isi" name="isi_rangkuman">{{$rangkuman->summary}}</textarea>
         </div>
         <div class="card">
             <div class="card-body">
