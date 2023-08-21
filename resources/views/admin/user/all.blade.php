@@ -121,13 +121,11 @@
                                 <a href="{{ $users->previousPageUrl() }}" class="btn btn-sm btn-primary">Previous</a>
                             </div>
                         </div>
-
                         <div class="btn-toolbar mb-2 mb-md-0">
                             <div class="btn-group me-2">
                                 <p class="page-info">{{ $users->currentPage() }}</p>
                             </div>
                         </div>
-
                         <div class="btn-toolbar mb-2 mb-md-0">
                             <div class="btn-group me-2">
                                 <a href="{{ $users->nextPageUrl() }}" class="btn btn-sm btn-primary">Next</a>
