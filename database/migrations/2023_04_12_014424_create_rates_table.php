@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('course_id')->constrained('courses');
             $table->foreignId('user_id')->constrained('users');
-            $table->timestamps();
             $table->enum('rate', [1, 2, 3, 4, 5]);
             $table->string('comment');
+            $table->timestamps();
         });
     }
 

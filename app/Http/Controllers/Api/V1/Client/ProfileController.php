@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\MyCourse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -13,10 +14,9 @@ class ProfileController extends Controller
     public function show()
     {
         $user = Auth::user();
-        $my_course = DB::table('my_course')
-            ->join('courses', 'courses.id', '=', 'my_course.course_id')
-            ->where('my_course.user_id', $user->id)
-            ->first();
+        $my_course = MyCourse::with('course')
+            ->where('user_id', Auth::id())
+            ->get();
 
         if ($my_course == null) {
             $response = [
@@ -47,7 +47,8 @@ class ProfileController extends Controller
             'first_name' => 'required|string',
             'last_name' => 'required|string',
             'username' => 'required',
-            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg',
+            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,svg',
+            'email' => 'required|email'
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -56,15 +57,15 @@ class ProfileController extends Controller
             ], 422);
         }
         if ($request->hasFile('avatar')) {
-            if ($user->avatar != null) {
-                $old_avatar = public_path('storage/images/avatar') . '/' . $user->avatar;
+            if ($user->avatar !== 'default.png') {
+                $old_avatar = public_path('storage/images/avatar/') . $user->avatar;
                 if (file_exists($old_avatar)) {
                     unlink($old_avatar);
                 }
             }
             $avatar = $request->file('avatar');
             $avatar_name = time() . '.' . $avatar->getClientOriginalExtension();
-            $avatar->move(public_path('storage/images/avatar'), $avatar_name);
+            $avatar->move(public_path('storage/images/avatar/'), $avatar_name);
         } else {
             $avatar_name = $user->avatar;
         }
@@ -75,10 +76,13 @@ class ProfileController extends Controller
                 'last_name' => $request->last_name,
                 'username' => $request->username,
                 'avatar' => $avatar_name,
+                'email' => $request->email,
             ]);
             DB::commit();
+            $modelUser = Auth::user();
+            activity()->causedBy($modelUser)->log('Updated Account '. $modelUser->email);
             return response()->json([
-                'message' => 'Profile updated successfully',
+                'message' => 'success',
                 'data' => $user,
             ], 200);
         } catch (\Throwable $th) {

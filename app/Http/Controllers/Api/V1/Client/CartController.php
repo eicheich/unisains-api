@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -22,31 +23,47 @@ class CartController extends Controller
                 'errors' => $validator->errors(),
             ], 422);
         } else
-            try {
-                DB::beginTransaction();
-                $cart = DB::table('carts')->insert([
-                    'user_id' => $user->id,
-                    'course_id' => $request->course_id,
-                ]);
-                DB::commit();
+        {
+            $cart = Cart::where('user_id', $user->id)
+                ->where('course_id', $request->course_id)
+                ->first();
+            if ($cart) {
                 return response()->json([
-                    'message' => 'Course added to cart',
+                    'message' => 'Course already in cart',
                 ], 200);
-            } catch (\Throwable $th) {
-                DB::rollback();
-                return response()->json([
-                    'message' => 'Something went wrong',
-                ], 500);
+            } else {
+                try {
+                    DB::beginTransaction();
+                    $cart = Cart::create([
+                        'user_id' => $user->id,
+                        'course_id' => $request->course_id,
+                    ]);
+                    DB::commit();
+                    return response()->json([
+                        'message' => 'success',
+                        'data' => [
+                            'cart' => $cart
+                        ]
+                    ], 200);
+                } catch (\Throwable $th) {
+                    DB::rollback();
+                    return response()->json([
+                        'message' => 'Something went wrong',
+                    ], 500);
+                }
             }
+        }
+
     }
 
     public function all()
     {
         $user = Auth::user();
-        $cart = DB::table('carts')
-            ->join('courses', 'courses.id', '=', 'carts.course_id')
-            ->where('carts.user_id', $user->id)
-            ->first();
+        $cart = Cart::with('course')
+            ->where('user_id', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
         if ($cart == null) {
             return response()->json([
                 'message' => 'Cart is empty',
@@ -54,7 +71,10 @@ class CartController extends Controller
         } else {
             try {
                 return response()->json([
-                    'cart' => $cart,
+                    'message' => 'success',
+                    'data' => [
+                        'cart' => $cart
+                    ]
                 ], 200);
             } catch (\Throwable $th) {
                 DB::rollback();
@@ -69,8 +89,8 @@ class CartController extends Controller
     {
         $user = Auth::user();
         $cart = DB::table('carts')
-            ->where('user_id', $user->id)
-            ->where('course_id', $id)->first();
+            ->where('id', $id)
+            ->first();
         if ($cart == null) {
             return response()->json([
                 'message' => 'Course not found in cart',
@@ -79,8 +99,7 @@ class CartController extends Controller
         try {
             DB::beginTransaction();
             $cart = DB::table('carts')
-                ->where('user_id', $user->id)
-                ->where('course_id', $id)->delete();
+                ->where('id', $id)->delete();
             DB::commit();
             return response()->json([
                 'message' => 'Course deleted from cart',

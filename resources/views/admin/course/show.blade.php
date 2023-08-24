@@ -1,57 +1,46 @@
 @extends('layouts.main')
 @section('content')
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <div
+        class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Detail Kursus</h1>
-        @if (session('status'))
-            <div class="alert alert-success" role="alert">
-                {{ session('status') }}
-            </div>
-        @endif
+        @include('layouts.session')
     </div>
     <div class="container mt-5">
         <div class="row">
             <div class="col-md-8">
                 <img src="{{ asset('storage/images/thumbnail_course/' . $course->image_course) }}" alt="Course Image"
-                    class="img-fluid mb-3" />
-                <h1 class="mb-3">{{ $course->title_course }}</h1>
+                     class="img-fluid mb-3"/>
+                <h3>Judul Kursus : {{ $course->title_course }}</h3>
                 @if ($course->is_paid == 0)
                     <p>Gratis</p>
                 @else
                     <p>Harga : Rp. {{ $course->price }}</p>
                 @endif
-                @if ($course->discount == 0)
-                    <p>Diskon: Tidak ada</p>
-                @else
-                    <p>Diskon: {{ $course->discount }}%</p>
-                @endif
-                <hr class="my-4" />
-                <h2>Kategori</h2>
-                <p>{{ $course->category->name_category }}</p>
-                <h2>Deskripsi Kursus</h2>
-                <p>{{ $course->description }}</p>
-                <h2>Modul</h2>
+                <p>Kategori : {{ $course->category->name_category }}</p>
+                <p>Deskripsi : {{ $course->description }}</p>
+                <h3>Modul</h3>
                 <ul>
                     @if ($modules->isEmpty())
-                        <h5>Belum ada modul rangkuman</h5>
+                        <p>Belum ada Modul</p>
                     @else
                         @foreach ($modules as $m)
                             <div id="accordion">
-                                <div class="card mt-5">
+                                <div class="card mt-3">
                                     <div class="coll-show" id="heading{{ $m->id }}">
                                         <h5 class="mb-0">
                                             <button class="btn-coll" data-toggle="collapse"
-                                                data-target="#collapse{{ $m->id }}" aria-expanded="true"
-                                                aria-controls="collapse{{ $m->id }}">
+                                                    data-target="#collapse{{ $m->id }}" aria-expanded="true"
+                                                    aria-controls="collapse{{ $m->id }}">
                                                 {{ $m->title_module }}
                                             </button>
                                         </h5>
                                     </div>
                                     <div id="collapse{{ $m->id }}" class="collapse show"
-                                        aria-labelledby="heading{{ $m->id }}" data-parent="#accordion">
+                                         aria-labelledby="heading{{ $m->id }}" data-parent="#accordion">
                                         <div class="card">
-                                            <img class="image_module"
-                                                src="{{ asset('storage/images/module/' . $m->image_module) }}"
-                                                alt="...">
+                                            <img class="image_modul"
+                                                 src="{{ asset('storage/images/module/' . $m->image_module) }}"
+                                                 alt="...">
                                             <div class="card-body">
                                                 Deskripsi <br>
                                                 {{ $m->description }}
@@ -63,14 +52,15 @@
                                             <div class="card-actions d-flex justify-content-center mt-3">
                                                 <div>
                                                     <a href="{{ route('update.modules.page', $m->id) }}"
-                                                        class="btn btn-primary">Edit</a>
+                                                       class="btn btn-primary">Edit</a>
                                                 </div>
                                                 <div>
                                                     <form action="{{ route('delete.modules', $m->id) }}" method="post">
                                                         @csrf
                                                         <button type="submit" id="hapus-ar"
-                                                            class="btn btn-danger mx-2">Hapus
-                                                            Module</button>
+                                                                class="btn btn-danger mx-2">Hapus
+                                                            Module
+                                                        </button>
                                                     </form>
                                                 </div>
                                             </div>
@@ -80,10 +70,11 @@
                             </div>
                         @endforeach
                     @endif
-                    <button id="add-module-btn" class="btn btn-sm btn-outline-secondary mt-5" data-toggle="modal"
-                        data-target="#add-module-modal">Tambah Modul</button>
+                    <button id="add-module-btn" class="btn btn-sm btn-outline-secondary mt-3" data-toggle="modal"
+                            data-target="#add-module-modal">Tambah Modul
+                    </button>
                     <div class="modal fade" id="add-module-modal" tabindex="-1" role="dialog"
-                        aria-labelledby="add-module-modal-title" aria-hidden="true">
+                         aria-labelledby="add-module-modal-title" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -94,23 +85,23 @@
                                 </div>
                                 <div class="modal-body">
                                     <form action="{{ route('store.modules') }}" method="post"
-                                        enctype="multipart/form-data">
+                                          enctype="multipart/form-data">
                                         @csrf
                                         <div class="form-group">
                                             <label for="module-name">Judul Modul</label>
                                             <input type="text" class="form-control" id="module-name" name="title_module"
-                                                placeholder="Nama Modul">
+                                                   placeholder="Nama Modul">
                                         </div>
                                         <div class="form-group">
                                             <label for="module-description">Deskripsi Modul</label>
-                                            <textarea type="text" class="form-control" id="module-description" name="description" rows="5">
-                                            </textarea>
+                                            <input type="text" class="form-control" id="module-name" name="description"
+                                                   placeholder="Deskripsi Modul">
                                         </div>
                                         <div class="form-group mt-2">
                                             <p>Gambar Module</p>
                                             <div class="custom-file">
                                                 <input type="file" class="custom-file-input" id="certificate"
-                                                    name="image_module" onchange="previewImage('certificate')">
+                                                       name="image_module" onchange="previewImage('certificate')">
                                                 <label class="custom-file-label" for="certificate">Pilih file</label>
                                             </div>
                                         </div>
@@ -119,13 +110,14 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="module-description">Materi Modul</label>
-                                            <textarea type="text" class="form-control" id="module-description" name="materi_module" rows="5">
-                                            </textarea>
+                                            <input type="text" class="form-control" id="module-name" name="materi_module"
+                                                   placeholder="Materi Modul">
                                         </div>
                                         <input type="hidden" name="course_id" value="{{ $course->id }}">
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"
-                                                data-dismiss="modal">Batal</button>
+                                                    data-dismiss="modal">Batal
+                                            </button>
                                             <button type="submit" class="btn btn-primary">Tambah</button>
                                         </div>
                                     </form>
@@ -134,24 +126,25 @@
                         </div>
                     </div>
                 </ul>
-                <h2>Modul Rangkuman</h2>
-                @if ($module_rangkuman->isEmpty())
-                    <h5>Belum ada modul rangkuman</h5>
-                    <a href="{{ route('create.rangkuman', $course->id) }}"
-                        class="btn btn-sm btn-outline-secondary mt-5">Tambah rangkuman</a>
+                <h3>Modul Rangkuman</h3>
+                @if ($summary_modules->isEmpty())
+                    <p>Belum ada modul rangkuman</p>
+                    <button id="add-module-btn" class="btn btn-sm btn-outline-secondary " data-toggle="modal"
+                            data-target="#add-rangkuman-modal">Tambah Rangkuman
+                    </button>
                 @else
-                    @foreach ($module_rangkuman as $mr)
+                    @foreach ($summary_modules as $mr)
                         <div class="card">
-                            <p>{{ $mr->isi_rangkuman }}</p>
+                            <p>{{ $mr->summary }}</p>
                             <video controls>
-                                <source src="{{ asset('storage/video/rangkuman/' . $mr->video_rangkuman) }}"
-                                    type="video/mp4">
-                                <source src="{{ asset('storage/video/rangkuman/' . $mr->video_rangkuman) }}"
-                                    type="video/webm">
-                                <source src="{{ asset('storage/video/rangkuman/' . $mr->video_rangkuman) }}"
-                                    type="video/ogg">
+                                <source src="{{ asset('storage/video/rangkuman/' . $mr->summary_video) }}"
+                                        type="video/mp4">
+                                <source src="{{ asset('storage/video/rangkuman/' . $mr->summary_video) }}"
+                                        type="video/webm">
+                                <source src="{{ asset('storage/video/rangkuman/' . $mr->summary_video) }}"
+                                        type="video/ogg">
                                 Your browser does not support the video tag. You can <a
-                                    href="{{ asset('storage/video/rangkuman/' . $mr->video_rangkuman) }}">download the
+                                    href="{{ asset('storage/video/rangkuman/' . $mr->summary_video) }}">download the
                                     video</a>
                                 instead.
                             </video>
@@ -164,17 +157,19 @@
                                 <form action="{{ route('delete.rangkuman', $mr->id) }}" method="post">
                                     @csrf
                                     <button type="submit" id="hapus-ar" class="btn btn-danger mx-2">Hapus
-                                        Module</button>
+                                        Module
+                                    </button>
                                 </form>
                             </div>
                         </div>
                     @endforeach
                 @endif
-                <h2 class="mt-5">Kartu AR</h2>
+                <h3 class="mt-5">Kartu AR</h3>
                 @if ($ar->isEmpty())
-                    <h5>Belum ada Kartu AR</h5>
-                    <button id="add-module-btn" class="btn btn-sm btn-outline-secondary mt-5" data-toggle="modal"
-                        data-target="#add-ar-modal">Tambah AR</button>
+                    <p>Belum ada Kartu AR</p>
+                    <button id="add-module-btn" class="btn btn-sm btn-outline-secondary" data-toggle="modal"
+                            data-target="#add-ar-modal">Tambah AR
+                    </button>
                 @else
                     <div class="container">
                         <div class="row">
@@ -182,18 +177,19 @@
                                 <div class="col-md-4">
                                     <div class="card">
                                         <img class="card-img" src="{{ asset('storage/images/ar/' . $ar->image_ar) }}"
-                                            alt="Card Image">
+                                             alt="Card Image">
                                         <div class="card-actions d-flex justify-content-center mt-3">
                                             <div>
                                                 <a href="{{ route('edit.ar.page', $ar->id) }}"
-                                                    class="btn btn-primary">Edit</a>
+                                                   class="btn btn-primary">Edit</a>
                                             </div>
                                             <div>
                                                 <form action="{{ route('delete.ar', $ar->id) }}" method="post">
                                                     @csrf
                                                     <button type="submit" id="hapus-ar"
-                                                        class="btn btn-danger mx-2">Hapus
-                                                        AR</button>
+                                                            class="btn btn-danger mx-2">Hapus
+                                                        AR
+                                                    </button>
                                                 </form>
                                             </div>
                                         </div>
@@ -202,11 +198,12 @@
                             @endforeach
                         </div>
                     </div>
-                    <button id="add-ar-btn" class="btn btn-sm btn-outline-secondary mt-5" data-toggle="modal"
-                        data-target="#add-ar-modal">Tambah AR</button>
+                    <button id="add-ar-btn" class="btn btn-sm btn-outline-secondary mt-4" data-toggle="modal"
+                            data-target="#add-ar-modal">Tambah AR
+                    </button>
                 @endif
                 <div class="modal fade" id="add-ar-modal" tabindex="-1" role="dialog"
-                    aria-labelledby="add-module-modal-title" aria-hidden="true">
+                     aria-labelledby="add-module-modal-title" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -222,7 +219,7 @@
                                         <p>Gambar AR</p>
                                         <div class="custom-file">
                                             <input type="file" class="custom-file-input" id="ar"
-                                                name="image_ar" onchange="previewImage('ar')">
+                                                   name="image_ar" onchange="previewImage('ar')">
                                             <label class="custom-file-label" for="ar">Pilih file</label>
                                         </div>
                                     </div>
@@ -232,7 +229,8 @@
                                     <input type="hidden" name="course_id" value="{{ $course->id }}">
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary"
-                                            data-dismiss="modal">Batal</button>
+                                                data-dismiss="modal">Batal
+                                        </button>
                                         <button type="submit" class="btn btn-primary">Tambah</button>
                                     </div>
                                 </form>
@@ -240,10 +238,54 @@
                         </div>
                     </div>
                 </div>
+                <h3 class="mt-5">Soal Kursus</h3>
+                @if ($quiz->isEmpty())
+                    <p>Belum ada soal kursus</p>
+                    <button id="add-ar-btn" class="btn btn-sm btn-outline-secondary mt-5" data-toggle="modal"
+                            data-target="#add-quiz-modal">Tambah Soal
+                    </button>
+                @else
+                    <div class="container">
+                        <table id="quizTable" class="table table-striped text-center">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Soal</th>
+                                <th>Jawaban benar</th>
+                                <th>Aksi</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach ($quiz as $index => $quizItem)
+                                @foreach ($quizItem->questions as $question)
+                                    <tr>
+                                    <td>{{ $question->id }}</td>
+                                    <td>{{ $question->question }}</td>
+                                    <td>{{ $question->correct_answer }}</td>
+                                    <td>
+
+                                        <a href="{{ route('quiz.edit', $question->id) }}" class="btn btn-primary">Edit</a>
+                                        <form action="{{ route('delete.quiz', $quizItem->id) }}" method="post" style="display: inline;">
+                                            @csrf
+                                            <button type="submit" class="btn btn-danger">Hapus Soal</button>
+                                        </form>
+                                    </td>
+                                    </tr>
+                                @endforeach
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <button id="add-ar-btn" class="btn btn-sm btn-outline-secondary mt-5" data-toggle="modal"
+                            data-target="#add-quiz-modal">Tambah Soal
+                    </button>
+                @endif
+                @include('admin.course.partials.modalGroupQuiz')
             </div>
         </div>
     </div>
     </div>
+    @include('admin.course.partials.modalVideo')
     <style>
         .card {
             position: relative;
@@ -370,20 +412,21 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script>
-        
-
+        $(document).ready(function () {
+            $('#quizTable').DataTable();
+        });
         const deleteButton = document.getElementById("submit-delete");
         const deleteModule = document.getElementById("hapus-modul");
         const deleteAr = document.getElementById("hapus-ar");
 
-        deleteModule.addEventListener("click", function(event) {
+        deleteModule.addEventListener("click", function (event) {
             handleDelete.call(this, event, "Apakah Anda yakin ingin menghapus modul ini?");
         });
 
-        deleteButton.addEventListener("click", function(event) {
+        deleteButton.addEventListener("click", function (event) {
             handleDelete.call(this, event, "Apakah Anda yakin ingin menghapus kursus ini?");
         });
-        deleteAr.addEventListener("click", function(event) {
+        deleteAr.addEventListener("click", function (event) {
             handleDelete.call(this, event, "Apakah Anda yakin ingin menghapus kursus ini?");
         });
 
@@ -394,16 +437,18 @@
                 this.form.submit();
             }
         }
-        
+
         const accordion = document.querySelector('#accordion');
         const collapses = accordion.querySelectorAll('.collapse');
 
         collapses.forEach(collapse => {
-            collapse.addEventListener('show.bs.collapse', () => {});
-            collapse.addEventListener('hide.bs.collapse', () => {});
+            collapse.addEventListener('show.bs.collapse', () => {
+            });
+            collapse.addEventListener('hide.bs.collapse', () => {
+            });
         });
-        $(document).ready(function() {
-            $('#add-module-btn').click(function() {
+        $(document).ready(function () {
+            $('#add-module-btn').click(function () {
                 $('#add-module-modal').modal('show');
             });
         });
@@ -412,7 +457,7 @@
             var preview = document.querySelector('#' + inputId + '_preview');
             var file = document.querySelector('#' + inputId).files[0];
             var reader = new FileReader();
-            reader.onloadend = function() {
+            reader.onloadend = function () {
                 preview.src = reader.result;
             }
             if (file) {
@@ -421,5 +466,26 @@
                 preview.src = "";
             }
         }
+
+        function previewVideo(inputId) {
+            var preview = document.querySelector('#video_preview');
+            var source = document.querySelector('#video_source');
+            var file = document.querySelector('#' + inputId).files[0];
+            var reader = new FileReader();
+
+            reader.onloadend = function () {
+                source.src = reader.result;
+                preview.load();
+            }
+
+            if (file) {
+                reader.readAsDataURL(file);
+            } else {
+                source.src = "";
+            }
+        }
+        document.querySelector('#video').addEventListener('change', function () {
+            previewVideo('video');
+        });
     </script>
 @endsection

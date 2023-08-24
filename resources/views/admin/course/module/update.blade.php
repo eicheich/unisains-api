@@ -2,11 +2,7 @@
 @section('content')
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Edit Modul</h1>
-        @if (session('status'))
-            <div class="alert alert-success" role="alert">
-                {{ session('status') }}
-            </div>
-        @endif
+        @include('layouts.session')
         <div class="btn-toolbar mb-2 mb-md-0">
         </div>
     </div>
@@ -33,11 +29,11 @@
         </div>
         <div class="mb-3 px-5">
             <label for="course_description" class="form-label">Deskripsi Modul</label>
-            <textarea class="form-control" id="module_description" name="description" rows="3"></textarea>
+            <textarea class="form-control" id="module_description" name="description"></textarea>
         </div>
         <div class="mb-3 px-5">
             <label for="course_description" class="form-label">Materi Modul</label>
-            <textarea class="form-control" id="module_materi" name="materi_module" rows="3"></textarea>
+            <textarea class="form-control" id="module_materi" name="materi_module"></textarea>
         </div>
         <div class="card mt-5">
             <button type="submit" class="btn btn-primary">Submit</button>

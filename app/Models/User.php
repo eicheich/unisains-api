@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class User extends Authenticatable
 {
@@ -34,7 +36,8 @@ class User extends Authenticatable
         'remember_token',
         'created_at',
         'updated_at',
-        'avatar'
+        'avatar',
+        'email_verified_at',
 
     ];
 
@@ -44,6 +47,8 @@ class User extends Authenticatable
     {
         return $this->avatar ? asset('storage/images/avatar/' . $this->avatar) : asset('storage/images/avatar/default.png');
     }
+
+
 
     /**
      * The attributes that should be cast.
@@ -57,5 +62,26 @@ class User extends Authenticatable
     public function courses()
     {
         return $this->belongsToMany(Course::class, 'user_courses');
+    }
+
+    public function reports()
+    {
+        return $this->hasMany(Report::class);
+    }
+
+    public function myCourses()
+    {
+        return $this->hasMany(MyCourse::class);
+    }
+
+    public function certificates()
+    {
+        return $this->hasMany(Certificate::class);
+    }
+
+    public function rates()
+    {
+        return $this->hasMany(Rate::class);
+
     }
 }

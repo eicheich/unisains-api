@@ -2,11 +2,7 @@
 @section('content')
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Edit Modul Rangkuman</h1>
-        @if (session('status'))
-            <div class="alert alert-success" role="alert">
-                {{ session('status') }}
-            </div>
-        @endif
+        @include('layouts.session')
         <div class="btn-toolbar mb-2 mb-md-0">
         </div>
     </div>
@@ -14,17 +10,17 @@
         @csrf
         <div class="mb-3 px-5">
             <label for="isi" class="form-label">Isi Rangkuman</label>
-            <textarea class="form-control" id="isi" name="isi_rangkuman" ></textarea>
+            <textarea class="form-control" id="isi" name="isi_rangkuman">{{$rangkuman->summary}}</textarea>
         </div>
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Video Rangkuman</h5>
                 <video class="video-control" controls>
-                    <source src="{{ asset('storage/video/rangkuman/' . $rangkuman->video_rangkuman) }}" type="video/mp4">
-                    <source src="{{ asset('storage/video/rangkuman/' . $rangkuman->video_rangkuman) }}" type="video/webm">
-                    <source src="{{ asset('storage/video/rangkuman/' . $rangkuman->video_rangkuman) }}" type="video/ogg">
+                    <source src="{{ asset('storage/video/rangkuman/' . $rangkuman->summary_video) }}" type="video/mp4">
+                    <source src="{{ asset('storage/video/rangkuman/' . $rangkuman->summary_video) }}" type="video/webm">
+                    <source src="{{ asset('storage/video/rangkuman/' . $rangkuman->summary_video) }}" type="video/ogg">
                     Your browser does not support the video tag. You can <a
-                        href="{{ asset('storage/video/rangkuman/' . $rangkuman->video_rangkuman) }}">download the
+                        href="{{ asset('storage/video/rangkuman/' . $rangkuman->summary_video) }}">download the
                         video</a>
                     instead.
                 </video>
@@ -113,7 +109,7 @@
         }
     </style>
     <script>
-        document.getElementById('isi').value = "{{ $rangkuman->isi_rangkuman }}";
+        document.getElementById('isi').value = "{{ $rangkuman->summary }}";
 
     </script>
 @endsection
