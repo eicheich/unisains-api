@@ -53,7 +53,7 @@ class WishlistController extends Controller
     public function all()
     {
         $user = Auth::user();
-        $wishlist = Wishlist::with('course')->where('user_id', $user->id)->get();
+        $wishlist = Wishlist::with('course')->where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
         if ($wishlist == null) {
             return response()->json([
                 'message' => 'Wishlist is empty',

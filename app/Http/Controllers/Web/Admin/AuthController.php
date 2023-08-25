@@ -18,6 +18,7 @@ class AuthController extends Controller
     {
         $credentials = $request->only('email', 'password');
         if (auth()->attempt($credentials)) {
+            $user = auth()->user();
             return redirect()->route('dashboard.page');
         } else {
             return redirect()->back()->withErrors(['password' => 'Password is incorrect']);
@@ -60,6 +61,15 @@ class AuthController extends Controller
             DB::rollback();
             return redirect()->back()->with('error', $th->getMessage());
         }
+    }
+
+//    show
+    public function show($id)
+    {
+        $user = DB::table('users')->where('id', $id)->first();
+//        activity_log dari user ini
+        $activity_logs = DB::table('activity_log')->where('causer_id', $id)->paginate(10);
+        return view('admin.user.show', compact('user','activity_logs'));
     }
 
 }

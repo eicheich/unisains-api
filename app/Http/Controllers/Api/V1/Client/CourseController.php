@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\V1\Client;
 use App\Helpers\UrlHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
+use App\Models\Question;
+use App\Models\Quiz;
 use App\Models\Rate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -54,26 +56,42 @@ class CourseController extends Controller
 
     public function learn($id)
     {
-        $course = Course::with(['category', 'modules', 'ars'])
+        $course = Course::with(['category', 'modules', 'summary_modules', 'ars'])
             ->find($id);
 
-        if ($course) {
-            return response()->json([
-                'course' => $course,
-            ], 200);
+        $quizzez = DB::table('quizzes')
+            ->where('course_id', $id)
+            ->first();
+
+        if ($quizzez) {
+            $questions = Question::with('answers')
+                ->where('quiz_id', $quizzez->id)
+                ->inRandomOrder() // Mengambil pertanyaan secara acak
+                ->limit(5) // Mengambil 5 pertanyaan
+                ->get();
+
+            if ($course) {
+                return response()->json([
+                    'course' => $course,
+                    'questions' => $questions, // Mengubah 'quizzez' menjadi 'questions'
+                ], 200);
+            } else {
+                return response()->json([
+                    'message' => 'Course not found'
+                ], 404);
+            }
         } else {
             return response()->json([
-                'message' => 'Course not found'
+                'message' => 'Quizzes not found'
             ], 404);
         }
+
     }
     public function show($id)
     {
-        $course = Course::with(['category', 'rates','modules' => function ($query) {
+        $course = Course::with(['category', 'rates.user','modules' => function ($query) {
             $query->select('course_id', 'title_module', 'description','image_module');
         }])->find($id);
-
-
         if ($course) {
             return response()->json([
                 'message' => 'success',

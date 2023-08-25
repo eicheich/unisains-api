@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\V1\Client\CourseController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\Client\CartController;
 use App\Http\Controllers\Api\V1\Client\ProfileController;
+use App\Http\Controllers\Api\V1\EmailVerifController;
 use App\Http\Controllers\Api\V1\Client\ReportController;
 use App\Http\Controllers\Api\V1\Client\PaymentController;
 use App\Http\Controllers\Api\V1\Client\TransactionController;
@@ -36,10 +37,13 @@ Route::get('/acces-denied', function () {
 
 Route::prefix('v1')->group(function () {
     Route::prefix('auth')->group(function () {
+        route::post('forgot-password', [AuthController::class, 'forgotPassword']);
         Route::post('login', [AuthController::class, 'login']);
         Route::post('register', [AuthController::class, 'register']);
         Route::middleware('auth:sanctum')->group(function () {
             Route::post('logout', [AuthController::class, 'logout']);
+            Route::post('verif-email', [EmailVerifController::class, 'verifEmail']);
+            Route::post('reset-password', [AuthController::class, 'resetPassword']);
         });
     });
     Route::post('callback', [PaymentController::class, 'callback']);
@@ -61,7 +65,9 @@ Route::prefix('v1')->group(function () {
         Route::get('category', [CourseController::class, 'category']);
         Route::get('preview/{id}', [CourseController::class, 'preview']);
         Route::get('search', [CourseController::class, 'search']);
+
         Route::middleware('auth:sanctum')->group(function () {
+
             Route::get('learn/{id}', [CourseController::class, 'learn'])->middleware('isBought');
             Route::get('show/{id}', [CourseController::class, 'show']);
             Route::prefix('cart')->group(function () {

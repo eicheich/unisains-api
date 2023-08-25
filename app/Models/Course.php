@@ -11,7 +11,7 @@ class Course extends Model
     use HasFactory;
     protected $guarded = [];
     protected $hidden = ['created_at', 'updated_at', 'deleted_at','is_paid','course_code','category_id','image_course','certificate_course','is_public'];
-    protected $appends = ['thumbnail','is_purchased', 'is_wishlist'];
+    protected $appends = ['thumbnail','is_purchased', 'is_wishlist','avgRate','in_cart','totalRate'];
     public function getPriceAttribute($value)
     {
         if ($this->is_paid == 0) {
@@ -113,6 +113,48 @@ class Course extends Model
             }
         }
         return false;
+    }
+
+    public function summary_modules()
+    {
+        return $this->hasMany(SummaryModule::class);
+    }
+
+    public function getAvgRateAttribute()
+    {
+        return $this->avgRate($this->id);
+    }
+    public static function avgRate($courseId)
+    {
+        $rates = Rate::where('course_id', $courseId)->get();
+        $totalRate = 0;
+
+        foreach ($rates as $rate) {
+            $totalRate += $rate->rate;
+        }
+
+        if (count($rates) > 0) {
+            return $totalRate / count($rates);
+        } else {
+            return 0;
+        }
+    }
+
+    public function getInCartAttribute()
+    {
+        $user = auth()->user();
+        if ($user) {
+            $cart = Cart::where('user_id', $user->id)->where('course_id', $this->id)->first();
+            if ($cart) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public function getTotalRateAttribute()
+    {
+        $rate = Rate::where('course_id', $this->id)->get();
+        return count($rate);
     }
 
 

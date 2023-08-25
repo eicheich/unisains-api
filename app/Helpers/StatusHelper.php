@@ -10,7 +10,8 @@ class StatusHelper{
         $transactions = DB::table('transactions')->get();
         foreach ($transactions as $transaction) {
             $date = Carbon::parse($transaction->created_at)->addDay();
-            if ($date < Carbon::now()) {
+//            cari transaksi yg statusnya success
+            if ($date < Carbon::now() && $transaction->status == 'pending') {
                 DB::table('transactions')->where('id', $transaction->id)->update([
                     'status' => 'failed'
                 ]);

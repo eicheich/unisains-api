@@ -48,6 +48,7 @@ class ProfileController extends Controller
             'last_name' => 'required|string',
             'username' => 'required',
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,svg',
+            'email' => 'required|email'
         ]);
         if ($validator->fails()) {
             return response()->json([
@@ -75,8 +76,11 @@ class ProfileController extends Controller
                 'last_name' => $request->last_name,
                 'username' => $request->username,
                 'avatar' => $avatar_name,
+                'email' => $request->email,
             ]);
             DB::commit();
+            $modelUser = Auth::user();
+            activity()->causedBy($modelUser)->log('Updated Account '. $modelUser->email);
             return response()->json([
                 'message' => 'success',
                 'data' => $user,

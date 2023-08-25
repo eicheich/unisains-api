@@ -14,7 +14,7 @@
 {{--                    drop down role--}}
                     <div class="form-group">
                         <label for="module-name">Role</label>
-                        <select class="" name="role">
+                        <select class="form-select" name="role">
                             <option value="">Pilih Role</option>
                                 <option value="admin">Admin</option>
                                 <option value="teacher">Pengajar</option>
