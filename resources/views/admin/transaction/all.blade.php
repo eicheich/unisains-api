@@ -125,10 +125,27 @@
                 background-color: rgba(0, 204, 0, 0.5);
                 color: #ffffff;
             }
+            .filter-group{
+display: flex;
+                justify-content: center;
+                align-items: center;
+            }
         </style>
         <div class="container">
+
             <div class="row justify-content-center mt-5">
                 <div class="col-md-4">
+                    <div class="filter-group">
+                        <!-- Tambahkan elemen filter di sini, misalnya: -->
+                        <select class="form-control" name="filter">
+                            <option value="option1">Option 1</option>
+                            <option value="option2">Option 2</option>
+                            <option value="option3">Option 3</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+
                     <div class="input-group">
                         <form action="{{route('transactions.search')}}" class="d-flex justify-content-between" method="get">
                             <input type="text" class="form-control search-input" name="search" placeholder="Cari kode transaksi. . .">
@@ -138,8 +155,10 @@
                         </form>
                     </div>
                 </div>
+
             </div>
         </div>
+
         <div class="container">
             <h4 class="mt-3">Data Transaksi</h4>
             <div class="table-responsive text-center">

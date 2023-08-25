@@ -51,11 +51,13 @@ class AuthController extends Controller
                 $user->notify(new EmailVerificationNotification());
                 DB::commit();
                 activity()->causedBy($user)->log('Requested OTP for Verify Email '. $user->email);
+
                 return response()->json([
                     'message' => 'Register success',
                     'user' => $user,
                     'token-verify' => $token,
                 ], 200);
+
             } catch (\Exception $e) {
                 DB::rollBack();
                 return response()->json([
