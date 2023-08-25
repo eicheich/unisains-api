@@ -17,11 +17,17 @@ class Question extends Model
     protected $hidden = [
         'created_at',
         'updated_at',
-        'answer'
+        'correct_answer',
+        'quiz_id'
     ];
 
     public function quizzes()
     {
         return $this->belongsTo(Quiz::class);
+    }
+
+    public function answers()
+    {
+        return $this->hasMany(Answer::class);
     }
 }

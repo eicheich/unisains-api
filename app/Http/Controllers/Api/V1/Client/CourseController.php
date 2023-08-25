@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api\V1\Client;
 use App\Helpers\UrlHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
+use App\Models\Question;
+use App\Models\Quiz;
 use App\Models\Rate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -54,12 +56,19 @@ class CourseController extends Controller
 
     public function learn($id)
     {
-        $course = Course::with(['category', 'modules', 'ars'])
+        $course = Course::with(['category', 'modules','summary_modules', 'ars'])
             ->find($id);
+        $quizzez = DB::table('quizzes')
+            ->where('course_id', $id)
+            ->first();
+        $question = Question::with('answers')
+            ->where('quiz_id', $quizzez->id)
+            ->get();
 
         if ($course) {
             return response()->json([
                 'course' => $course,
+                'quizzez' => $question,
             ], 200);
         } else {
             return response()->json([
@@ -69,11 +78,9 @@ class CourseController extends Controller
     }
     public function show($id)
     {
-        $course = Course::with(['category', 'rates','modules' => function ($query) {
+        $course = Course::with(['category', 'rates.user','modules' => function ($query) {
             $query->select('course_id', 'title_module', 'description','image_module');
         }])->find($id);
-
-
         if ($course) {
             return response()->json([
                 'message' => 'success',
@@ -151,6 +158,11 @@ class CourseController extends Controller
                 'errors' => $validator->errors(),
             ], 422);
         } else
+            if (Rate::where('user_id', $user->id)->where('course_id', $request->course_id)->exists()) {
+                return response()->json([
+                    'message' => 'You have rated this course',
+                ], 422);
+            } else
             try {
                 $rate = DB::table('rates')->insert([
                     'user_id' => $user->id,

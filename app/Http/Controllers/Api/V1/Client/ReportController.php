@@ -17,14 +17,12 @@ class ReportController extends Controller
         $validator = Validator::make($request->all(), [
             'report' => 'required',
         ]);
-
         if ($validator->fails()) {
             return response()->json([
                 'message' => 'Validation error',
                 'errors' => $validator->errors(),
             ], 422);
         }
-
         try {
             DB::beginTransaction();
             $report = DB::table('reports')->insert([
@@ -34,6 +32,7 @@ class ReportController extends Controller
                 'updated_at' => Carbon::now(),
             ]);
             DB::commit();
+            activity()->causedBy($user)->log('Send Report '. $user->email);
             return response()->json([
                 'message' => 'success',
                 'data' => $report,

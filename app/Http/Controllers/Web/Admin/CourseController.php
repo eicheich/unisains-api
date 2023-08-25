@@ -27,6 +27,7 @@ class CourseController extends Controller
             'category_id' => 'required|integer',
             'image_course' => 'required|file|mimes:jpeg,png',
             'price' => 'nullable|required_if:is_paid,1|numeric',
+            'link_chat' => 'required',
         ]);
 
         $image_name = $this->uploadImage($request->file('image_course'));
@@ -38,13 +39,26 @@ class CourseController extends Controller
             'image_course' => $image_name,
             'category_id' => $request->category_id,
             'course_code' => 'UNI' . rand(1000, 9999),
+            'link_chat' => $request->link_chat,
         ];
 
         if ($request->is_paid == 1) {
             $courseData['price'] = $request->price;
         }
 
-        Course::create($courseData);
+        try {
+            DB::beginTransaction();
+//            store course
+            $course = Course::create($courseData);
+            Quiz::create([
+                'course_id' => $course->id,
+                'title_quiz' => $course->title_course,
+            ]);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->with('error', $e->getMessage());
+        }
 
         return redirect()->route('course.page')->with('success', 'Course telah ditambahkan');
     }
@@ -149,5 +163,13 @@ class CourseController extends Controller
         }
 
         return redirect()->route('course.page')->with('success', 'Kursus telah dihapus');
+    }
+
+    public function search(Request $request)
+    {
+        $search = $request->search;
+        $courses = Course::where('title_course', 'like', '%' . $search . '%')->paginate(9);
+        return view('admin.course.course', compact('courses'));
+
     }
 }

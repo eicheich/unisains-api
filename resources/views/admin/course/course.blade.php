@@ -11,18 +11,62 @@
         </div>
     </div>
     @if ($courses->isEmpty())
+        <div class="container">
+            <div class="row justify-content-center mt-5">
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <form action="{{route('transactions.search')}}" class="d-flex justify-content-between" method="get">
+                            <input type="text" class="form-control search-input" name="search" placeholder="Cari nama kursus. . .">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary search-button" type="submit">Cari</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <style>
+            .search-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin-top: 100px;
+            }
+
+            .search-input {
+                width: 300px;
+                padding: 10px;
+                border: 2px solid #ccc;
+                border-radius: 5px;
+                font-size: 16px;
+                outline: none;
+            }
+
+            .search-button {
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                margin-left: 10px;
+                font-size: 16px;
+            }
+        </style>
+        <hr>
         <div class="alert alert-danger text-light" role="alert">
             Data Kursus Kosong
         </div>
     @else
         <div class="container">
             <div class="row justify-content-center mt-5">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="input-group">
-                        <input type="text" class="form-control search-input" placeholder="Cari...">
-                        <div class="input-group-append">
-                            <button class="btn btn-primary search-button" type="button">Cari</button>
-                        </div>
+                        <form action="{{route('course.search')}}" class="d-flex justify-content-between" method="get">
+                            <input type="text" class="form-control search-input" name="search" placeholder="Cari nama kursus. . .">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary search-button" type="submit">Cari</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -107,13 +151,23 @@
                                             <a class="btn btn-outline-primary"
                                                 href="{{ route('course.show', $course->id) }}">Lihat
                                                 selengkapnya</a>
-                                            <form action="{{ route('delete.course', $course->id) }}" method="post">
+{{--                                            <a class="btn btn-outline-danger"--}}
+{{--                                                href="{{ route('delete.course', $course->id) }}" id="delete-btn" onclick="confirmation(event)">Hapus</a>--}}
+                                            <form action="{{ route('delete.course', $course->id) }}" method="post" id="delete-form">
                                                 @csrf
-                                                <button class="btn btn-outline-danger" onclick="" id="submit-delete"
-                                                    type="submit">Hapus
-                                                    Kursus</button>
+                                                <button class="btn btn-outline-danger" type="button" onclick="showConfirmation()">Hapus Kursus</button>
                                             </form>
+                                            <script>
+                                                function showConfirmation() {
+                                                    if (confirm("Apakah Anda yakin ingin menghapus kursus ini?")) {
+                                                        // Jika pengguna menyetujui, submit form
+                                                        document.getElementById('delete-form').submit();
+                                                    }
+                                                }
+                                            </script>
 
+                                            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                                            <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
                                         </div>
                                     </div>
                                 </div>

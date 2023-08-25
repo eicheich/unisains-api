@@ -7,6 +7,7 @@ use App\Helpers\StatusHelper;
 use App\Http\Controllers\Controller;
 use App\Mail\MailNotify;
 use App\Models\Certificate;
+use App\Models\Course;
 use App\Models\MyCourse;
 use App\Models\Transaction;
 use Carbon\Carbon;
@@ -47,6 +48,12 @@ class TransactionController extends Controller
                 'message' => 'Course not found',
             ], 404);
         }
+        $my_course = DB::table('my_courses')->where('user_id', $user->id)->where('course_id', $request->course_id)->first();
+        if ($my_course) {
+            return response()->json([
+                'message' => 'You already have this course',
+            ], 200);
+        }
 
         if ($course->is_paid == 0) {
             try {
@@ -60,7 +67,9 @@ class TransactionController extends Controller
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now(),
                 ]);
+                DB::table('carts')->where('user_id', $user->id)->where('course_id', $request->course_id)->delete();
                 DB::commit();
+                activity()->causedBy($transaction)->log('Added Transaction '. $user->email);
                 return response()->json([
                     'message' => 'Transaction added',
                 ], 201);
@@ -87,6 +96,8 @@ class TransactionController extends Controller
                 DB::table('transactions')->insert($transaction);
                 $newTransaction = DB::table('transactions')->where('code_transaction', $code_transaction)->first();
                 DB::commit();
+                $trx = Transaction::where('code_transaction', $code_transaction)->first();
+                activity()->causedBy($trx)->log('Added Transaction '. $user->email);
                 return response()->json([
                     'message' => 'transaction added',
                     'data' => [
@@ -244,7 +255,7 @@ class TransactionController extends Controller
                 DB::table('my_courses')->where('id', $id)->update([
                     'is_done' => "1",
                 ]);
-                $time = $user->id;
+                $time = $user->id.$course->id;
                 DB::table('certificates')->insert([
                     'user_id' => $user->id,
                     'course_id' => $course->id,
@@ -253,7 +264,7 @@ class TransactionController extends Controller
                     'updated_at' => Carbon::now(),
                 ]);
                 DB::commit();
-                CertificateGenerator::generate($user->first_name .' '. $user->last_name, $course->title_course, Carbon::now()->format('d F Y'), $course->id, $user->id);
+                CertificateGenerator::generate($user->first_name .' '. $user->last_name, $course->title_course, Carbon::now()->format('d F Y'),$score_percentage, $time);
                 $certificate = Certificate::where('user_id', $user->id)->where('course_id', $course->id)->first();
                 $data = [
                     'name' => $user->first_name . ' ' . $user->last_name,
@@ -264,6 +275,8 @@ class TransactionController extends Controller
                     'time' => $time
                 ];
                 Mail::to($user->email)->send(new MailNotify($data));
+                $modelCourse = Course::find($course->id);
+                activity()->causedBy($user)->log('Completed the course ' . $user->email);
                 $response = [
                     'message' => 'success',
                     'data' => [
@@ -279,7 +292,7 @@ class TransactionController extends Controller
                 ], 500);
             }
         } else {
-            return response()->json(['message' => $score_percentage]);
+            return response()->json(['message' => 'failed', 'data' => ['user_score' => $score_percentage]], 200);
         }
 
 

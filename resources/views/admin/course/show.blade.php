@@ -21,7 +21,7 @@
                 <h3>Modul</h3>
                 <ul>
                     @if ($modules->isEmpty())
-                        <p>Belum ada modul rangkuman</p>
+                        <p>Belum ada Modul</p>
                     @else
                         @foreach ($modules as $m)
                             <div id="accordion">
@@ -249,10 +249,10 @@
                         <table id="quizTable" class="table table-striped text-center">
                             <thead>
                             <tr>
-                                <th>No</th>
+                                <th>ID</th>
                                 <th>Soal</th>
-                                <th>Jawaban</th>
-                                <th>Actions</th>
+                                <th>Jawaban benar</th>
+                                <th>Aksi</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -261,10 +261,10 @@
                                     <tr>
                                     <td>{{ $question->id }}</td>
                                     <td>{{ $question->question }}</td>
-                                    <td>{{ $question->answer }}</td>
+                                    <td>{{ $question->correct_answer }}</td>
                                     <td>
 
-                                        <a href="{{ route('update.quiz.page', $quizItem->id) }}" class="btn btn-primary">Lihat soal</a>
+                                        <a href="{{ route('quiz.edit', $question->id) }}" class="btn btn-primary">Edit</a>
                                         <form action="{{ route('delete.quiz', $quizItem->id) }}" method="post" style="display: inline;">
                                             @csrf
                                             <button type="submit" class="btn btn-danger">Hapus Soal</button>
