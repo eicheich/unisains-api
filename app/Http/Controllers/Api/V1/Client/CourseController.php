@@ -56,25 +56,36 @@ class CourseController extends Controller
 
     public function learn($id)
     {
-        $course = Course::with(['category', 'modules','summary_modules', 'ars'])
+        $course = Course::with(['category', 'modules', 'summary_modules', 'ars'])
             ->find($id);
+
         $quizzez = DB::table('quizzes')
             ->where('course_id', $id)
             ->first();
-        $question = Question::with('answers')
-            ->where('quiz_id', $quizzez->id)
-            ->get();
 
-        if ($course) {
-            return response()->json([
-                'course' => $course,
-                'quizzez' => $question,
-            ], 200);
+        if ($quizzez) {
+            $questions = Question::with('answers')
+                ->where('quiz_id', $quizzez->id)
+                ->inRandomOrder() // Mengambil pertanyaan secara acak
+                ->limit(5) // Mengambil 5 pertanyaan
+                ->get();
+
+            if ($course) {
+                return response()->json([
+                    'course' => $course,
+                    'questions' => $questions, // Mengubah 'quizzez' menjadi 'questions'
+                ], 200);
+            } else {
+                return response()->json([
+                    'message' => 'Course not found'
+                ], 404);
+            }
         } else {
             return response()->json([
-                'message' => 'Course not found'
+                'message' => 'Quizzes not found'
             ], 404);
         }
+
     }
     public function show($id)
     {
@@ -149,44 +160,5 @@ class CourseController extends Controller
 
     }
 
-    public function rate(Request $request)
-    {
-        $user = Auth::user();
-        $validator = Validator::make($request->all(), [
-            'course_id' => 'required|exists:courses,id',
-            'rate' => 'required|numeric|min:1|max:5',
-            'comment' => 'required'
-        ]);
-        if ($validator->fails()) {
-            return response()->json([
-                'message' => 'Validation error',
-                'errors' => $validator->errors(),
-            ], 422);
-        } else
-            if (Rate::where('user_id', $user->id)->where('course_id', $request->course_id)->exists()) {
-                return response()->json([
-                    'message' => 'You have rated this course',
-                ], 422);
-            } else
-            try {
-                $rate = DB::table('rates')->insert([
-                    'user_id' => $user->id,
-                    'course_id' => $request->course_id,
-                    'rate' => $request->rate,
-                    'comment' => $request->comment,
-                    'created_at' => now()
-                    ]);
-                return response()->json([
-                    'message' => 'success',
-                    'data' => [
-                        'rate' => $rate
-                    ]
-                ], 200);
-            } catch (\Throwable $th) {
-                DB::rollback();
-                return response()->json([
-                    'message' => $th
-                ], 500);
-            }
-    }
+
 }

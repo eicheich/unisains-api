@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\V1\Client\ReportController;
 use App\Http\Controllers\Api\V1\Client\PaymentController;
 use App\Http\Controllers\Api\V1\Client\TransactionController;
 use App\Http\Controllers\Api\V1\Client\WishlistController;
+use App\Http\Controllers\Api\V1\Client\RateController;
 use App\Http\Controllers\Api\V1\TeacherController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -64,7 +65,9 @@ Route::prefix('v1')->group(function () {
         Route::get('category', [CourseController::class, 'category']);
         Route::get('preview/{id}', [CourseController::class, 'preview']);
         Route::get('search', [CourseController::class, 'search']);
+
         Route::middleware('auth:sanctum')->group(function () {
+
             Route::get('learn/{id}', [CourseController::class, 'learn'])->middleware('isBought');
             Route::get('show/{id}', [CourseController::class, 'show']);
             Route::prefix('cart')->group(function () {
@@ -79,6 +82,8 @@ Route::prefix('v1')->group(function () {
             });
             Route::post('trx-quiz/{id}', [TransactionController::class, 'quiz']);
             Route::post('rate', [CourseController::class, 'rate']);
+            Route::get('rate/edit/{id}', [RateController::class, 'editRate']);
+            Route::post('rate/update/{id}', [RateController::class, 'updateRate']);
         });
     });
     Route::prefix('profile')->middleware('auth:sanctum')->group(function () {
