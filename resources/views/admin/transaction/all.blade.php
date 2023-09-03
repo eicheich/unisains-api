@@ -126,28 +126,50 @@
                 color: #ffffff;
             }
             .filter-group{
-display: flex;
+                display: flex;
                 justify-content: center;
                 align-items: center;
             }
-        </style>
-        <div class="container">
+            /* styles.css */
+            .transaction-card {
+                background-color: #f9f9f9;
+                border-radius: 10px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                transition: transform 0.2s;
+            }
 
+            .transaction-card:hover {
+                transform: translateY(-5px);
+            }
+
+            .filter-input {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                transition: box-shadow 0.2s;
+            }
+
+            .filter-input:focus {
+                outline: none;
+                border-color: #007bff;
+                box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            }
+
+        </style>
+        <div class="container p-2">
             <div class="row justify-content-center mt-5">
+                <div class="col-md-4 card">0192102</div>
                 <div class="col-md-4">
                     <div class="filter-group">
-                        <!-- Tambahkan elemen filter di sini, misalnya: -->
-                        <select class="form-control" name="filter">
-                            <option value="option1">Option 1</option>
-                            <option value="option2">Option 2</option>
-                            <option value="option3">Option 3</option>
-                        </select>
+                        <!-- Elemen filter tanggal -->
+                        <input type="date" class="form-control" name="filter_date">
                     </div>
                 </div>
                 <div class="col-md-4">
-
                     <div class="input-group">
                         <form action="{{route('transactions.search')}}" class="d-flex justify-content-between" method="get">
+                            <!-- Input pencarian -->
                             <input type="text" class="form-control search-input" name="search" placeholder="Cari kode transaksi. . .">
                             <div class="input-group-append">
                                 <button class="btn btn-primary search-button" type="submit">Cari</button>
@@ -155,7 +177,6 @@ display: flex;
                         </form>
                     </div>
                 </div>
-
             </div>
         </div>
 
