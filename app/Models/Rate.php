@@ -16,7 +16,7 @@ class Rate extends Model
 //    appends
     protected $appends = ['date', 'rated_by_me'];
 
-    public function courses()
+    public function course()
     {
         return $this->belongsTo(Course::class);
     }
