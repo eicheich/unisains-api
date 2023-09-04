@@ -14,7 +14,7 @@ class Rate extends Model
     protected $hidden = ['created_at', 'updated_at', 'user_id', 'course_id'];
 
 //    appends
-    protected $appends = ['date'];
+    protected $appends = ['date', 'rated_by_me'];
 
     public function courses()
     {
@@ -32,6 +32,16 @@ class Rate extends Model
         $formattedDate = $date->isoFormat('D MMMM Y');
 
         return $formattedDate;
+    }
+
+    public function getRatedByMeAttribute()
+    {
+        $user = auth()->user();
+        if ($this->user_id == $user->id) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 
