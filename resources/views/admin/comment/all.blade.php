@@ -178,6 +178,7 @@
                         <th>No</th>
                         <th>Tanggal</th>
                         <th>Isi Ulasan</th>
+                        <th>Nilai ulasan</th>
                         <th>Pengguna</th>
                         <th>Kursus</th>
                         <th>Status</th>
@@ -190,6 +191,17 @@
                             <td>{{ $index + 1 }}</td>
                             <td>{{ $cmnt->date }}</td>
                             <td>{{ $cmnt->comment }}</td>
+{{--                            sesuaikan jumlah rate dengan bintang yang di tampilkan--}}
+                            <td>
+                                @for ($i = 0; $i < $cmnt->rate; $i++)
+                                    <i class="fas fa-star"></i>
+                                    <style>
+                                        .fa-star {
+                                            color: #FFD700;
+                                        }
+                                    </style>
+                                @endfor
+                            </td>
                             <td>{{ $cmnt->user->email }}</td>
                         <td>{{ $cmnt->course->title_course }}</td>
                             <td>
