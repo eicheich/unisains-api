@@ -110,7 +110,7 @@ class CourseController extends Controller
 
     public function preview($id)
     {
-        $course = Course::with(['category', 'modules', 'rates'])
+        $course = Course::with(['category', 'modules'])
             ->find($id);
         if ($course) {
             return response()->json([

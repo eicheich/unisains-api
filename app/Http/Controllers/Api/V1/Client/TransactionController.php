@@ -116,13 +116,9 @@ class TransactionController extends Controller
     public function schedule($transactionId)
     {
         $transaction = DB::table('transactions')->where('id', $transactionId)->first();
-
         if ($transaction->status == 'pending') {
-            // Calculate due time as 1 day after the transaction's creation time
             $dueTime = Carbon::parse($transaction->created_at)->addDay();
-            // Schedule the task to run at the due time
             Cache::put('transaction_due_' . $transaction->id, true, $dueTime);
-            // Register the task
             Cache::put('transaction_due_task_' . $transaction->id, function () use ($transactionId) {
                 $this->updateTransactionStatus($transactionId);
             }, $dueTime);
