@@ -81,7 +81,7 @@ Route::prefix('v1')->group(function () {
                 Route::delete('delete/{id}', [WishlistController::class, 'delete']);
             });
             Route::post('trx-quiz/{id}', [TransactionController::class, 'quiz']);
-            Route::post('rate', [CourseController::class, 'rate']);
+            Route::post('rate', [RateController::class, 'rate']);
             Route::get('rate/edit/{id}', [RateController::class, 'editRate']);
             Route::post('rate/update/{id}', [RateController::class, 'updateRate']);
         });
