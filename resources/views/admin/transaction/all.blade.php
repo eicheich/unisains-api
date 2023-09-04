@@ -159,17 +159,61 @@
         </style>
         <div class="container p-2">
             <div class="row justify-content-center mt-5">
-                <div class="col-md-4 card">0192102</div>
-                <div class="col-md-4">
+                <div class="col-md-2">
+                    <div class="card_total">Total : Rp. {{$total_pendapatan}}</div>
+
+                </div>
+                <div class="col-md-2">
                     <div class="filter-group">
-                        <!-- Elemen filter tanggal -->
-                        <input type="date" class="form-control" name="filter_date">
+                        <input type="date" class="filter_date" name="filter_date">
                     </div>
                 </div>
-                <div class="col-md-4">
+                <style>
+                    .card_total {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        padding: 10px;
+                        border: 1px solid #ddd;
+                        border-radius: 5px;
+                        transition: box-shadow 0.2s;
+                        background-color: #4CAF50;
+                        color: white;
+                        font-weight: bold;
+                    }
+                    .filter-group {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                    }
+                    .filter_status {
+                        width: 100%;
+                        padding: 14px;
+                        border: 1px solid #ddd;
+                        border-radius: 5px;
+                        transition: box-shadow 0.2s;
+                    }
+                    .filter_date {
+                        width: 100%;
+                        padding: 10px;
+                        border: 1px solid #ddd;
+                        border-radius: 5px;
+                        transition: box-shadow 0.2s;
+                    }
+                </style>
+                <div class="col-md-2">
+                    <div class="filter-group">
+                        <select name="filter_status" class="filter_status">
+                            <option value="">Semua Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="success">Success</option>
+                            <option value="failed">Failed</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
                     <div class="input-group">
                         <form action="{{route('transactions.search')}}" class="d-flex justify-content-between" method="get">
-                            <!-- Input pencarian -->
                             <input type="text" class="form-control search-input" name="search" placeholder="Cari kode transaksi. . .">
                             <div class="input-group-append">
                                 <button class="btn btn-primary search-button" type="submit">Cari</button>
