@@ -43,11 +43,4 @@ class Rate extends Model
             return false;
         }
     }
-
-
-
-
-
-
-
 }
