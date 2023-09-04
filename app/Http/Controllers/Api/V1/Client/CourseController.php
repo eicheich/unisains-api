@@ -89,9 +89,14 @@ class CourseController extends Controller
     }
     public function show($id)
     {
-        $course = Course::with(['category', 'rates.user','modules' => function ($query) {
-            $query->select('course_id', 'title_module', 'description','image_module');
-        }])->find($id);
+        $course = Course::with(['category', 'rates' => function ($query) {
+            $query->approved(); // Panggil scopeApproved dari model Rate
+            $query->with('user'); // Ambil data user dari model Rate
+        }, 'modules' => function ($query) {
+            $query->select('course_id', 'title_module', 'description', 'image_module');
+        }])
+            ->find($id);
+
         if ($course) {
             return response()->json([
                 'message' => 'success',

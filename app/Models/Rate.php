@@ -9,6 +9,10 @@ use Illuminate\Database\Eloquent\Model;
 class Rate extends Model
 {
     use HasFactory;
+    public function scopeApproved($query)
+    {
+        return $query->where('status', 'approved');
+    }
 
     protected $guarded = [];
     protected $hidden = ['created_at', 'updated_at', 'user_id', 'course_id'];
@@ -43,4 +47,6 @@ class Rate extends Model
             return false;
         }
     }
+//    hanya mereturn rate yg statusnya approved
+
 }
