@@ -3,6 +3,7 @@
 use App\Http\Controllers\Web\Admin\ARController;
 use App\Http\Controllers\Web\Admin\AuthController;
 use App\Http\Controllers\Web\Admin\CourseController;
+use App\Http\Controllers\Web\Admin\CommentController;
 use App\Http\Controllers\Web\Admin\UserController;
 use App\Http\Controllers\Web\Admin\DashboardController;
 use App\Http\Controllers\Web\Admin\ModuleController;
@@ -104,5 +105,14 @@ Route::prefix('admin')->middleware('isAdminWeb')->group(function () {
         Route::post('update/{id}', [ReportController::class, 'updateReport'])->name('update.report');
         Route::post('delete/{id}', [ReportController::class, 'deleteReport'])->name('delete.report');
         Route::get('search', [ReportController::class, 'search'])->name('report.search');
+    });
+
+    Route::prefix('comments')->group(function () {
+        Route::get('/', [CommentController::class, 'all'])->name('comments.page');
+        Route::get('show/{id}', [CommentController::class, 'showComment'])->name('comments.show');
+        Route::get('update-page/{id}', [CommentController::class, 'updatePageComment'])->name('update.comments.page');
+        Route::post('update/{id}', [CommentController::class, 'updateComment'])->name('update.comments');
+        Route::post('delete/{id}', [CommentController::class, 'deleteComment'])->name('delete.comments');
+        Route::get('search', [CommentController::class, 'search'])->name('comments.search');
     });
 });
