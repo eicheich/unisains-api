@@ -109,10 +109,7 @@ Route::prefix('admin')->middleware('isAdminWeb')->group(function () {
 
     Route::prefix('comments')->group(function () {
         Route::get('/', [CommentController::class, 'all'])->name('comments.page');
-        Route::get('show/{id}', [CommentController::class, 'showComment'])->name('comments.show');
-        Route::get('update-page/{id}', [CommentController::class, 'updatePageComment'])->name('update.comments.page');
-        Route::post('update/{id}', [CommentController::class, 'updateComment'])->name('update.comments');
-        Route::post('delete/{id}', [CommentController::class, 'deleteComment'])->name('delete.comments');
-        Route::get('search', [CommentController::class, 'search'])->name('comments.search');
+        Route::post('approve/{id}', [CommentController::class, 'approve'])->name('approve.comments');
+        Route::post('disapprove/{id}', [CommentController::class, 'disapprove'])->name('disapprove.comments');
     });
 });

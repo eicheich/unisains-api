@@ -157,5 +157,13 @@ class Course extends Model
         return count($rate);
     }
 
+    public function scopeApproved($query)
+    {
+        return $query->whereHas('rates', function ($subquery) {
+            $subquery->where('status', 'approved');
+        });
+    }
+
+
 
 }

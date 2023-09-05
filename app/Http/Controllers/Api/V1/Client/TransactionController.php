@@ -9,6 +9,7 @@ use App\Mail\MailNotify;
 use App\Models\Certificate;
 use App\Models\Course;
 use App\Models\MyCourse;
+use App\Models\Rate;
 use App\Models\Transaction;
 use Carbon\Carbon;
 use Carbon\CarbonInterface;
@@ -53,46 +54,32 @@ class TransactionController extends Controller
             return response()->json([
                 'message' => 'You already have this course',
             ], 200);
-        }
-
-        if ($course->is_paid == 0) {
-            try {
-                DB::beginTransaction();
-                $transaction = DB::table('transactions')->insert([
-                    'user_id' => $user->id,
-                    'course_id' => $request->course_id,
-                    'status' => 'pending',
-                    'code_transaction' => 'TRU' . time(),
-                    'total_price' => 0,
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now(),
-                ]);
-                DB::table('carts')->where('user_id', $user->id)->where('course_id', $request->course_id)->delete();
-                DB::commit();
-                activity()->causedBy($transaction)->log('Added Transaction '. $user->email);
-                return response()->json([
-                    'message' => 'Transaction added',
-                ], 201);
-            } catch (\Throwable $th) {
-                DB::rollBack();
-                return response()->json([
-                    'status', $th->getMessage()
-                ], 500);
-            }
-        } elseif ($course->is_paid == 1) {
+        } else
             try {
                 DB::beginTransaction();
 
                 $code_transaction = 'TRU' . time();
-                $transaction = [
-                    'user_id' => $user->id,
-                    'course_id' => $request->course_id,
-                    'status' => 'pending',
-                    'code_transaction' => $code_transaction,
-                    'total_price' => $course->price,
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now(),
-                ];
+                if ($course->is_paid == 1){
+                    $transaction = [
+                        'user_id' => $user->id,
+                        'course_id' => $request->course_id,
+                        'status' => 'pending',
+                        'code_transaction' => $code_transaction,
+                        'total_price' => $course->price,
+                        'created_at' => Carbon::now(),
+                        'updated_at' => Carbon::now(),
+                    ];
+                } elseif ($course->is_paid == 0){
+                    $transaction = [
+                        'user_id' => $user->id,
+                        'course_id' => $request->course_id,
+                        'status' => 'success',
+                        'code_transaction' => $code_transaction,
+                        'total_price' => 0,
+                        'created_at' => Carbon::now(),
+                        'updated_at' => Carbon::now(),
+                    ];
+                }
                 DB::table('transactions')->insert($transaction);
                 $newTransaction = DB::table('transactions')->where('code_transaction', $code_transaction)->first();
                 DB::commit();
@@ -111,7 +98,7 @@ class TransactionController extends Controller
                 ], 500);
             }
         }
-    }
+
 
     public function schedule($transactionId)
     {
@@ -128,15 +115,29 @@ class TransactionController extends Controller
     public function all()
     {
         $user = Auth::user();
-//        panggil function statusUpdate dari StatusHelper
         $statusHelper = new StatusHelper();
         $statusHelper->statusUpdate();
-        $transactions = Transaction::with('course')->where('user_id', $user->id)->get();
+
+        $transactions = Transaction::with('course')
+            ->where('user_id', $user->id)
+            ->get();
 
         if ($transactions->count() == 0) {
             return response()->json([
                 'message' => 'transactions not found',
             ], 404);
+        }
+
+// Mencari nilai rates yang sesuai
+        $rates = Rate::whereIn('user_id', $transactions->pluck('user_id'))
+            ->whereIn('course_id', $transactions->pluck('course_id'))
+            ->get();
+
+// Menggabungkan rates ke dalam data transactions
+        foreach ($transactions as $transaction) {
+            $transaction->rate = $rates->where('user_id', $transaction->user_id)
+                ->where('course_id', $transaction->course_id)
+                ->first();
         }
 
         return response()->json([
@@ -145,6 +146,7 @@ class TransactionController extends Controller
                 'transactions' => $transactions,
             ],
         ], 200);
+
 
 
 //        $transactions = DB::table('transactions')
