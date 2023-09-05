@@ -46,31 +46,68 @@ class PaymentController extends Controller
             ], 400);
         }
 
-        $params = array(
-            'transaction_details' => array(
-                'order_id' => $trx->id,
-                'gross_amount' => (int)$trx->total_price,
-            ),
-            'customer_details' => array(
-                'first_name' => $user->first_name,
-                'last_name' => $user->last_name,
-                'email' => $user->email,
-                'phone' => 626229933,
-            ),
-        );
+        if ($trx->total_price == 0){
+            try {
+                DB::beginTransaction();
+                DB::table('transactions')->where('id', $request->transaction_id)->update([
+                    'status' => 'success',
+                    'updated_at' => now(),
+                ]);
+                $mycourse = DB::table('my_courses')->insert([
+                    'user_id' => $user->id,
+                    'course_id' => $trx->course_id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+                $user = DB::table('users')->where('id', $trx->user_id)->first();
+                Mail::to($user->email)->send(new SuccessPayment([
+                    'name' => $user->first_name . ' ' . $user->last_name,
+//                    'course' => $transaction->course_name,
+                    'date' => Carbon::now()->format('d F Y'),
+                    'id' => $trx->id,
+                    'email' => $user->email,
+                    'paymentMethod' => '-',
+                    'total' => 0,
+//                    'image' => $transaction->course_thumbnail
+                ]));
+                DB::commit();
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'course successfully purchased',
+                ], 200);
+            } catch (\Throwable $th) {
+                DB::rollback();
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Something went wrong',
+                ], 500);
+            }
+        } elseif ($trx->total_price >= 0){
+            $params = array(
+                'transaction_details' => array(
+                    'order_id' => $trx->id,
+                    'gross_amount' => (int)$trx->total_price,
+                ),
+                'customer_details' => array(
+                    'first_name' => $user->first_name,
+                    'last_name' => $user->last_name,
+                    'email' => $user->email,
+                    'phone' => 626229933,
+                ),
+            );
 
-        try {
-            $snapToken = Snap::getSnapToken($params);
-        } catch (\Exception $e) {
+            try {
+                $snapToken = Snap::getSnapToken($params);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => $e->getMessage(),
+                ], 500);
+            }
+
             return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage(),
-            ], 500);
-        }
-
-        return response()->json([
-            'snap_token' => $snapToken,
-        ]);
+                'snap_token' => $snapToken,
+            ]);}
     }
     public function callback(Request $request)
     {
