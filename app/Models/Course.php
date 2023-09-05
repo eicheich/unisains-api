@@ -134,11 +134,15 @@ class Course extends Model
         }
 
         if (count($rates) > 0) {
-            return $totalRate / count($rates);
+            // Memperoleh rata-rata dan membulatkannya ke 2 desimal.
+            $averageRate = $totalRate / count($rates);
+            $roundedRate = round($averageRate, 2);
+            return $roundedRate;
         } else {
             return 0;
         }
     }
+
 
     public function getInCartAttribute()
     {
