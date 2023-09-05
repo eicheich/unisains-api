@@ -134,8 +134,8 @@ class CourseController extends Controller
 
     public function search(Request $request)
     {
-        $search = $request->input('search');
-        $courses = Course::with(['category','rates'])
+        $search = $request->search;
+        $courses = Course::with(['category', 'modules'])
             ->where('title_course', 'like', '%' . $search . '%')
             ->get();
 
