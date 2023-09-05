@@ -97,6 +97,14 @@ class Transaction extends Model
             return false;
         }
     }
+// *            scope  cari yg is_rated nya true kasih data ratenya
+    public function scopeRate($query)
+    {
+        return $query->whereHas('course', function ($query) {
+            $query->where('is_rated', true);
+        });
+    }
+
 
 
 

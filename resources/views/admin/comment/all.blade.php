@@ -14,7 +14,7 @@
                 <div class="col-md-4">
                     <div class="input-group">
                         <form action="{{route('transactions.search')}}" class="d-flex justify-content-between" method="get">
-                            <input type="text" class="form-control search-input" name="search" placeholder="Cari kode transaksi. . .">
+                            <input type="text" class="form-control search-input" name="search" placeholder="Cari nama pengguna atau kursus. . .">
                             <div class="input-group-append">
                                 <button class="btn btn-primary search-button" type="submit">Cari</button>
                             </div>
@@ -160,7 +160,7 @@
                 <div class="col-md-3">
                     <div class="input-group">
                         <form action="{{route('transactions.search')}}" class="d-flex justify-content-between" method="get">
-                            <input type="text" class="form-control search-input" name="search" placeholder="Cari kode transaksi. . .">
+                            <input type="text" class="form-control search-input" name="search" placeholder="Cari nama pengguna atau kursus. . .">
                             <div class="input-group-append">
                                 <button class="btn btn-primary search-button" type="submit">Cari</button>
                             </div>
@@ -170,7 +170,7 @@
             </div>
         </div>
         <div class="container">
-            <h4 class="mt-3">Data Transaksi</h4>
+            <h4 class="mt-3">Data Komentar</h4>
             <div class="table-responsive text-center">
                 <table class="table table-striped">
                     <thead>

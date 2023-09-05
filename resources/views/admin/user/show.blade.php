@@ -15,6 +15,13 @@
                         <p class="card-text">Role: {{ $user->role }}</p>
                     </div>
                     <style>
+                        .filter_date {
+                            width: 100%;
+                            padding: 10px;
+                            border: 1px solid #ddd;
+                            border-radius: 5px;
+                            transition: box-shadow 0.2s;
+                        }
                         .avatar {
                             width: 150px;
                             height: 150px;
@@ -32,8 +39,13 @@
     <div class="row justify-content-center mt-4">
         <div class="col-md-7">
             <div class="card">
-                <div class="card-header">
+                <div class="card-header row justify-content-center align-items-center">
                     Riwayat Aktivitas Pengguna
+                    <div class="col-md-2">
+                        <div class="filter-group">
+                            <input type="date" class="filter_date" name="filter_date">
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body">
                     <ul class="list-group">
