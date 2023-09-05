@@ -111,4 +111,33 @@ class CartController extends Controller
             ], 500);
         }
     }
+
+    public function cartCount()
+    {
+        $user = Auth::user();
+        $cartCount = Cart::where('user_id', $user->id)->count();
+        if ($cartCount == null) {
+            return response()->json([
+                'message' => 'success',
+                'data' => [
+                    'cart-count' => 0
+                ]
+            ], 200);
+        } else {
+            try {
+                return response()->json([
+                    'message' => 'success',
+                    'data' => [
+                        'cart-count' => $cartCount
+                    ]
+                ], 200);
+            } catch (\Throwable $th) {
+                DB::rollback();
+                return response()->json([
+                    'message' => 'something went wrong',
+                ], 500);
+            }
+        }
+
+    }
 }

@@ -87,6 +87,7 @@ Route::prefix('v1')->group(function () {
         });
     });
     Route::prefix('profile')->middleware('auth:sanctum')->group(function () {
+        Route::get('cart-count', [CartController::class, 'cartCount']);
         Route::get('show', [ProfileController::class, 'show']);
         Route::post('update', [ProfileController::class, 'update']);
     });
