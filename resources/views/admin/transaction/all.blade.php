@@ -225,7 +225,7 @@
 
         <div class="container">
             <h4 class="mt-3">Data Transaksi</h4>
-            <div class="table-responsive text-center">
+            <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
                         <tr>

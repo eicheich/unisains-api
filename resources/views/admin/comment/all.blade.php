@@ -108,70 +108,74 @@
             }
 
         </style>
+        <style>
+            .card_total {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                transition: box-shadow 0.2s;
+                background-color: #4CAF50;
+                color: white;
+                font-weight: bold;
+            }
+            .filter-group {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .filter_status {
+                width: 100%;
+                padding: 14px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                transition: box-shadow 0.2s;
+            }
+            .filter_date {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                transition: box-shadow 0.2s;
+            }
+        </style>
+
         <div class="container p-2">
             <div class="row justify-content-center mt-5">
                 <div class="col-md-2">
-                    <div class="filter-group">
-                        <input type="date" class="filter_date" name="filter_date">
-                    </div>
+                    <form action="{{route('comments.search')}}" method="get">
+                        <div class="filter-group">
+                            <input type="date" class="filter_date" name="filter_date" value="{{ request('filter_date') }}">
+                        </div>
                 </div>
-                <style>
-                    .card_total {
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        padding: 10px;
-                        border: 1px solid #ddd;
-                        border-radius: 5px;
-                        transition: box-shadow 0.2s;
-                        background-color: #4CAF50;
-                        color: white;
-                        font-weight: bold;
-                    }
-                    .filter-group {
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                    }
-                    .filter_status {
-                        width: 100%;
-                        padding: 14px;
-                        border: 1px solid #ddd;
-                        border-radius: 5px;
-                        transition: box-shadow 0.2s;
-                    }
-                    .filter_date {
-                        width: 100%;
-                        padding: 10px;
-                        border: 1px solid #ddd;
-                        border-radius: 5px;
-                        transition: box-shadow 0.2s;
-                    }
-                </style>
                 <div class="col-md-2">
                     <div class="filter-group">
                         <select name="filter_status" class="filter_status">
                             <option value="">Semua Status</option>
-                            <option value="pending">Pending</option>
-                            <option value="success">Di setujui</option>
+                            <option value="pending" {{ request('filter_status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                            <option value="approved" {{ request('filter_status') == 'approved' ? 'selected' : '' }}>Di setujui</option>
                         </select>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="input-group">
-                        <form action="{{route('transactions.search')}}" class="d-flex justify-content-between" method="get">
-                            <input type="text" class="form-control search-input" name="search" placeholder="Cari nama pengguna atau kursus. . .">
+                        <div class="d-flex justify-content-between">
+                            <input type="text" class="form-control search-input" name="search" placeholder="Cari nama pengguna atau kursus. . ." value="{{ request('search') }}">
                             <div class="input-group-append">
                                 <button class="btn btn-primary search-button" type="submit">Cari</button>
                             </div>
-                        </form>
+                        </div>
                     </div>
+                    </form>
                 </div>
             </div>
         </div>
+
         <div class="container">
             <h4 class="mt-3">Data Komentar</h4>
-            <div class="table-responsive text-center">
+            <div class="table-responsive ">
                 <table class="table table-striped">
                     <thead>
                     <tr>

@@ -111,5 +111,6 @@ Route::prefix('admin')->middleware('isAdminWeb')->group(function () {
         Route::get('/', [CommentController::class, 'all'])->name('comments.page');
         Route::post('approve/{id}', [CommentController::class, 'approve'])->name('approve.comments');
         Route::post('disapprove/{id}', [CommentController::class, 'disapprove'])->name('disapprove.comments');
+        Route::get('/search', [CommentController::class, 'search'])->name('comments.search');
     });
 });

@@ -65,7 +65,7 @@
                         Data Pengguna Kosong
                     </div>
                 @else
-                    <div class="table-responsive text-center">
+                    <div class="table-responsive">
                         <table class="table table-striped">
                             <thead>
                             <tr>

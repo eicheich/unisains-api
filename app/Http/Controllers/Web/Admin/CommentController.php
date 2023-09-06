@@ -34,4 +34,37 @@ class CommentController extends Controller
         return redirect()->back()->with(['success' => 'Komentar berhasil di disapprove']);
 
     }
+
+    public function search()
+    {
+        $query = Rate::query()
+            ->with(['course', 'user'])
+            ->orderBy('created_at', 'DESC');
+
+        $searchTerm = request('search');
+        if ($searchTerm) {
+            $query->where(function ($query) use ($searchTerm) {
+                $query->where('comment', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhereHas('user', function ($query) use ($searchTerm) {
+                        $query->where('email', 'LIKE', '%' . $searchTerm . '%');
+                    });
+            });
+        }
+
+        $filterStatus = request('filter_status');
+        if ($filterStatus) {
+            $query->where('status', $filterStatus);
+        }
+
+        $filterDate = request('filter_date');
+        if ($filterDate) {
+            $query->whereDate('created_at', $filterDate);
+        }
+
+        $comment = $query->get();
+//        dd($comments);
+
+        return view('admin.comment.all', compact('comment'));
+    }
+
 }
