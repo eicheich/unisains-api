@@ -73,7 +73,7 @@ class TransactionController extends Controller
                     $transaction = [
                         'user_id' => $user->id,
                         'course_id' => $request->course_id,
-                        'status' => 'success',
+                        'status' => 'pending',
                         'code_transaction' => $code_transaction,
                         'total_price' => 0,
                         'created_at' => Carbon::now(),
