@@ -40,7 +40,6 @@ class CommentController extends Controller
         $query = Rate::query()
             ->with(['course', 'user'])
             ->orderBy('created_at', 'DESC');
-
         $searchTerm = request('search');
         if ($searchTerm) {
             $query->where(function ($query) use ($searchTerm) {
@@ -50,7 +49,6 @@ class CommentController extends Controller
                     });
             });
         }
-
         $filterStatus = request('filter_status');
         if ($filterStatus) {
             $query->where('status', $filterStatus);
@@ -62,8 +60,6 @@ class CommentController extends Controller
         }
 
         $comment = $query->get();
-//        dd($comments);
-
         return view('admin.comment.all', compact('comment'));
     }
 
