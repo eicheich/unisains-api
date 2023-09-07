@@ -85,6 +85,7 @@ Route::prefix('admin')->middleware('isAdminWeb')->group(function () {
         Route::post('update/{id}', [AuthController::class, 'update'])->name('update.users');
         Route::post('delete/{id}', [UserController::class, 'delete'])->name('delete.users');
         Route::get('search', [UserController::class, 'search'])->name('users.search');
+        Route::get('filter-date', [UserController::class, 'filterDate'])->name('activity.date');
     });
     Route::prefix('transactions')->group(function () {
         Route::get('/', [TransactionController::class, 'all'])->name('transactions.page');
@@ -111,5 +112,6 @@ Route::prefix('admin')->middleware('isAdminWeb')->group(function () {
         Route::get('/', [CommentController::class, 'all'])->name('comments.page');
         Route::post('approve/{id}', [CommentController::class, 'approve'])->name('approve.comments');
         Route::post('disapprove/{id}', [CommentController::class, 'disapprove'])->name('disapprove.comments');
+        Route::get('/search', [CommentController::class, 'search'])->name('comments.search');
     });
 });

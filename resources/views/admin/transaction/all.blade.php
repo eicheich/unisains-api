@@ -9,19 +9,39 @@
         </div>
     </div>
     @if ($transactions->isEmpty())
-        <div class="container">
-            <div class="row justify-content-center mt-5">
-                <div class="col-md-4">
-                    <div class="input-group">
-                        <form action="{{route('transactions.search')}}" class="d-flex justify-content-between" method="get">
-                            <input type="text" class="form-control search-input" name="search" placeholder="Cari kode transaksi. . .">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary search-button" type="submit">Cari</button>
+        <div class="container p-2">
+            <form action="{{ route('transactions.search') }}" method="get">
+                <div class="row justify-content-center mt-5">
+                    <div class="col-md-2">
+                        <div class="card_total">Total : Rp. {{$total_pendapatan}}</div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="filter-group">
+                            <input type="date" class="filter_date" name="filter_date" value="{{ isset($_GET['filter_date']) ? $_GET['filter_date'] : '' }}">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="filter-group">
+                            <select name="filter_status" class="filter_status">
+                                <option value="">Semua Status</option>
+                                <option value="pending" {{ isset($_GET['filter_status']) && $_GET['filter_status'] == 'pending' ? 'selected' : '' }}>Pending</option>
+                                <option value="success" {{ isset($_GET['filter_status']) && $_GET['filter_status'] == 'success' ? 'selected' : '' }}>Success</option>
+                                <option value="failed" {{ isset($_GET['filter_status']) && $_GET['filter_status'] == 'failed' ? 'selected' : '' }}>Failed</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="input-group">
+                            <div class="d-flex justify-content-between">
+                                <input type="text" class="form-control search-input" name="search" placeholder="Cari kode transaksi atau email. . ." value="{{ isset($_GET['search']) ? $_GET['search'] : '' }}">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary search-button" type="submit">Cari</button>
+                                </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
         <hr>
         <div class="alert alert-danger text-light" role="alert">
@@ -75,7 +95,72 @@
                 background-color: rgba(0, 204, 0, 0.5);
                 color: #ffffff;
             }
+            .filter-group{
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            /* styles.css */
+            .transaction-card {
+                background-color: #f9f9f9;
+                border-radius: 10px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                transition: transform 0.2s;
+            }
+
+            .transaction-card:hover {
+                transform: translateY(-5px);
+            }
+
+            .filter-input {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                transition: box-shadow 0.2s;
+            }
+
+            .filter-input:focus {
+                outline: none;
+                border-color: #007bff;
+                box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            }
+
         </style>
+        <style>
+            .card_total {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                transition: box-shadow 0.2s;
+                background-color: #4CAF50;
+                color: white;
+                font-weight: bold;
+            }
+            .filter-group {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .filter_status {
+                width: 100%;
+                padding: 14px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                transition: box-shadow 0.2s;
+            }
+            .filter_date {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                transition: box-shadow 0.2s;
+            }
+        </style>
+
     @else
         <style>
             .search-container {
@@ -157,75 +242,77 @@
             }
 
         </style>
-        <div class="container p-2">
-            <div class="row justify-content-center mt-5">
-                <div class="col-md-2">
-                    <div class="card_total">Total : Rp. {{$total_pendapatan}}</div>
-                </div>
-                <div class="col-md-2">
-                    <div class="filter-group">
-                        <input type="date" class="filter_date" name="filter_date">
-                    </div>
-                </div>
-                <style>
-                    .card_total {
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        padding: 10px;
-                        border: 1px solid #ddd;
-                        border-radius: 5px;
-                        transition: box-shadow 0.2s;
-                        background-color: #4CAF50;
-                        color: white;
-                        font-weight: bold;
-                    }
-                    .filter-group {
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                    }
-                    .filter_status {
-                        width: 100%;
-                        padding: 14px;
-                        border: 1px solid #ddd;
-                        border-radius: 5px;
-                        transition: box-shadow 0.2s;
-                    }
-                    .filter_date {
-                        width: 100%;
-                        padding: 10px;
-                        border: 1px solid #ddd;
-                        border-radius: 5px;
-                        transition: box-shadow 0.2s;
-                    }
-                </style>
-                <div class="col-md-2">
-                    <div class="filter-group">
-                        <select name="filter_status" class="filter_status">
-                            <option value="">Semua Status</option>
-                            <option value="pending">Pending</option>
-                            <option value="success">Success</option>
-                            <option value="failed">Failed</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="input-group">
-                        <form action="{{route('transactions.search')}}" class="d-flex justify-content-between" method="get">
-                            <input type="text" class="form-control search-input" name="search" placeholder="Cari kode transaksi. . .">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary search-button" type="submit">Cari</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <style>
+            .card_total {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                transition: box-shadow 0.2s;
+                background-color: #4CAF50;
+                color: white;
+                font-weight: bold;
+            }
+            .filter-group {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .filter_status {
+                width: 100%;
+                padding: 14px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                transition: box-shadow 0.2s;
+            }
+            .filter_date {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                transition: box-shadow 0.2s;
+            }
+        </style>
 
+        <div class="container p-2">
+            <form action="{{ route('transactions.search') }}" method="get">
+                <div class="row justify-content-center mt-5">
+                    <div class="col-md-2">
+                        <div class="card_total">Total : Rp. {{$total_pendapatan}}</div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="filter-group">
+                            <input type="date" class="filter_date" name="filter_date" value="{{ isset($_GET['filter_date']) ? $_GET['filter_date'] : '' }}">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="filter-group">
+                            <select name="filter_status" class="filter_status">
+                                <option value="">Semua Status</option>
+                                <option value="pending" {{ isset($_GET['filter_status']) && $_GET['filter_status'] == 'pending' ? 'selected' : '' }}>Pending</option>
+                                <option value="success" {{ isset($_GET['filter_status']) && $_GET['filter_status'] == 'success' ? 'selected' : '' }}>Success</option>
+                                <option value="failed" {{ isset($_GET['filter_status']) && $_GET['filter_status'] == 'failed' ? 'selected' : '' }}>Failed</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="input-group">
+                            <div class="d-flex justify-content-between">
+                                <input type="text" class="form-control search-input" name="search" placeholder="Cari kode transaksi atau email. . ." value="{{ isset($_GET['search']) ? $_GET['search'] : '' }}">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary search-button" type="submit">Cari</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
         <div class="container">
             <h4 class="mt-3">Data Transaksi</h4>
-            <div class="table-responsive text-center">
+            <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
                         <tr>

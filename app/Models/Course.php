@@ -126,7 +126,9 @@ class Course extends Model
     }
     public static function avgRate($courseId)
     {
-        $rates = Rate::where('course_id', $courseId)->get();
+        $rates = Rate::where('course_id', $courseId)
+            ->where('status', 'approved')
+            ->get();
         $totalRate = 0;
 
         foreach ($rates as $rate) {
@@ -134,7 +136,6 @@ class Course extends Model
         }
 
         if (count($rates) > 0) {
-            // Memperoleh rata-rata dan membulatkannya ke 2 desimal.
             $averageRate = $totalRate / count($rates);
             $roundedRate = round($averageRate, 2);
             return $roundedRate;

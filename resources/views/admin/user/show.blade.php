@@ -42,10 +42,19 @@
                 <div class="card-header row justify-content-center align-items-center">
                     Riwayat Aktivitas Pengguna
                     <div class="col-md-2">
-                        <div class="filter-group">
-                            <input type="date" class="filter_date" name="filter_date">
-                        </div>
+                        <form action="{{ route('activity.date') }}" method="get" style="display: flex; align-items: center;">
+                            <div class="filter-group">
+                                <input type="date" class="filter_date" name="filter_date" value="{{ isset($_GET['filter_date']) ? $_GET['filter_date'] : '' }}">
+                                <input type="hidden" name="user_id" value="{{$user->id}}">
+                            </div>
+                            <div class="filter-group mx-4">
+                                <button type="submit" class="btn btn-primary">Filter</button>
+                            </div>
+                        </form>
                     </div>
+
+
+
                 </div>
                 <div class="card-body">
                     <ul class="list-group">

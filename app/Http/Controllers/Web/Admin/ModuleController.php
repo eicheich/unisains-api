@@ -138,37 +138,41 @@ class ModuleController extends Controller
             return redirect()->back()->with('status', $validator->errors());
         }
 
-        $rangkuman = DB::table('summary_modules')->where('id', $id)->first();
-        if ($request->hasFile('summary_video')) {
-            $old_video = public_path('storage/video/rangkuman/') . $rangkuman->video_rangkuman;
-            if (file_exists($old_video)) {
-                unlink($old_video);
+        try {
+            $rangkuman = DB::table('summary_modules')->where('id', $id)->first();
+            if ($request->hasFile('summary_video')) {
+                $old_video = public_path('storage/video/rangkuman/') . $rangkuman->video_rangkuman;
+                if (file_exists($old_video)) {
+                    unlink($old_video);
+                }
+                $video = $request->file('summary_video');
+                $video_name = time() . '.' . $video->getClientOriginalExtension();
+                $video->move(public_path('storage/video/rangkuman'), $video_name);
+            } else {
+                $video_name = $rangkuman->summary_video;
             }
-            $video = $request->file('summary_video');
-            $video_name = time() . '.' . $video->getClientOriginalExtension();
-            $video->move(public_path('storage/video/rangkuman'), $video_name);
-        } else {
-            $video_name = $rangkuman->summary_video;
+            // db update
+            $rangkuman = DB::table('summary_modules')->where('id', $id)->update([
+                'summary' => $request->isi_rangkuman,
+                'summary_video' => $video_name,
+            ]);
+        } catch (\Throwable $th) {
+            return redirect()->back()->with('status', $th->getMessage());
         }
-        // db update
-        $rangkuman = DB::table('summary_modules')->where('id', $id)->update([
-            'summary' => $request->isi_rangkuman,
-            'summary_video' => $video_name,
-        ]);
 
         return redirect()->route('course.page')->with('status', 'Rangkuman updated successfully');
     }
 
     public function deleteRangkuman(Request $request, $id)
     {
-        $rangkuman = DB::table('module_rangkuman')->where('id', $id)->first();
+        $rangkuman = DB::table('summary_modules')->where('id', $id)->first();
 
         // delete video
-        $old_video = public_path('storage/video/rangkuman/') . $rangkuman->video_rangkuman;
+        $old_video = public_path('storage/video/rangkuman/') . $rangkuman->summary_video;
         if (file_exists($old_video)) {
             unlink($old_video);
         }
-        $rangkuman = DB::table('module_rangkuman')->where('id', $id)->delete();
+        $rangkuman = DB::table('summary_modules')->where('id', $id)->delete();
         return redirect()->back()->with('status', 'Rangkuman deleted successfully');
     }
 }
