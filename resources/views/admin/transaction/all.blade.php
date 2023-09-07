@@ -33,7 +33,7 @@
                     <div class="col-md-3">
                         <div class="input-group">
                             <div class="d-flex justify-content-between">
-                                <input type="text" class="form-control search-input" name="search" placeholder="Cari kode transaksi. . ." value="{{ isset($_GET['search']) ? $_GET['search'] : '' }}">
+                                <input type="text" class="form-control search-input" name="search" placeholder="Cari kode transaksi atau email. . ." value="{{ isset($_GET['search']) ? $_GET['search'] : '' }}">
                                 <div class="input-group-append">
                                     <button class="btn btn-primary search-button" type="submit">Cari</button>
                                 </div>
@@ -300,7 +300,7 @@
                     <div class="col-md-3">
                         <div class="input-group">
                             <div class="d-flex justify-content-between">
-                                <input type="text" class="form-control search-input" name="search" placeholder="Cari kode transaksi. . ." value="{{ isset($_GET['search']) ? $_GET['search'] : '' }}">
+                                <input type="text" class="form-control search-input" name="search" placeholder="Cari kode transaksi atau email. . ." value="{{ isset($_GET['search']) ? $_GET['search'] : '' }}">
                                 <div class="input-group-append">
                                     <button class="btn btn-primary search-button" type="submit">Cari</button>
                                 </div>

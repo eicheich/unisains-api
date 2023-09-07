@@ -85,6 +85,7 @@ Route::prefix('admin')->middleware('isAdminWeb')->group(function () {
         Route::post('update/{id}', [AuthController::class, 'update'])->name('update.users');
         Route::post('delete/{id}', [UserController::class, 'delete'])->name('delete.users');
         Route::get('search', [UserController::class, 'search'])->name('users.search');
+        Route::get('filter-date', [UserController::class, 'filterDate'])->name('activity.date');
     });
     Route::prefix('transactions')->group(function () {
         Route::get('/', [TransactionController::class, 'all'])->name('transactions.page');
