@@ -15,7 +15,7 @@ class Course extends Model
     public function getPriceAttribute($value)
     {
         if ($this->is_paid == 0) {
-            return 'free';
+            return 'Gratis';
         }
         return $value;
     }
